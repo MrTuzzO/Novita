@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+
+{% block title %}Recovery Tracking - Empower Recovery{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title">Recovery Tracking</h2>
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Today's Check-in Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title">Today's Check-in</h4>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">How are you feeling today?</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for value, label in mood_choices %}
+                                    <input type="radio" class="btn-check" name="mood" id="mood{{ forloop.counter }}" value="{{ value }}" {% if forloop.first %}checked{% endif %}>
+                                    <label class="btn btn-outline-primary" for="mood{{ forloop.counter }}">{{ label }}</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Cravings Level (1-10)</label>
+                                <input type="range" class="form-range" name="cravings_level" min="1" max="10" value="5">
+                                <div class="d-flex justify-content-between">
+                                    <small>Minimal</small>
+                                    <small>Severe</small>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Today's Notes</label>
+                                <textarea class="form-control" name="notes" rows="3" placeholder="How was your day? Any challenges or successes?"></textarea>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" name="trigger_avoided" id="triggerAvoided">
+                                <label class="form-check-label" for="triggerAvoided">I successfully avoided a trigger today</label>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" name="support_used" id="supportUsed">
+                                <label class="form-check-label" for="supportUsed">I used my support system today</label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Save Daily Entry</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Progress Overview -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Progress Overview</h4>
+                        <div class="row text-center mb-4">
+                            <div class="col-md-4">
+                                <div class="streak-counter">{{ streak_data.days_sober }}</div>
+                                <p class="text-muted">Days Sober</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="h3 text-primary">{{ streak_data.recovery_progress }}%</div>
+                                <p class="text-muted">Recovery Progress</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="h3 text-success">{{ streak_data.milestones_achieved }}</div>
+                                <p class="text-muted">Milestones Achieved</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Mood Chart -->
+                        <div class="mb-4">
+                            <h5>Mood Trends (Last 7 Days)</h5>
+                            <div class="chart-container" style="height: 200px;">
+                                <!-- Chart would be rendered here with Chart.js -->
+                                <canvas id="moodChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Cravings Chart -->
+                        <div>
+                            <h5>Cravings Level (Last 7 Days)</h5>
+                            <div class="chart-container" style="height: 200px;">
+                                <!-- Chart would be rendered here with Chart.js -->
+                                <canvas id="cravingsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- Recent Entries -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title">Recent Entries</h4>
+                        <div class="list-group list-group-flush">
+                            {% for entry in recent_entries %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ entry.date|date:"M d" }}</h6>
+                                    <p class="mb-1 small">{{ entry.notes|truncatewords:10 }}</p>
+                                </div>
+                                <span class="badge bg-{{ entry.mood_color }} rounded-pill">{{ entry.cravings_level }}/10</span>
+                            </div>
+                            {% empty %}
+                            <div class="list-group-item text-center text-muted">
+                                No entries yet. Start tracking your recovery journey!
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Quick Actions</h4>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'recovery_history' %}" class="btn btn-outline-primary">View Full History</a>
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exportModal">Export Progress Data</button>
+                            <a href="{% url 'set_goals' %}" class="btn btn-outline-primary">Set Recovery Goals</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Milestone Progress -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h4 class="card-title">Next Milestone</h4>
+                        <div class="text-center py-3">
+                            <h3 class="text-primary">{{ next_milestone.days }} Days</h3>
+                            <p class="text-muted">{{ next_milestone.title }}</p>
+                            <div class="progress mb-3">
+                                <!-- <div class="progress-bar" role="progressbar" style="width: {{ next_milestone.progress }}%">
+                                    {{ next_milestone.progress }}%
+                                </div> -->
+                            </div>
+                            <p>{{ next_milestone.days_remaining }} days to go!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Export Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Export Progress Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'export_data' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Date Range</label>
+                        <select class="form-select" name="date_range">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="365">Last year</option>
+                            <option value="all">All time</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Format</label>
+                        <select class="form-select" name="format">
+                            <option value="csv">CSV</option>
+                            <option value="pdf">PDF Report</option>
+                            <option value="excel">Excel</option>
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Export Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Chart data passed from Django -->
+{{ mood_labels|json_script:"mood-labels" }}
+{{ mood_data|json_script:"mood-data" }}
+{{ cravings_labels|json_script:"cravings-labels" }}
+{{ cravings_data|json_script:"cravings-data" }}
+<script>
+    // Initialize charts
+    document.addEventListener('DOMContentLoaded', function() {
+        const moodCtx = document.getElementById('moodChart').getContext('2d');
+        const cravingsCtx = document.getElementById('cravingsChart').getContext('2d');
+        
+        // Get chart data from JSON scripts
+        const moodLabels = JSON.parse(document.getElementById('mood-labels').textContent || '[]');
+        const moodData = JSON.parse(document.getElementById('mood-data').textContent || '[]');
+        const cravingsLabels = JSON.parse(document.getElementById('cravings-labels').textContent || '[]');
+        const cravingsData = JSON.parse(document.getElementById('cravings-data').textContent || '[]');
+        
+        // Mood chart
+        const moodChart = new Chart(moodCtx, {
+            type: 'line',
+            data: {
+                labels: moodLabels,
+                datasets: [{
+                    label: 'Mood Level',
+                    data: moodData,
+                    borderColor: '#2a9d8f',
+                    backgroundColor: 'rgba(42, 157, 143, 0.1)',
+                    tension: 0.1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10
+                    }
+                }
+            }
+        });
+        
+        // Cravings chart
+        const cravingsChart = new Chart(cravingsCtx, {
+            type: 'bar',
+            data: {
+                labels: cravingsLabels,
+                datasets: [{
+                    label: 'Cravings Level',
+                    data: cravingsData,
+                    backgroundColor: '#e76f51',
+                    borderColor: '#e76f51',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}
