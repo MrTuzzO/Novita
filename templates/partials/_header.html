@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
         <a class="navbar-brand text-primary" href="{% url 'home' %}">
-            <i class="fas fa-heart me-2"></i>Empower Recovery
+            <i class="fas fa-star me-2"></i>Novita
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -19,6 +19,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'resources' %}active{% endif %}" href="{% url 'resources' %}">Resources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'blog' in request.resolver_match.namespace %}active{% endif %}" href="{% url 'blog:home' %}">Community</a>
                 </li>
                 
                 {% if user.is_authenticated %}
@@ -38,9 +41,9 @@
             </ul>
             
             <div class="d-flex align-items-center">
-                <!-- Community Blog Link -->
-                <a class="btn btn-outline-primary me-2 {% if 'blog' in request.resolver_match.namespace %}active{% endif %}" href="{% url 'blog:home' %}">
-                    <i class="fas fa-comments me-1"></i>Community
+                <!-- Support Link -->
+                <a class="btn btn-outline-primary me-2 {% if 'support' in request.resolver_match.namespace %}active{% endif %}" href="{% url 'support:dashboard' %}">
+                    <i class="fas fa-headset me-1"></i>Support
                 </a>
                 
                 {% if user.is_authenticated %}
@@ -56,6 +59,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user-cog me-2"></i>Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'blog:my_posts' %}"><i class="fas fa-pen me-2"></i>My Posts</a></li>
+                            <li><a class="dropdown-item" href="{% url 'support:ticket_list' %}"><i class="fas fa-ticket-alt me-2"></i>My Tickets</a></li>
                             <li><a class="dropdown-item" href="{% url 'appointments' %}"><i class="fas fa-calendar me-2"></i>Appointments</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>

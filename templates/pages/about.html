@@ -1,48 +1,90 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}About Us - Empower Recovery{% endblock %}
+{% block title %}About Us - Novita{% endblock %}
 
 {% block content %}
 <section class="py-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                <h1 class="section-title">About Empower Recovery</h1>
-                <p class="lead">Empower Recovery is a web platform dedicated to drug addiction recovery and women empowerment. We provide a safe, anonymous, and supportive environment where users can track their recovery journey, connect with mentors and support groups, access educational resources, and celebrate milestones.</p>
+                <h1 class="section-title">About Novita</h1>
+                <p class="lead">Novita is a comprehensive social welfare web platform designed to help individuals overcome drug addiction, access mental health support, and receive cyber safety assistance in times of need. The name Novita comes from "nova," meaning new, symbolizing new hope, new life, and new beginnings.</p>
+                
+                <div class="alert alert-primary mt-4">
+                    <h5><i class="fas fa-star me-2"></i>Our Core Services</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><i class="fas fa-heart me-2 text-danger"></i><strong>Recovery & Mental Health Support</strong> - Track progress, connect with mentors and therapists</li>
+                        <li><i class="fas fa-shield-halved me-2 text-primary"></i><strong>Cyber Safety Protection</strong> - Report harassment, abuse, and access digital safety resources</li>
+                        <li><i class="fas fa-phone me-2 text-warning"></i><strong>Emergency Support System</strong> - Immediate access to authorities and crisis counselors</li>
+                    </ul>
+                </div>
                 
                 <h3 class="mt-5">Our Mission</h3>
-                <p>Our mission is to create a platform that combines health, empowerment, and community support, reducing social stigma and giving addicts, especially women, a holistic pathway to recovery.</p>
+                <p>To create a bridge between mental wellness and digital protection, providing a safe, private, and empowering digital space—especially for women and vulnerable individuals. We aim to build comprehensive support systems that address addiction recovery, mental health, and cyber safety in one integrated platform.</p>
                 
                 <h3 class="mt-5">Our Vision</h3>
-                <p>We envision a world where everyone has access to compassionate, effective support for addiction recovery, free from judgment and stigma. We believe in empowering individuals to reclaim their lives and build brighter futures.</p>
+                <p>We envision a world where no one feels alone in their struggles—online or offline—and where every person has access to hope, help, and healing. By combining recovery support with digital protection, we create a safer, more supportive environment for vulnerable individuals to rebuild their lives.</p>
                 
-                <h3 class="mt-5">Our Team</h3>
+                <h3 class="mt-5">Why Novita Matters</h3>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="feature-box p-3 border rounded">
+                            <h5><i class="fas fa-user-shield me-2 text-primary"></i>Safe & Anonymous</h5>
+                            <p class="mb-0">Complete privacy protection with anonymous account options for those who need discretion and safety.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-box p-3 border rounded">
+                            <h5><i class="fas fa-globe me-2 text-primary"></i>Digital Protection</h5>
+                            <p class="mb-0">First platform to integrate cyber safety with recovery support, addressing modern digital threats.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <div class="feature-box p-3 border rounded">
+                            <h5><i class="fas fa-hands-helping me-2 text-secondary"></i>Holistic Support</h5>
+                            <p class="mb-0">Comprehensive approach addressing addiction, mental health, and digital safety in one platform.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <div class="feature-box p-3 border rounded">
+                            <h5><i class="fas fa-phone-volume me-2 text-danger"></i>Crisis Response</h5>
+                            <p class="mb-0">Immediate access to emergency support during substance relapse, emotional crisis, or cyber threats.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mt-5">Our Expert Team</h3>
                 <div class="row mt-4">
                     <div class="col-md-4">
                         <div class="team-member text-center">
-                            <img src="{% static 'images/team1.jpg' %}" alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
+                            <img src="{% static 'images/team1.jpg' %}" alt="Clinical Director" class="rounded-circle mb-3" width="150" height="150">
                             <h5>Dr. Sarah Johnson</h5>
-                            <p class="text-muted">Clinical Director</p>
-                            <p>Licensed therapist with 15 years of experience in addiction treatment and women's mental health.</p>
+                            <p class="text-muted">Clinical Director & Mental Health Specialist</p>
+                            <p>Licensed therapist with 15 years of experience in addiction treatment, trauma recovery, and women's mental health.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="team-member text-center">
-                            <img src="{% static 'images/team2.jpg' %}" alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
-                            <h5>Michael Rodriguez</h5>
-                            <p class="text-muted">Community Manager</p>
-                            <p>Recovery advocate and peer support specialist with 8 years of personal recovery experience.</p>
+                            <img src="{% static 'images/team2.jpg' %}" alt="Cyber Safety Director" class="rounded-circle mb-3" width="150" height="150">
+                            <h5>Alex Chen</h5>
+                            <p class="text-muted">Cyber Safety & Digital Protection Director</p>
+                            <p>Cybersecurity expert and digital rights advocate specializing in online harassment prevention and victim support.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="team-member text-center">
-                            <img src="{% static 'images/team3.jpg' %}" alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
-                            <h5>Jennifer Lee</h5>
-                            <p class="text-muted">Empowerment Coach</p>
-                            <p>Specializes in building self-esteem and life skills for women in recovery.</p>
+                            <img src="{% static 'images/team3.jpg' %}" alt="Community Manager" class="rounded-circle mb-3" width="150" height="150">
+                            <h5>Jennifer Martinez</h5>
+                            <p class="text-muted">Community Manager & Crisis Response Coordinator</p>
+                            <p>Licensed social worker and crisis intervention specialist with expertise in emergency response and victim advocacy.</p>
                         </div>
                     </div>
+                </div>
+                
+                <div class="alert alert-light mt-5">
+                    <h5><i class="fas fa-handshake me-2 text-primary"></i>Our Commitment</h5>
+                    <p class="mb-0">Novita is committed to providing 24/7 support, maintaining complete confidentiality, and ensuring that every user feels safe, supported, and empowered on their journey to healing. We believe that with the right support, everyone can overcome their challenges and build a brighter future.</p>
                 </div>
             </div>
         </div>

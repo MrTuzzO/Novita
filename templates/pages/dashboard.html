@@ -11,8 +11,8 @@
                 <h1 class="display-4 fw-bold mb-4">Welcome to Your Recovery Dashboard</h1>
                 <p class="lead mb-4">Track your progress, connect with support, and access resources tailored to your journey.</p>
                 <div class="d-flex flex-wrap gap-2">
-                    <a href="{% url 'recovery_tracking' %}" class="btn btn-light btn-lg">Today's Check-in</a>
-                    <a href="{% url 'groups' %}" class="btn btn-outline-light btn-lg">Join a Group</a>
+                    <a href="{% url 'recovery_tracking' %}" class="btn btn-secondary btn-lg">Today's Check-in</a>
+                    <a href="{% url 'groups' %}" class="btn btn-outline-secondary btn-lg">Join a Group</a>
                 </div>
             </div>
             <div class="col-lg-4 text-center">
@@ -49,7 +49,7 @@
             <div class="col-md-3">
                 <div class="card text-center">
                     <div class="card-body">
-                        <h3 class="text-info">{{ active_groups }}</h3>
+                        <h3 class="text-secondary">{{ active_groups }}</h3>
                         <p class="mb-0">Active Groups</p>
                     </div>
                 </div>

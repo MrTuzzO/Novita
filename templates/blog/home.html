@@ -11,15 +11,15 @@
                 <p class="lead">Share your journey, inspire others, and build a supportive community together</p>
                 {% if user.is_authenticated %}
                 <div class="d-flex gap-2 justify-content-center flex-wrap">
-                    <a href="{% url 'blog:create' %}" class="btn btn-primary btn-lg">
+                    <a href="{% url 'blog:create' %}" class="btn btn-primary">
                         <i class="fas fa-plus me-2"></i>Share Your Story
                     </a>
-                    <a href="{% url 'blog:my_posts' %}" class="btn btn-outline-primary btn-lg">
+                    <a href="{% url 'blog:my_posts' %}" class="btn btn-outline-primary">
                         <i class="fas fa-pen me-2"></i>My Posts & Drafts
                     </a>
                 </div>
                 {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">
                     <i class="fas fa-sign-in-alt me-2"></i>Join the Community
                 </a>
                 {% endif %}
@@ -106,7 +106,7 @@
                     {% endfor %}
                 </div>
                 <div class="text-center mt-4">
-                    <a href="{% url 'blog:list' %}" class="btn btn-primary btn-lg">
+                    <a href="{% url 'blog:list' %}" class="btn btn-primary">
                         <i class="fas fa-comments me-2"></i>View All Community Posts
                     </a>
                 </div>

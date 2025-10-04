@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Home - Empower Recovery{% endblock %}
+{% block title %}Home - Novita{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -9,20 +9,21 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">Your Safe Path to Recovery Starts Here</h1>
-                <p class="lead mb-4">A confidential, supportive platform for addiction recovery and women's empowerment. Join anonymously and begin your journey today.</p>
+                <h1 class="display-4 fw-bold mb-4">New Hope. New Life. New Beginnings.</h1>
+                <p class="lead mb-4">Novita is your comprehensive social welfare platform for addiction recovery, mental health support, and cyber safety assistance. A safe space for healing, empowerment, and digital protection.</p>
                 <div class="d-flex flex-wrap gap-2">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">Go to Dashboard</a>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary ">Go to Dashboard</a>
                     {% else %}
-                        <a href="{% url 'signup' %}" class="btn btn-light btn-lg">Start Your Journey</a>
-                        <a href="{% url 'how_it_works' %}" class="btn btn-outline-light btn-lg">Learn More</a>
+                        <a href="{% url 'signup' %}" class="btn btn-secondary ">Start Your Journey</a>
+                        <a href="{% url 'how_it_works' %}" class="btn btn-outline-light ">Learn More</a>
                     {% endif %}
                 </div>
                 <div class="mt-4">
-                    <small class="d-block"><i class="fas fa-shield-alt me-2"></i>100% Anonymous Option Available</small>
-                    <small class="d-block"><i class="fas fa-users me-2"></i>Supportive Community</small>
-                    <small class="d-block"><i class="fas fa-certificate me-2"></i>Professional Guidance</small>
+                    <small class="d-block"><i class="fas fa-shield-alt me-2"></i>Complete Privacy & Safety</small>
+                    <small class="d-block"><i class="fas fa-heart me-2"></i>Recovery & Mental Health Support</small>
+                    <small class="d-block"><i class="fas fa-globe me-2"></i>Cyber Safety Protection</small>
+                    <small class="d-block"><i class="fas fa-phone me-2"></i>Emergency Support System</small>
                 </div>
             </div>
             <div class="col-lg-6 text-center">
@@ -37,8 +38,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="section-title text-center">Why Choose Empower Recovery?</h2>
-                <p class="lead">We provide a comprehensive approach to recovery that addresses both addiction and empowerment needs.</p>
+                <h2 class="section-title text-center">Why Choose Novita?</h2>
+                <p class="lead">We bridge mental wellness and digital protection, providing comprehensive support for recovery, empowerment, and safety in today's digital world.</p>
             </div>
         </div>
         <div class="row g-4">
@@ -46,10 +47,43 @@
                 <div class="card feature-card h-100">
                     <div class="card-body text-center p-4">
                         <div class="feature-icon mb-3">
+                            <i class="fas fa-heart-pulse fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Recovery & Mental Health</h4>
+                        <p class="card-text">Track your progress, connect with mentors and therapists, and access verified resources for addiction recovery and mental wellness.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-shield-halved fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Cyber Safety Protection</h4>
+                        <p class="card-text">Report cyber harassment, online abuse, or blackmail. Access digital safety resources and get immediate help when threatened online.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-phone-volume fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Emergency Support System</h4>
+                        <p class="card-text">Quick access to local authorities, counselors, and trusted contacts during critical situations - substance relapse, emotional breakdowns, or cyber threats.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
                             <i class="fas fa-user-shield fa-3x text-primary"></i>
                         </div>
-                        <h4 class="card-title">Complete Anonymity</h4>
-                        <p class="card-text">Protect your privacy with our anonymous account option. Share only what you're comfortable with.</p>
+                        <h4 class="card-title">Safe & Private Space</h4>
+                        <p class="card-text">Especially designed for women and vulnerable individuals. Complete anonymity options to protect your privacy and identity.</p>
                     </div>
                 </div>
             </div>
@@ -59,8 +93,8 @@
                         <div class="feature-icon mb-3">
                             <i class="fas fa-users fa-3x text-primary"></i>
                         </div>
-                        <h4 class="card-title">Supportive Community</h4>
-                        <p class="card-text">Connect with others who understand your journey in safe, moderated support groups.</p>
+                        <h4 class="card-title">Professional Support Network</h4>
+                        <p class="card-text">Connect with verified mentors, therapists, support groups, and counselors who understand your unique challenges and journey.</p>
                     </div>
                 </div>
             </div>
@@ -70,8 +104,8 @@
                         <div class="feature-icon mb-3">
                             <i class="fas fa-chart-line fa-3x text-primary"></i>
                         </div>
-                        <h4 class="card-title">Progress Tracking</h4>
-                        <p class="card-text">Monitor your recovery journey with daily check-ins and visual progress tools.</p>
+                        <h4 class="card-title">Comprehensive Tracking</h4>
+                        <p class="card-text">Monitor recovery progress, mental health indicators, and safety incidents. Visual tools to celebrate milestones and identify areas for support.</p>
                     </div>
                 </div>
             </div>
@@ -82,7 +116,7 @@
 <!-- Testimonials -->
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="section-title text-center">Stories of Hope & Recovery</h2>
+        <h2 class="section-title text-center">Stories of Hope, Healing & Safety</h2>
         <div class="row g-4">
             <div class="col-lg-4">
                 <div class="card testi p-4 rounded h-100">
@@ -91,11 +125,11 @@
                             <i class="fas fa-user-circle fa-2x text-muted"></i>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-0">RecoveryJourney42 <span class="anonymous-badge">Anonymous</span></h5>
-                            <small class="text-muted">6 months sober</small>
+                            <h5 class="mb-0">NewBeginnings <span class="anonymous-badge">Anonymous</span></h5>
+                            <small class="text-muted">8 months recovery</small>
                         </div>
                     </div>
-                    <p class="mb-0">"The anonymous option let me seek help without fear. The women's group understood my struggles in ways others couldn't. Today I'm 6 months clean and rebuilding my life."</p>
+                    <p class="mb-0">"Novita gave me hope when I had none. The anonymous support groups and professional counselors helped me overcome addiction. Today I'm rebuilding my life with dignity and strength."</p>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -105,11 +139,11 @@
                             <i class="fas fa-user-circle fa-2x text-muted"></i>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-0">StrongerEveryDay <span class="anonymous-badge">Anonymous</span></h5>
-                            <small class="text-muted">1 year sober</small>
+                            <h5 class="mb-0">DigitalSafe <span class="anonymous-badge">Anonymous</span></h5>
+                            <small class="text-muted">Cyber safety survivor</small>
                         </div>
                     </div>
-                    <p class="mb-0">"Tracking my progress daily kept me accountable. The milestone badges might seem small, but celebrating each week kept me going when things got tough."</p>
+                    <p class="mb-0">"When I faced online harassment and blackmail, Novita's emergency support system connected me with authorities immediately. The cyber safety resources helped me protect myself and others."</p>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -154,7 +188,7 @@
                     <div class="card-body d-flex flex-column">
                         <div class="mb-2">
                             <span class="badge bg-primary">{{ post.category.name }}</span>
-                            <span class="badge bg-warning text-dark">Featured</span>
+                            <span class="badge bg-warning">Featured</span>
                         </div>
                         <h5 class="card-title">{{ post.title|truncatechars:60 }}</h5>
                         <p class="card-text flex-grow-1">{{ post.excerpt|truncatewords:20 }}</p>
@@ -180,7 +214,7 @@
             {% endfor %}
         </div>
         <div class="text-center mt-4">
-            <a href="{% url 'blog:list' %}" class="btn btn-primary btn-lg">
+            <a href="{% url 'blog:list' %}" class="btn btn-primary ">
                 <i class="fas fa-comments me-2"></i>View All Posts
             </a>
         </div>
@@ -193,14 +227,14 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-8">
-                <h2 class="mb-3">Ready to Start Your Recovery Journey?</h2>
-                <p class="mb-0">Join thousands who have found support, community, and hope through Empower Recovery.</p>
+                <h2 class="mb-3">Ready to Begin Your Journey to Hope & Healing?</h2>
+                <p class="mb-0">Join thousands who have found recovery, safety, and empowerment through Novita. No one feels alone in their struggles—online or offline.</p>
             </div>
             <div class="col-lg-4 text-lg-end">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">Go to Dashboard</a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary ">Go to Dashboard</a>
                 {% else %}
-                    <a href="{% url 'signup' %}" class="btn btn-light btn-lg">Sign Up Free Today</a>
+                    <a href="{% url 'signup' %}" class="btn btn-secondary ">Sign Up Free Today</a>
                 {% endif %}
             </div>
         </div>

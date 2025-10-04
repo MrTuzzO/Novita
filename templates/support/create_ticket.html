@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Get Support - Novita{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-hands-helping me-2"></i>Get Support from Novita</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-warning mb-4">
+                            <i class="fas fa-exclamation-triangle me-2"></i><strong>Emergency?</strong> 
+                            If you're in immediate danger or crisis, please contact local emergency services (999), 
+                            crisis hotlines, or trusted authorities right away. This support system is for non-emergency assistance.
+                        </div>
+                        <p class="text-muted mb-4">
+                            Whether you need recovery support, mental health assistance, cyber safety help, or general guidance, 
+                            our team is here for you. Share what you're comfortable with - we're here to help.
+                        </p>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% crispy form %}
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Support Guidelines -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Support Guidelines</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-check-circle text-primary me-2"></i>For Best Support:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Share only what you're comfortable with</li>
+                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Be specific about your situation</li>
+                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Include screenshots for cyber safety issues</li>
+                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Mention what support you've already received</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-shield-alt text-primary me-2"></i>Privacy & Safety:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Never share passwords or personal IDs</li>
+                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Your identity remains protected</li>
+                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>All communications are confidential</li>
+                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>We follow strict privacy protocols</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-primary mt-3">
+                            <h6><i class="fas fa-heart me-2"></i>Different Types of Support Available:</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small><strong>Recovery & Mental Health:</strong> Substance abuse support, therapy guidance, crisis intervention</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small><strong>Cyber Safety:</strong> Online harassment, blackmail, digital threats, privacy protection</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{% url 'support:dashboard' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Support Center
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.querySelector('input[name="attachments"]');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            const fileCount = files.length;
+            
+            // Create or update file list display
+            let fileList = document.getElementById('file-list');
+            if (!fileList) {
+                fileList = document.createElement('div');
+                fileList.id = 'file-list';
+                fileList.className = 'mt-2';
+                e.target.parentNode.appendChild(fileList);
+            }
+            
+            if (fileCount > 0) {
+                const fileNames = files.map(file => 
+                    `<small class="text-muted d-block"><i class="fas fa-paperclip me-1"></i>${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</small>`
+                );
+                fileList.innerHTML = `<div class="alert alert-info py-2 mt-2"><strong>${fileCount} file(s) selected:</strong><br>${fileNames.join('')}</div>`;
+            } else {
+                fileList.innerHTML = '';
+            }
+        });
+    }
+});
+</script>
+
+{% endblock %}
