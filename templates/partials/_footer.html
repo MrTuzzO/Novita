@@ -1,0 +1,47 @@
+<footer class="bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h4 class="mb-3">Empower Recovery</h4>
+                <p>A safe, anonymous, and supportive environment for addiction recovery and women empowerment.</p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-white"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+                <h5 class="mb-3">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none">Home</a></li>
+                    <li class="mb-2"><a href="{% url 'about' %}" class="text-white-50 text-decoration-none">About</a></li>
+                    <li class="mb-2"><a href="{% url 'how_it_works' %}" class="text-white-50 text-decoration-none">How It Works</a></li>
+                    <li class="mb-2"><a href="{% url 'resources' %}" class="text-white-50 text-decoration-none">Resources</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+                <h5 class="mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">FAQ</a></li>
+                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Contact</a></li>
+                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Privacy</a></li>
+                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Terms</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                {% include 'partials/_emergency_resources.html' %}
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <p class="mb-0">&copy; 2023 Empower Recovery. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="#" class="text-white-50 text-decoration-none me-3">Privacy Policy</a>
+                <a href="#" class="text-white-50 text-decoration-none">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>

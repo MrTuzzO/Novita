@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Resources - Empower Recovery{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h1 class="section-title">Recovery Resources</h1>
+        <p class="lead mb-5">Access educational materials, empowerment resources, and tools to support your recovery journey. These resources are available to everyone.</p>
+        
+        <div class="row g-4">
+            {% for resource in resources %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <span class="badge bg-{{ resource.badge_color }} mb-2">{{ resource.category }}</span>
+                        <h5 class="card-title">{{ resource.title }}</h5>
+                        <p class="card-text">{{ resource.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">{{ resource.duration }}</small>
+                            <a href="{{ resource.url }}" class="btn btn-sm btn-outline-primary">View Resource</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Emergency Resources -->
+        <div class="row mt-5">
+            <div class="col-12">
+                {% include 'partials/_emergency_resources.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

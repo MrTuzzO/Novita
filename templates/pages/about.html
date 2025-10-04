@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Empower Recovery{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="section-title">About Empower Recovery</h1>
+                <p class="lead">Empower Recovery is a web platform dedicated to drug addiction recovery and women empowerment. We provide a safe, anonymous, and supportive environment where users can track their recovery journey, connect with mentors and support groups, access educational resources, and celebrate milestones.</p>
+                
+                <h3 class="mt-5">Our Mission</h3>
+                <p>Our mission is to create a platform that combines health, empowerment, and community support, reducing social stigma and giving addicts, especially women, a holistic pathway to recovery.</p>
+                
+                <h3 class="mt-5">Our Vision</h3>
+                <p>We envision a world where everyone has access to compassionate, effective support for addiction recovery, free from judgment and stigma. We believe in empowering individuals to reclaim their lives and build brighter futures.</p>
+                
+                <h3 class="mt-5">Our Team</h3>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="team-member text-center">
+                            <img src="{% static 'images/team1.jpg' %}" alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
+                            <h5>Dr. Sarah Johnson</h5>
+                            <p class="text-muted">Clinical Director</p>
+                            <p>Licensed therapist with 15 years of experience in addiction treatment and women's mental health.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="team-member text-center">
+                            <img src="{% static 'images/team2.jpg' %}" alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
+                            <h5>Michael Rodriguez</h5>
+                            <p class="text-muted">Community Manager</p>
+                            <p>Recovery advocate and peer support specialist with 8 years of personal recovery experience.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="team-member text-center">
+                            <img src="{% static 'images/team3.jpg' %}" alt="Team Member" class="rounded-circle mb-3" width="150" height="150">
+                            <h5>Jennifer Lee</h5>
+                            <p class="text-muted">Empowerment Coach</p>
+                            <p>Specializes in building self-esteem and life skills for women in recovery.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

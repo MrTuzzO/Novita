@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}How It Works - Empower Recovery{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <h1 class="section-title">How Empower Recovery Works</h1>
+                <p class="lead">Our platform is designed to support your recovery journey through multiple interconnected features. Here's how each component works together to help you achieve lasting recovery.</p>
+                
+                <div class="row mt-5">
+                    {% for step in steps %}
+                    <div class="col-md-6">
+                        <div class="d-flex mb-4">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-{{ step.icon }} fa-2x text-primary me-3"></i>
+                            </div>
+                            <div>
+                                <h4>{{ step.number }}. {{ step.title }}</h4>
+                                <p>{{ step.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="card bg-light mt-5">
+                    <div class="card-body p-4">
+                        <h3 class="card-title">Ready to Get Started?</h3>
+                        <p class="card-text">Join our community today and take the first step toward lasting recovery. Our platform is designed to grow with you as your needs change throughout your journey.</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+                            {% else %}
+                                <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up Now</a>
+                            {% endif %}
+                            <a href="{% url 'resources' %}" class="btn btn-outline-primary">Explore Resources</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

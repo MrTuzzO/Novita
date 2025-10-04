@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand text-primary" href="{% url 'home' %}">
+            <i class="fas fa-heart me-2"></i>Empower Recovery
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'how_it_works' %}active{% endif %}" href="{% url 'how_it_works' %}">How It Works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'resources' %}active{% endif %}" href="{% url 'resources' %}">Resources</a>
+                </li>
+                
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        Dashboard
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'dashboard' %}">Overview</a></li>
+                        <li><a class="dropdown-item" href="{% url 'recovery_tracking' %}">Recovery Tracking</a></li>
+                        <li><a class="dropdown-item" href="{% url 'groups' %}">Support Groups</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mentors' %}">Mentors</a></li>
+                        <li><a class="dropdown-item" href="{% url 'milestones' %}">Milestones</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            
+            <div class="d-flex">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>
+                            {% if user.is_anonymous_mode %}
+                                Anonymous User
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user-cog me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'appointments' %}"><i class="fas fa-calendar me-2"></i>Appointments</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <a class="btn btn-outline-primary me-2" href="{% url 'login' %}">Login</a>
+                    <a class="btn btn-primary" href="{% url 'signup' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

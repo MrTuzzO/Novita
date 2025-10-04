@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Empower Recovery{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Your Safe Path to Recovery Starts Here</h1>
+                <p class="lead mb-4">A confidential, supportive platform for addiction recovery and women's empowerment. Join anonymously and begin your journey today.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">Go to Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'signup' %}" class="btn btn-light btn-lg">Start Your Journey</a>
+                        <a href="{% url 'how_it_works' %}" class="btn btn-outline-light btn-lg">Learn More</a>
+                    {% endif %}
+                </div>
+                <div class="mt-4">
+                    <small class="d-block"><i class="fas fa-shield-alt me-2"></i>100% Anonymous Option Available</small>
+                    <small class="d-block"><i class="fas fa-users me-2"></i>Supportive Community</small>
+                    <small class="d-block"><i class="fas fa-certificate me-2"></i>Professional Guidance</small>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/hero-image.png' %}" alt="Recovery Journey" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="section-title text-center">Why Choose Empower Recovery?</h2>
+                <p class="lead">We provide a comprehensive approach to recovery that addresses both addiction and empowerment needs.</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-user-shield fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Complete Anonymity</h4>
+                        <p class="card-text">Protect your privacy with our anonymous account option. Share only what you're comfortable with.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-users fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Supportive Community</h4>
+                        <p class="card-text">Connect with others who understand your journey in safe, moderated support groups.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-line fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Progress Tracking</h4>
+                        <p class="card-text">Monitor your recovery journey with daily check-ins and visual progress tools.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center">Stories of Hope & Recovery</h2>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card testi p-4 rounded h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-user-circle fa-2x text-muted"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">RecoveryJourney42 <span class="anonymous-badge">Anonymous</span></h5>
+                            <small class="text-muted">6 months sober</small>
+                        </div>
+                    </div>
+                    <p class="mb-0">"The anonymous option let me seek help without fear. The women's group understood my struggles in ways others couldn't. Today I'm 6 months clean and rebuilding my life."</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card testi p-4 rounded h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-user-circle fa-2x text-muted"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">StrongerEveryDay <span class="anonymous-badge">Anonymous</span></h5>
+                            <small class="text-muted">1 year sober</small>
+                        </div>
+                    </div>
+                    <p class="mb-0">"Tracking my progress daily kept me accountable. The milestone badges might seem small, but celebrating each week kept me going when things got tough."</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card testi p-4 rounded h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <img src="{% static 'images/mentor1.jpg' %}" class="rounded-circle" alt="Mentor" width="40" height="40">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">Sarah Johnson</h5>
+                            <small class="text-muted">Recovery Therapist</small>
+                        </div>
+                    </div>
+                    <p class="mb-0">"I've seen incredible transformations through this platform. The combination of community support and professional guidance creates a powerful recovery environment."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="mb-3">Ready to Start Your Recovery Journey?</h2>
+                <p class="mb-0">Join thousands who have found support, community, and hope through Empower Recovery.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">Go to Dashboard</a>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="btn btn-light btn-lg">Sign Up Free Today</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

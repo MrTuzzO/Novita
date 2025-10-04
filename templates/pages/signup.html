@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up - Empower Recovery{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <h1 class="section-title text-center mb-4">Join Empower Recovery</h1>
+                        <p class="text-center text-muted mb-4">Create your account to start your recovery journey.</p>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            {% if form.errors %}
+                            <div class="alert alert-danger">
+                                Please correct the errors below.
+                            </div>
+                            {% endif %}
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                <div class="text-danger">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Username</label>
+                                {{ form.username }}
+                                <div class="form-text">This will be displayed to other users unless you choose anonymous mode.</div>
+                                {% if form.username.errors %}
+                                <div class="text-danger">{{ form.username.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Create Password</label>
+                                {{ form.password1 }}
+                                {% if form.password1.errors %}
+                                <div class="text-danger">{{ form.password1.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                {{ form.password2 }}
+                                {% if form.password2.errors %}
+                                <div class="text-danger">{{ form.password2.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    {{ form.is_anonymous }}
+                                    <label class="form-check-label" for="{{ form.is_anonymous.id_for_label }}">
+                                        Join anonymously <span class="badge bg-secondary">Recommended</span>
+                                    </label>
+                                    <div class="form-text">Your identity will be protected. You'll use a generated username instead of your real name.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                {{ form.agree_terms }}
+                                <label class="form-check-label" for="{{ form.agree_terms.id_for_label }}">
+                                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                                </label>
+                                {% if form.agree_terms.errors %}
+                                <div class="text-danger">{{ form.agree_terms.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
+                            </div>
+                        </form>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-center">
+                            <p class="mb-0">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
