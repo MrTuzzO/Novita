@@ -13,21 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --primary: #2a9d8f;
-            --secondary: #e76f51;
-            --light: #f8f9fa;
-            --dark: #264653;
-            --accent: #9b5de5;
-            --success: #2a9d8f;
-            --warning: #e9c46a;
-            --danger: #e76f51;
-        }
+
         
         body {
             font-family: 'Open Sans', sans-serif;
-            color: #333;
-            background-color: #f8f9fa;
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -40,18 +29,10 @@
             font-size: 1.5rem;
         }
         
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: #23867a;
-            border-color: #23867a;
-        }
+
         
         .hero-section {
-            background: linear-gradient(135deg, var(--primary) 0%, #4cc9b8 100%);
+            background: var(--bs-primary);
             color: white;
             padding: 5rem 0;
         }
@@ -81,11 +62,11 @@
             left: 0;
             width: 60px;
             height: 3px;
-            background-color: var(--primary);
+            background-color: var(--bs-primary);
         }
         
         .anonymous-badge {
-            background-color: #6c757d;
+            background-color: var(--bs-secondary);
             color: white;
             font-size: 0.7rem;
             padding: 0.25rem 0.5rem;

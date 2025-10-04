@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Recovery Tracking - Empower Recovery{% endblock %}
 
@@ -12,43 +13,68 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <h4 class="card-title">Today's Check-in</h4>
-                        <form method="post">
+                        
+                        {% if messages %}
+                        <div class="mb-3">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <form method="post" action="{% url 'save_daily_entry' %}">
                             {% csrf_token %}
+                            
+                            <!-- Mood Selection -->
                             <div class="mb-3">
                                 <label class="form-label">How are you feeling today?</label>
                                 <div class="d-flex flex-wrap gap-2">
-                                    {% for value, label in mood_choices %}
-                                    <input type="radio" class="btn-check" name="mood" id="mood{{ forloop.counter }}" value="{{ value }}" {% if forloop.first %}checked{% endif %}>
-                                    <label class="btn btn-outline-primary" for="mood{{ forloop.counter }}">{{ label }}</label>
-                                    {% endfor %}
+                                    <input type="radio" class="btn-check" name="mood" id="mood1" value="great" checked>
+                                    <label class="btn btn-outline-primary" for="mood1">😊 Great</label>
+                                    
+                                    <input type="radio" class="btn-check" name="mood" id="mood2" value="okay">
+                                    <label class="btn btn-outline-primary" for="mood2">😐 Okay</label>
+                                    
+                                    <input type="radio" class="btn-check" name="mood" id="mood3" value="struggling">
+                                    <label class="btn btn-outline-primary" for="mood3">😔 Struggling</label>
                                 </div>
                             </div>
                             
+                            <!-- Cravings Level -->
                             <div class="mb-3">
-                                <label class="form-label">Cravings Level (1-10)</label>
-                                <input type="range" class="form-range" name="cravings_level" min="1" max="10" value="5">
+                                <label class="form-label">Cravings Level: <strong id="cravingsValue">5/10</strong></label>
+                                <input type="range" class="form-range" name="cravings_level" id="cravingsLevel" min="1" max="10" value="5" oninput="updateCravingsValue(this.value)">
                                 <div class="d-flex justify-content-between">
-                                    <small>Minimal</small>
-                                    <small>Severe</small>
+                                    <small>Minimal (1)</small>
+                                    <small>Severe (10)</small>
                                 </div>
                             </div>
                             
+                            <!-- Notes -->
                             <div class="mb-3">
                                 <label class="form-label">Today's Notes</label>
-                                <textarea class="form-control" name="notes" rows="3" placeholder="How was your day? Any challenges or successes?"></textarea>
+                                <textarea class="form-control" name="notes" rows="4" placeholder="How was your day? Any challenges, successes, or insights you'd like to share?"></textarea>
                             </div>
                             
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" name="trigger_avoided" id="triggerAvoided">
-                                <label class="form-check-label" for="triggerAvoided">I successfully avoided a trigger today</label>
+                            <!-- Checkboxes -->
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="trigger_avoided" id="triggerAvoided">
+                                    <label class="form-check-label" for="triggerAvoided">I successfully avoided a trigger today</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="support_used" id="supportUsed">
+                                    <label class="form-check-label" for="supportUsed">I used my support system today</label>
+                                </div>
                             </div>
                             
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" name="support_used" id="supportUsed">
-                                <label class="form-check-label" for="supportUsed">I used my support system today</label>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">Save Daily Entry</button>
+                                <button type="reset" class="btn btn-outline-secondary">Clear Form</button>
                             </div>
-                            
-                            <button type="submit" class="btn btn-primary">Save Daily Entry</button>
                         </form>
                     </div>
                 </div>
@@ -57,36 +83,38 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Progress Overview</h4>
+                        
+                        <!-- Stats Row -->
                         <div class="row text-center mb-4">
-                            <div class="col-md-4">
-                                <div class="streak-counter">{{ streak_data.days_sober }}</div>
+                            <div class="col-md-3">
+                                <div class="streak-counter">{{ days_sober|default:"0" }}</div>
                                 <p class="text-muted">Days Sober</p>
                             </div>
-                            <div class="col-md-4">
-                                <div class="h3 text-primary">{{ streak_data.recovery_progress }}%</div>
+                            <div class="col-md-3">
+                                <div class="h3 text-primary">{{ recovery_progress|default:"0" }}%</div>
                                 <p class="text-muted">Recovery Progress</p>
                             </div>
-                            <div class="col-md-4">
-                                <div class="h3 text-success">{{ streak_data.milestones_achieved }}</div>
-                                <p class="text-muted">Milestones Achieved</p>
+                            <div class="col-md-3">
+                                <div class="h3 text-primary">{{ milestones|default:"0" }}</div>
+                                <p class="text-muted">Milestones</p>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="h3 text-info">{{ checkins|default:"0" }}</div>
+                                <p class="text-muted">Check-ins</p>
                             </div>
                         </div>
                         
-                        <!-- Mood Chart -->
+                        <!-- Simple Progress Bars -->
                         <div class="mb-4">
-                            <h5>Mood Trends (Last 7 Days)</h5>
-                            <div class="chart-container" style="height: 200px;">
-                                <!-- Chart would be rendered here with Chart.js -->
-                                <canvas id="moodChart"></canvas>
+                            <h5>This Week's Progress</h5>
+                            <div class="progress mb-2" style="height: 25px;">
+                                <div class="progress-bar bg-primary" style="width: 70%">5 Good Days</div>
                             </div>
-                        </div>
-                        
-                        <!-- Cravings Chart -->
-                        <div>
-                            <h5>Cravings Level (Last 7 Days)</h5>
-                            <div class="chart-container" style="height: 200px;">
-                                <!-- Chart would be rendered here with Chart.js -->
-                                <canvas id="cravingsChart"></canvas>
+                            <div class="progress mb-2" style="height: 25px;">
+                                <div class="progress-bar bg-primary" style="width: 30%">2 Challenging Days</div>
+                            </div>
+                            <div class="progress" style="height: 25px;">
+                                <div class="progress-bar bg-primary" style="width: 85%">7 Triggers Avoided</div>
                             </div>
                         </div>
                     </div>
@@ -99,48 +127,61 @@
                     <div class="card-body">
                         <h4 class="card-title">Recent Entries</h4>
                         <div class="list-group list-group-flush">
-                            {% for entry in recent_entries %}
+                            <!-- Sample entries - replace with actual data from backend -->
                             <div class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="mb-1">{{ entry.date|date:"M d" }}</h6>
-                                    <p class="mb-1 small">{{ entry.notes|truncatewords:10 }}</p>
+                                    <h6 class="mb-1">Today</h6>
+                                    <p class="mb-1 small text-muted">Feeling positive, good day overall</p>
+                                    <small class="text-muted">😊 Great</small>
                                 </div>
-                                <span class="badge bg-{{ entry.mood_color }} rounded-pill">{{ entry.cravings_level }}/10</span>
+                                <span class="badge bg-primary rounded-pill">3/10</span>
                             </div>
-                            {% empty %}
-                            <div class="list-group-item text-center text-muted">
-                                No entries yet. Start tracking your recovery journey!
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Yesterday</h6>
+                                    <p class="mb-1 small text-muted">Challenging but stayed strong</p>
+                                    <small class="text-muted">😐 Okay</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">6/10</span>
                             </div>
-                            {% endfor %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">2 days ago</h6>
+                                    <p class="mb-1 small text-muted">Attended support group meeting</p>
+                                    <small class="text-muted">😊 Great</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">2/10</span>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="#" class="btn btn-sm btn-outline-primary">View All Entries</a>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Quick Actions -->
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-body">
                         <h4 class="card-title">Quick Actions</h4>
                         <div class="d-grid gap-2">
-                            <a href="{% url 'recovery_history' %}" class="btn btn-outline-primary">View Full History</a>
-                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exportModal">Export Progress Data</button>
-                            <a href="{% url 'set_goals' %}" class="btn btn-outline-primary">Set Recovery Goals</a>
+                            <a href="#" class="btn btn-outline-primary btn-sm">View Full History</a>
+                            <a href="#" class="btn btn-outline-primary btn-sm">Set Recovery Goals</a>
+                            <a href="#" class="btn btn-outline-primary btn-sm">Progress Reports</a>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Milestone Progress -->
-                <div class="card mt-4">
+                <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Next Milestone</h4>
                         <div class="text-center py-3">
-                            <h3 class="text-primary">{{ next_milestone.days }} Days</h3>
-                            <p class="text-muted">{{ next_milestone.title }}</p>
-                            <div class="progress mb-3">
-                                <!-- <div class="progress-bar" role="progressbar" style="width: {{ next_milestone.progress }}%">
-                                    {{ next_milestone.progress }}%
-                                </div> -->
+                            <h3 class="text-primary">30 Days</h3>
+                            <p class="text-muted">One Month Sober</p>
+                            <div class="progress mb-3" style="height: 20px;">
+                                <div class="progress-bar progress-bar-striped" style="width: 70%">70%</div>
                             </div>
-                            <p>{{ next_milestone.days_remaining }} days to go!</p>
+                            <p class="mb-0"><strong>9</strong> days to go!</p>
                         </div>
                     </div>
                 </div>
@@ -149,114 +190,57 @@
     </div>
 </section>
 
-<!-- Export Modal -->
-<div class="modal fade" id="exportModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Export Progress Data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="{% url 'export_data' %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label">Date Range</label>
-                        <select class="form-select" name="date_range">
-                            <option value="7">Last 7 days</option>
-                            <option value="30" selected>Last 30 days</option>
-                            <option value="90">Last 90 days</option>
-                            <option value="365">Last year</option>
-                            <option value="all">All time</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Format</label>
-                        <select class="form-select" name="format">
-                            <option value="csv">CSV</option>
-                            <option value="pdf">PDF Report</option>
-                            <option value="excel">Excel</option>
-                        </select>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Export Data</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-{% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- Chart data passed from Django -->
-{{ mood_labels|json_script:"mood-labels" }}
-{{ mood_data|json_script:"mood-data" }}
-{{ cravings_labels|json_script:"cravings-labels" }}
-{{ cravings_data|json_script:"cravings-data" }}
+<!-- Simple JavaScript -->
 <script>
-    // Initialize charts
-    document.addEventListener('DOMContentLoaded', function() {
-        const moodCtx = document.getElementById('moodChart').getContext('2d');
-        const cravingsCtx = document.getElementById('cravingsChart').getContext('2d');
-        
-        // Get chart data from JSON scripts
-        const moodLabels = JSON.parse(document.getElementById('mood-labels').textContent || '[]');
-        const moodData = JSON.parse(document.getElementById('mood-data').textContent || '[]');
-        const cravingsLabels = JSON.parse(document.getElementById('cravings-labels').textContent || '[]');
-        const cravingsData = JSON.parse(document.getElementById('cravings-data').textContent || '[]');
-        
-        // Mood chart
-        const moodChart = new Chart(moodCtx, {
-            type: 'line',
-            data: {
-                labels: moodLabels,
-                datasets: [{
-                    label: 'Mood Level',
-                    data: moodData,
-                    borderColor: '#2a9d8f',
-                    backgroundColor: 'rgba(42, 157, 143, 0.1)',
-                    tension: 0.1,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 10
-                    }
-                }
-            }
-        });
-        
-        // Cravings chart
-        const cravingsChart = new Chart(cravingsCtx, {
-            type: 'bar',
-            data: {
-                labels: cravingsLabels,
-                datasets: [{
-                    label: 'Cravings Level',
-                    data: cravingsData,
-                    backgroundColor: '#e76f51',
-                    borderColor: '#e76f51',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 10
-                    }
-                }
-            }
-        });
-    });
+function updateCravingsValue(value) {
+    document.getElementById('cravingsValue').textContent = value + '/10';
+    
+    // Add emoji based on cravings level
+    let emoji = '';
+    if (value <= 3) {
+        emoji = ' 😊';
+    } else if (value <= 5) {
+        emoji = ' 😐';
+    } else if (value <= 7) {
+        emoji = ' 😔';
+    } else if (value <= 9) {
+        emoji = ' 😟';
+    } else {
+        emoji = ' 😨';
+    }
+    document.getElementById('cravingsValue').textContent = value + '/10' + emoji;
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateCravingsValue(5); // Set initial value
+});
 </script>
-{% endblock %}
+
+<style>
+.streak-counter {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--bs-primary);
+}
+
+.progress-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+}
+
+.feature-card {
+    border-radius: 10px;
+    transition: transform 0.3s;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+</style>
 {% endblock %}

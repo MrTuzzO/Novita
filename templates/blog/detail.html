@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ post.title }} - Empower Recovery Blog{% endblock %}
+
+{% block extra_css %}
+<style>
+.blog-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.375rem;
+    margin: 1rem 0;
+}
+.blog-content {
+    line-height: 1.8;
+}
+.comment-item {
+    border-left: 3px solid var(--bs-primary);
+    padding-left: 1rem;
+}
+.reply-item {
+    border-left: 3px solid var(--bs-secondary);
+    margin-left: 2rem;
+    margin-top: 1rem;
+}
+.like-button {
+    transition: all 0.3s ease;
+}
+.like-button.liked {
+    color: var(--bs-danger);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <article class="mb-5">
+                    <!-- Post Header -->
+                    <div class="mb-4">
+                        {% if post.featured_image %}
+                        <img src="{{ post.featured_image.url }}" class="img-fluid rounded mb-4" alt="{{ post.title }}" style="width: 100%; height: 400px; object-fit: cover;">
+                        {% endif %}
+                        
+                        <h1 class="display-5 fw-bold mb-3">{{ post.title }}</h1>
+                        
+                        {% if post.status == 'draft' %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-eye-slash me-2"></i>
+                            <strong>Draft Preview:</strong> This post is not published yet and is only visible to you.
+                        </div>
+                        {% endif %}
+                        
+                        <div class="d-flex flex-wrap align-items-center mb-3">
+                            <div class="me-4">
+                                <i class="fas fa-user me-1"></i>
+                                <span>{{ post.author.get_full_name }}</span>
+                            </div>
+                            <div class="me-4">
+                                <i class="fas fa-calendar me-1"></i>
+                                <span>{{ post.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            <div class="me-4">
+                                <i class="fas fa-clock me-1"></i>
+                                <span>{{ post.reading_time }} min read</span>
+                            </div>
+                            <div class="me-4">
+                                <i class="fas fa-eye me-1"></i>
+                                <span>{{ post.views_count }} views</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <span class="badge bg-primary me-2">{{ post.category.name }}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Post Content -->
+                    <div class="blog-content mb-5">
+                        {{ post.content|safe }}
+                    </div>
+                    
+                    <!-- Post Actions -->
+                    <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-4">
+                        <div>
+                            {% if user.is_authenticated %}
+                            <button class="btn btn-outline-danger like-button {% if user_liked %}liked{% endif %}" 
+                                    onclick="toggleLike('{{ post.slug }}')" id="like-btn">
+                                <i class="fas fa-heart me-1"></i>
+                                <span id="like-count">{{ post.likes_count }}</span> Likes
+                            </button>
+                            {% else %}
+                            <span class="text-muted">
+                                <i class="fas fa-heart me-1"></i>{{ post.likes_count }} Likes
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {% if user.is_authenticated and user == post.author %}
+                            <a href="{% url 'blog:edit' post.slug %}" class="btn btn-outline-primary btn-sm me-1">
+                                <i class="fas fa-edit me-1"></i>Edit Post
+                            </a>
+                            <a href="{% url 'blog:delete' post.slug %}" class="btn btn-outline-danger btn-sm me-1">
+                                <i class="fas fa-trash-alt me-1"></i>Delete Post
+                            </a>
+                            {% endif %}
+                            <button class="btn btn-outline-secondary btn-sm" onclick="sharePost()">
+                                <i class="fas fa-share me-1"></i>Share
+                            </button>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <h4 class="mb-4">
+                        Comments ({{ comments.count }})
+                    </h4>
+                    
+                    {% if user.is_authenticated %}
+                    <!-- Comment Form -->
+                    <div class="mb-5">
+                        <form method="post" action="{% url 'blog:add_comment' post.slug %}">
+                            {% csrf_token %}
+                            {% crispy comment_form %}
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <a href="{% url 'login' %}">Login</a> to leave a comment.
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Comments List -->
+                    {% for comment in comments %}
+                    <div class="comment-item mb-4 p-3 bg-light rounded">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="mb-0">{{ comment.author.get_full_name }}</h6>
+                            <small class="text-muted">{{ comment.created_at|date:"M d, Y g:i A" }}</small>
+                        </div>
+                        <p class="mb-2">{{ comment.content }}</p>
+                        
+                        {% if user.is_authenticated %}
+                        <button class="btn btn-link btn-sm p-0 text-primary" onclick="showReplyForm({{ comment.id }})">
+                            <i class="fas fa-reply me-1"></i>Reply
+                        </button>
+                        {% endif %}
+                        
+                        <!-- Reply Form (Hidden by default) -->
+                        {% if user.is_authenticated %}
+                        <div id="reply-form-{{ comment.id }}" class="mt-3" style="display: none;">
+                            <form method="post" action="{% url 'blog:add_comment' post.slug %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                <div class="mb-3">
+                                    <textarea name="content" class="form-control" rows="3" placeholder="Write your reply..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Post Reply</button>
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="hideReplyForm({{ comment.id }})">Cancel</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Replies -->
+                        {% for reply in comment.replies.all %}
+                        <div class="reply-item p-2 bg-white rounded mt-2">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <h6 class="mb-0 small">{{ reply.author.get_full_name }}</h6>
+                                <small class="text-muted">{{ reply.created_at|date:"M d, Y g:i A" }}</small>
+                            </div>
+                            <p class="mb-0 small">{{ reply.content }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center">No comments yet. Be the first to share your thoughts!</p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Author Info -->
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <h6>About the Author</h6>
+                        <h5>{{ post.author.get_full_name }}</h5>
+                        <p class="text-muted small">Recovery journey since {{ post.author.date_joined|date:"Y" }}</p>
+                    </div>
+                </div>
+                
+                <!-- Related Posts -->
+                {% if related_posts %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">Related Posts</h6>
+                    </div>
+                    <div class="card-body">
+                        {% for related in related_posts %}
+                        <div class="mb-3">
+                            <h6 class="mb-1">
+                                <a href="{% url 'blog:detail' related.slug %}" class="text-decoration-none">
+                                    {{ related.title|truncatechars:60 }}
+                                </a>
+                            </h6>
+                            <small class="text-muted">{{ related.created_at|date:"M d, Y" }}</small>
+                        </div>
+                        {% if not forloop.last %}<hr class="my-2">{% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Navigation -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'blog:home' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Blog
+                            </a>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'blog:create' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>Write New Post
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Like/Unlike functionality
+function toggleLike(slug) {
+    fetch(`/blog/post/${slug}/like/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const likeBtn = document.getElementById('like-btn');
+        const likeCount = document.getElementById('like-count');
+        
+        likeCount.textContent = data.likes_count;
+        
+        if (data.liked) {
+            likeBtn.classList.add('liked');
+        } else {
+            likeBtn.classList.remove('liked');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Reply form functionality
+function showReplyForm(commentId) {
+    const form = document.getElementById(`reply-form-${commentId}`);
+    form.style.display = 'block';
+}
+
+function hideReplyForm(commentId) {
+    const form = document.getElementById(`reply-form-${commentId}`);
+    form.style.display = 'none';
+}
+
+// Share functionality
+function sharePost() {
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ post.title|escapejs }}',
+            text: '{{ post.excerpt|escapejs }}',
+            url: window.location.href
+        });
+    } else {
+        // Fallback - copy to clipboard
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('Link copied to clipboard!');
+        });
+    }
+}
+</script>
+{% endblock %}

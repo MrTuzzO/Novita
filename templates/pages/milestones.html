@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Milestones - Empower Recovery{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title">Recovery Milestones</h2>
+        <p class="lead mb-5">Celebrate your achievements and track your progress.</p>
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-marker bg-primary"></div>
+                        <div class="timeline-content">
+                            <h5>Day 1 - First Step</h5>
+                            <p class="text-muted">You made the decision to start your recovery journey.</p>
+                            <small class="text-primary">✓ Completed</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item completed">
+                        <div class="timeline-marker bg-primary"></div>
+                        <div class="timeline-content">
+                            <h5>Week 1 - First Week Strong</h5>
+                            <p class="text-muted">You've successfully completed your first week of recovery.</p>
+                            <small class="text-primary">✓ Completed</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item current">
+                        <div class="timeline-marker bg-primary"></div>
+                        <div class="timeline-content">
+                            <h5>Month 1 - Building Momentum</h5>
+                            <p class="text-muted">Complete your first month of continuous recovery.</p>
+                            <small class="text-primary">In Progress (Day 15/30)</small>
+                            <div class="progress mt-2">
+                                <div class="progress-bar" role="progressbar" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-light border"></div>
+                        <div class="timeline-content">
+                            <h5>3 Months - Establishing Routine</h5>
+                            <p class="text-muted">Build strong daily habits and coping strategies.</p>
+                            <small class="text-muted">Upcoming</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-light border"></div>
+                        <div class="timeline-content">
+                            <h5>6 Months - Halfway Point</h5>
+                            <p class="text-muted">Reflect on your progress and set new goals.</p>
+                            <small class="text-muted">Upcoming</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-light border"></div>
+                        <div class="timeline-content">
+                            <h5>1 Year - Major Milestone</h5>
+                            <p class="text-muted">Celebrate one full year of recovery and growth.</p>
+                            <small class="text-muted">Upcoming</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Your Progress</h5>
+                        <div class="text-center mb-3">
+                            <div class="display-4 text-primary">15</div>
+                            <p class="text-muted">Days Sober</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Next Milestone</span>
+                                <span>30 Days</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: 50%"></div>
+                            </div>
+                            <small class="text-muted">15 days to go</small>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="btn btn-primary">Share Achievement</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h6 class="card-title">Milestone Badges</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-primary">First Day</span>
+                            <span class="badge bg-primary">First Week</span>
+                            <span class="badge bg-primary">First Month</span>
+                            <span class="badge bg-primary">3 Months</span>
+                            <span class="badge bg-primary">6 Months</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--bs-gray-300);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -1.5rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.timeline-content {
+    margin-left: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}

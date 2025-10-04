@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}My Posts - Community Forum{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2><i class="fas fa-user-edit me-2"></i>My Posts</h2>
+                    <a href="{% url 'blog:create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i>Create New Post
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        {% if page_obj %}
+        <div class="row">
+            {% for post in page_obj %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-primary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-image fa-3x text-white opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <div class="mb-2">
+                            <span class="badge bg-primary">{{ post.category.name }}</span>
+                            {% if post.status == 'draft' %}
+                            <span class="badge bg-secondary">Draft</span>
+                            {% elif post.status == 'published' %}
+                            <span class="badge bg-success">Published</span>
+                            {% elif post.status == 'archived' %}
+                            <span class="badge bg-dark">Archived</span>
+                            {% endif %}
+                        </div>
+                        
+                        <h5 class="card-title">{{ post.title|truncatechars:60 }}</h5>
+                        <p class="card-text flex-grow-1">{{ post.excerpt|truncatewords:20 }}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted">{{ post.created_at|date:"M d, Y" }}</small>
+                                <div class="text-muted small">
+                                    <i class="fas fa-eye me-1"></i>{{ post.views_count }}
+                                    <i class="fas fa-heart ms-2 me-1"></i>{{ post.likes_count }}
+                                </div>
+                            </div>
+                            
+                            <div class="btn-group w-100">
+                                {% if post.status == 'archived' %}
+                                <button class="btn btn-outline-secondary btn-sm" disabled title="Archived posts cannot be viewed">
+                                    <i class="fas fa-archive me-1"></i>Archived
+                                </button>
+                                {% else %}
+                                <a href="{% url 'blog:detail' post.slug %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View
+                                </a>
+                                {% endif %}
+                                <a href="{% url 'blog:edit' post.slug %}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </a>
+                                <a href="{% url 'blog:delete' post.slug %}" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-trash-alt me-1"></i>Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="d-flex justify-content-center mt-4">
+            <nav>
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-pen fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No posts yet</h4>
+            <p class="text-muted">You haven't created any posts yet. Share your story with the community!</p>
+            <a href="{% url 'blog:create' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Create Your First Post
+            </a>
+        </div>
+        {% endif %}
+        
+        <div class="mt-4 text-center">
+            <a href="{% url 'blog:home' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Community
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

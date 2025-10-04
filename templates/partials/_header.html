@@ -37,7 +37,12 @@
                 {% endif %}
             </ul>
             
-            <div class="d-flex">
+            <div class="d-flex align-items-center">
+                <!-- Community Blog Link -->
+                <a class="btn btn-outline-primary me-2 {% if 'blog' in request.resolver_match.namespace %}active{% endif %}" href="{% url 'blog:home' %}">
+                    <i class="fas fa-comments me-1"></i>Community
+                </a>
+                
                 {% if user.is_authenticated %}
                     <div class="dropdown">
                         <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -50,6 +55,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user-cog me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'blog:my_posts' %}"><i class="fas fa-pen me-2"></i>My Posts</a></li>
                             <li><a class="dropdown-item" href="{% url 'appointments' %}"><i class="fas fa-calendar me-2"></i>Appointments</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>

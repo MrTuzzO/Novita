@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Share Your Story - Community Forum{% endblock %}
+
+{% block extra_css %}
+<!-- CKEditor CSS -->
+<style>
+.cke {
+    border-radius: 0.375rem;
+}
+.form-group label {
+    font-weight: 600;
+}
+.community-header {
+    background: var(--bs-primary);
+    color: white;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow">
+                    <div class="card-header community-header">
+                        <div class="text-center py-3">
+                            <h2 class="mb-2">
+                                <i class="fas fa-pen me-2"></i>Share Your Story
+                            </h2>
+                            <p class="mb-0 opacity-75">Your journey matters. Share it with our supportive community.</p>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <strong>Community Guidelines:</strong> Share openly and honestly. Your story could inspire someone else on their recovery journey.
+                        </div>
+                        
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% crispy form %}
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <a href="{% url 'blog:home' %}" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Community
+                    </a>
+                    <a href="{% url 'blog:list' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-comments me-2"></i>View All Posts
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+{{ form.media }}
+<!-- Additional CKEditor customizations -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-save functionality (optional)
+    let autoSaveTimer;
+    const form = document.querySelector('form');
+    
+    function autoSave() {
+        // You can implement auto-save functionality here
+        console.log('Auto-save triggered');
+    }
+    
+    // Auto-save every 30 seconds
+    if (form) {
+        autoSaveTimer = setInterval(autoSave, 30000);
+    }
+    
+    // Clear auto-save timer when form is submitted
+    form?.addEventListener('submit', function() {
+        if (autoSaveTimer) {
+            clearInterval(autoSaveTimer);
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,11 +1,19 @@
 from django.shortcuts import render
-from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-from django.urls import reverse_lazy
+from blog.models import BlogPost
 
 # Create your views here.
 
 def home(request):
-    return render(request, 'pages/home.html')
+    # Get featured posts for the homepage
+    featured_posts = BlogPost.objects.filter(
+        status='published',
+        is_featured=True
+    ).select_related('author', 'category').order_by('-created_at')[:3]
+    
+    context = {
+        'featured_posts': featured_posts,
+    }
+    return render(request, 'pages/home.html', context)
 
 def about(request):
     return render(request, 'pages/about.html')
@@ -48,12 +56,6 @@ def recovery_tracking(request):
     }
     return render(request, 'pages/recovery_tracking.html', context)
 
-def login_view(request):
-    return render(request, 'pages/login.html')
-
-def signup_view(request):
-    return render(request, 'pages/signup.html')
-
 # Placeholder views for URLs referenced in recovery_tracking.html
 def recovery_history(request):
     return render(request, 'pages/recovery_tracking.html')  # Redirect to main tracking for now
@@ -66,19 +68,22 @@ def set_goals(request):
     # Placeholder - would handle goal setting
     return render(request, 'pages/recovery_tracking.html')
 
-# Custom Password Reset Views
-class CustomPasswordResetView(PasswordResetView):
-    template_name = 'pages/password_reset.html'
-    success_url = reverse_lazy('password_reset_done')
-    email_template_name = 'registration/password_reset_email.html'
-    subject_template_name = 'registration/password_reset_subject.txt'
+def groups_view(request):
+    # Placeholder view for support groups
+    return render(request, 'pages/groups.html')
 
-class CustomPasswordResetDoneView(PasswordResetDoneView):
-    template_name = 'pages/password_reset_done.html'
+def mentors_view(request):
+    # Placeholder view for mentors
+    return render(request, 'pages/mentors.html')
 
-class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'pages/password_reset_confirm.html'
-    success_url = reverse_lazy('password_reset_complete')
+def milestones_view(request):
+    # Placeholder view for milestones
+    return render(request, 'pages/milestones.html')
 
-class CustomPasswordResetCompleteView(PasswordResetCompleteView):
-    template_name = 'pages/password_reset_complete.html'
+def appointments_view(request):
+    # Placeholder view for appointments
+    return render(request, 'pages/appointments.html')
+
+def save_daily_entry(request):
+    # Placeholder view for saving daily entry
+    return render(request, 'pages/recovery_tracking.html')

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Appointments - Empower Recovery{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title">My Appointments</h2>
+        <p class="lead mb-5">Manage your appointments with counselors, mentors, and support groups.</p>
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Upcoming Appointments</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="appointment-item border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6>Individual Counseling Session</h6>
+                                    <p class="text-muted mb-1">Dr. Sarah Johnson</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>Tomorrow, Oct 5, 2025 at 2:00 PM
+                                    </small>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-2">Reschedule</button>
+                                    <button class="btn btn-sm btn-outline-danger">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6>Mentor Meeting</h6>
+                                    <p class="text-muted mb-1">Jessica K. - Recovery Mentor</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>Oct 7, 2025 at 11:00 AM
+                                    </small>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-2">Reschedule</button>
+                                    <button class="btn btn-sm btn-outline-danger">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6>Women's Circle Support Group</h6>
+                                    <p class="text-muted mb-1">Weekly Group Session</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>Oct 8, 2025 at 6:00 PM
+                                    </small>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary">Group Settings</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Past Appointments</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="appointment-item border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6>Initial Assessment</h6>
+                                    <p class="text-muted mb-1">Dr. Sarah Johnson</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>Oct 1, 2025 at 10:00 AM
+                                    </small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-primary">Completed</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6>Newcomers Group Orientation</h6>
+                                    <p class="text-muted mb-1">Group Facilitator</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>Sep 30, 2025 at 7:00 PM
+                                    </small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-primary">Completed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Quick Actions</h5>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary">Schedule New Appointment</button>
+                            <button class="btn btn-outline-primary">Find a Counselor</button>
+                            <button class="btn btn-outline-primary">Join Support Group</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Appointment Stats</h6>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="h4 text-primary">3</div>
+                                <small class="text-muted">This Week</small>
+                            </div>
+                            <div class="col-6">
+                                <div class="h4 text-primary">12</div>
+                                <small class="text-muted">Total Attended</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.appointment-item:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+</style>
+{% endblock %}
