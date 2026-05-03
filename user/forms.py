@@ -1,10 +1,15 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.contrib.auth import get_user_model
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
 
 User = get_user_model()
+
+_INPUT = (
+    'w-full rounded-xl border border-slate-300 px-4 py-2.5 text-slate-800 '
+    'placeholder:text-slate-400 focus:outline-none focus:ring-2 '
+    'focus:ring-[var(--color-primary)] focus:border-transparent'
+)
+
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -16,24 +21,12 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            HTML('<h3 class="mb-4">Create Your Account</h3>'),
-            'full_name',
-            'email',
-            'password1',
-            'password2',
-            Div(
-                Submit('submit', 'Sign Up', css_class='btn btn-primary btn-lg w-100'),
-                css_class='d-grid gap-2'
-            )
-        )
-        
-        # Update field attributes
-        self.fields['email'].widget.attrs.update({'class': 'form-control'})
-        self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+
+        for field in self.fields.values():
+            field.widget.attrs.setdefault('class', _INPUT)
+
+        self.fields['email'].widget.attrs.update({'placeholder': 'your@email.com', 'type': 'email'})
+        self.fields['full_name'].widget.attrs.update({'placeholder': 'Your full name'})
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -43,77 +36,46 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
+
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('email', 'full_name')
 
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = [
-            'full_name', 'date_of_birth', 
-            'address', 'school_college_name', 'phone_number'
-        ]
+        fields = ['full_name', 'date_of_birth', 'address', 'school_college_name', 'phone_number']
         widgets = {
-            'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'address': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'address': forms.Textarea(attrs={'rows': 3}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            HTML('<h3 class="mb-4">Profile Information</h3>'),
-            HTML('<p class="text-muted mb-4">All fields are optional. You can update this information anytime.</p>'),
-            'full_name',
-            Row(
-                Column('date_of_birth', css_class='form-group col-md-6 mb-3'),
-                Column('phone_number', css_class='form-group col-md-6 mb-3'),
-                css_class='form-row'
-            ),
-            'school_college_name',
-            'address',
-            Div(
-                Submit('submit', 'Update Profile', css_class='btn btn-primary'),
-                css_class='d-grid gap-2 d-md-flex justify-content-md-end'
-            )
-        )
-        
-        # Update field attributes
+
         for field in self.fields.values():
-            if 'class' not in field.widget.attrs:
-                field.widget.attrs.update({'class': 'form-control'})
-        
-        # Update labels
+            field.widget.attrs.setdefault('class', _INPUT)
+
         self.fields['full_name'].label = 'Full Name'
         self.fields['date_of_birth'].label = 'Date of Birth'
         self.fields['address'].label = 'Address'
         self.fields['school_college_name'].label = 'School/College Name'
         self.fields['phone_number'].label = 'Phone Number'
 
+
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            HTML('<h3 class="mb-4">Welcome Back</h3>'),
-            'username',  # Django's AuthenticationForm uses 'username' field
-            'password',
-            Div(
-                Submit('submit', 'Sign In', css_class='btn btn-primary btn-lg w-100'),
-                css_class='d-grid gap-2'
-            )
-        )
-        
-        # Customize the username field to work with email
+
         self.fields['username'].label = 'Email'
         self.fields['username'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Email',
-            'type': 'email'
+            'class': _INPUT,
+            'placeholder': 'your@email.com',
+            'type': 'email',
         })
         self.fields['password'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Password'
+            'class': _INPUT,
+            'placeholder': 'Enter your password',
         })

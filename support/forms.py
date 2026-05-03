@@ -1,7 +1,5 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, Field
 from .models import SupportTicket, TicketResponse, TicketAttachment
 
 User = get_user_model()
@@ -30,11 +28,23 @@ class MultipleFileField(forms.FileField):
             result = single_file_clean(data, initial)
             return [result] if result else []
 
+_INPUT = (
+    'w-full rounded-xl border border-slate-300 px-4 py-2.5 text-slate-800 '
+    'placeholder:text-slate-400 focus:outline-none focus:ring-2 '
+    'focus:ring-[var(--color-primary)] focus:border-transparent'
+)
+_FILE = (
+    'w-full rounded-xl border border-slate-300 px-4 py-2 text-sm text-slate-800 '
+    'file:mr-4 file:rounded-lg file:border-0 file:bg-[var(--color-primary)]/10 '
+    'file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[var(--color-primary)]'
+)
+
+
 class SupportTicketForm(forms.ModelForm):
     attachments = MultipleFileField(
         required=False,
         widget=MultipleFileInput(attrs={
-            'class': 'form-control',
+            'class': _FILE,
             'accept': '.jpg,.jpeg,.png,.gif,.pdf'
         }),
         help_text="Upload images (JPG, PNG, GIF) or PDF files (max 10MB each)"
@@ -50,30 +60,11 @@ class SupportTicketForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            'subject',
-            Row(
-                Column('category', css_class='form-group col-md-6 mb-3'),
-                Column('priority', css_class='form-group col-md-6 mb-3'),
-                css_class='form-row'
-            ),
-            'description',
-            'attachments',
-            HTML('<small class="text-muted">Supported file types: JPG, PNG, GIF, PDF (Max 10MB each)</small>'),
-            Div(
-                Submit('submit', 'Create Support Ticket', css_class='btn btn-primary'),
-                css_class='d-flex justify-content-center mt-4'
-            )
-        )
-        
-        # Customize field attributes
+
         for field_name, field in self.fields.items():
             if field_name != 'attachments':
-                field.widget.attrs.update({'class': 'form-control'})
-        
-        # Customize labels and help text
+                field.widget.attrs.setdefault('class', _INPUT)
+
         self.fields['subject'].label = 'How can Novita support you today?'
         self.fields['subject'].help_text = 'Brief title describing your support need or concern'
         self.fields['category'].label = 'Support Type'
@@ -95,7 +86,7 @@ class TicketResponseForm(forms.ModelForm):
     attachments = MultipleFileField(
         required=False,
         widget=MultipleFileInput(attrs={
-            'class': 'form-control',
+            'class': _FILE,
             'accept': '.jpg,.jpeg,.png,.gif,.pdf'
         }),
         help_text="Attach images or PDF files to your response (optional)"
@@ -108,7 +99,6 @@ class TicketResponseForm(forms.ModelForm):
             'message': forms.Textarea(attrs={
                 'rows': 4,
                 'placeholder': 'Type your response here...',
-                'class': 'form-control'
             })
         }
     
@@ -116,17 +106,8 @@ class TicketResponseForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         self.ticket = kwargs.pop('ticket', None)
         super().__init__(*args, **kwargs)
-        
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            'message',
-            'attachments',
-            Div(
-                Submit('submit_response', 'Send Response', css_class='btn btn-primary'),
-                css_class='d-flex justify-content-end mt-3'
-            )
-        )
-        
+
+        self.fields['message'].widget.attrs.setdefault('class', _INPUT)
         self.fields['message'].label = 'Your Response'
     
     def save(self, commit=True):
@@ -148,29 +129,10 @@ class AdminTicketUpdateForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-        # Limit assigned_to to staff members only
         self.fields['assigned_to'].queryset = User.objects.filter(is_staff=True)
         self.fields['assigned_to'].empty_label = "Unassigned"
-        
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.layout = Layout(
-            Row(
-                Column('status', css_class='form-group col-md-4 mb-3'),
-                Column('priority', css_class='form-group col-md-4 mb-3'),
-                Column('assigned_to', css_class='form-group col-md-4 mb-3'),
-                css_class='form-row'
-            ),
-            Div(
-                Submit('update_ticket', 'Update Ticket', css_class='btn btn-warning'),
-                css_class='d-flex justify-content-end'
-            )
-        )
-        
-        # Add CSS classes
         for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
+            field.widget.attrs.setdefault('class', _INPUT)
 
 class TicketSearchForm(forms.Form):
     search = forms.CharField(
@@ -178,41 +140,23 @@ class TicketSearchForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'Search tickets...',
-            'class': 'form-control'
         })
     )
     status = forms.ChoiceField(
         choices=[('', 'All Status')] + SupportTicket.STATUS_CHOICES,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={})
     )
     category = forms.ChoiceField(
         choices=[('', 'All Categories')] + SupportTicket.CATEGORY_CHOICES,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={})
     )
     priority = forms.ChoiceField(
         choices=[('', 'All Priorities')] + SupportTicket.PRIORITY_CHOICES,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={})
     )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-        self.helper = FormHelper()
-        self.helper.form_method = 'GET'
-        self.helper.layout = Layout(
-            Row(
-                Column('search', css_class='form-group col-md-4 mb-3'),
-                Column('status', css_class='form-group col-md-3 mb-3'),
-                Column('category', css_class='form-group col-md-3 mb-3'),
-                Column('priority', css_class='form-group col-md-2 mb-3'),
-                css_class='form-row'
-            ),
-            Div(
-                Submit('filter', 'Filter', css_class='btn btn-primary'),
-                HTML('<a href="?" class="btn btn-outline-secondary ms-2">Clear</a>'),
-                css_class='d-flex justify-content-center'
-            )
-        )

@@ -1,56 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Mentors - Empower Recovery{% endblock %}
+{% block title %}Mentors - Novita{% endblock %}
 
 {% block content %}
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="section-title">Find a Mentor</h2>
-        <p class="lead mb-5">Connect with experienced mentors who can guide you through your recovery journey.</p>
-        
-        <div class="row">
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <img src="https://via.placeholder.com/100x100/007bff/ffffff?text=SM" class="rounded-circle mb-3" alt="Mentor">
-                        <h5 class="card-title">Sarah M.</h5>
-                        <p class="text-muted">5 years in recovery</p>
-                        <p class="card-text">Specializes in early recovery support and relapse prevention strategies.</p>
-                        <button class="btn btn-primary">Connect</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <img src="https://via.placeholder.com/100x100/28a745/ffffff?text=JK" class="rounded-circle mb-3" alt="Mentor">
-                        <h5 class="card-title">Jessica K.</h5>
-                        <p class="text-muted">8 years in recovery</p>
-                        <p class="card-text">Focuses on women's empowerment and building healthy relationships.</p>
-                        <button class="btn btn-primary">Connect</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <img src="https://via.placeholder.com/100x100/dc3545/ffffff?text=AL" class="rounded-circle mb-3" alt="Mentor">
-                        <h5 class="card-title">Amanda L.</h5>
-                        <p class="text-muted">12 years in recovery</p>
-                        <p class="card-text">Experienced in family relationships and career rebuilding after recovery.</p>
-                        <button class="btn btn-primary">Connect</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="text-center mt-5">
-            <h4>Want to become a mentor?</h4>
-            <p class="text-muted">Help others by sharing your experience and strength.</p>
-            <button class="btn btn-outline-primary">Apply to be a Mentor</button>
-        </div>
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-slate-900">Find a Mentor</h1>
+    <p class="mt-2 text-slate-600">Connect with experienced mentors who can guide your recovery journey.</p>
+
+    <div class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm"><img src="https://via.placeholder.com/100x100/165dff/ffffff?text=SM" class="mx-auto h-24 w-24 rounded-full" alt="Mentor"><h2 class="mt-4 text-lg font-semibold">Sarah M.</h2><p class="text-xs text-slate-500">5 years in recovery</p><p class="mt-2 text-sm text-slate-600">Specializes in early recovery support and relapse prevention.</p><button class="mt-4 rounded-xl bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white">Connect</button></article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm"><img src="https://via.placeholder.com/100x100/15b79e/ffffff?text=JK" class="mx-auto h-24 w-24 rounded-full" alt="Mentor"><h2 class="mt-4 text-lg font-semibold">Jessica K.</h2><p class="text-xs text-slate-500">8 years in recovery</p><p class="mt-2 text-sm text-slate-600">Focuses on women's empowerment and healthy relationships.</p><button class="mt-4 rounded-xl bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white">Connect</button></article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm"><img src="https://via.placeholder.com/100x100/dc2626/ffffff?text=AL" class="mx-auto h-24 w-24 rounded-full" alt="Mentor"><h2 class="mt-4 text-lg font-semibold">Amanda L.</h2><p class="text-xs text-slate-500">12 years in recovery</p><p class="mt-2 text-sm text-slate-600">Experienced in family healing and career rebuilding.</p><button class="mt-4 rounded-xl bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white">Connect</button></article>
+    </div>
+
+    <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-8 text-center">
+        <h3 class="text-2xl font-semibold">Want to become a mentor?</h3>
+        <p class="mt-2 text-slate-600">Help others by sharing your experience and strength.</p>
+        <button class="mt-4 rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">Apply to be a Mentor</button>
     </div>
 </section>
 {% endblock %}

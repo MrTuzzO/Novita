@@ -1,201 +1,118 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Recovery Tracking - Empower Recovery{% endblock %}
+{% block title %}Recovery Tracking - Novita{% endblock %}
 
 {% block content %}
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="section-title">Recovery Tracking</h2>
-        <div class="row">
-            <div class="col-lg-8">
-                <!-- Today's Check-in Form -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h4 class="card-title">Today's Check-in</h4>
-                        
-                        {% if messages %}
-                        <div class="mb-3">
-                            {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                        
-                        <form method="post" action="{% url 'save_daily_entry' %}">
-                            {% csrf_token %}
-                            
-                            <!-- Mood Selection -->
-                            <div class="mb-3">
-                                <label class="form-label">How are you feeling today?</label>
-                                <div class="d-flex flex-wrap gap-2">
-                                    <input type="radio" class="btn-check" name="mood" id="mood1" value="great" checked>
-                                    <label class="btn btn-outline-primary" for="mood1">😊 Great</label>
-                                    
-                                    <input type="radio" class="btn-check" name="mood" id="mood2" value="okay">
-                                    <label class="btn btn-outline-primary" for="mood2">😐 Okay</label>
-                                    
-                                    <input type="radio" class="btn-check" name="mood" id="mood3" value="struggling">
-                                    <label class="btn btn-outline-primary" for="mood3">😔 Struggling</label>
-                                </div>
-                            </div>
-                            
-                            <!-- Cravings Level -->
-                            <div class="mb-3">
-                                <label class="form-label">Cravings Level: <strong id="cravingsValue">5/10</strong></label>
-                                <input type="range" class="form-range" name="cravings_level" id="cravingsLevel" min="1" max="10" value="5" oninput="updateCravingsValue(this.value)">
-                                <div class="d-flex justify-content-between">
-                                    <small>Minimal (1)</small>
-                                    <small>Severe (10)</small>
-                                </div>
-                            </div>
-                            
-                            <!-- Notes -->
-                            <div class="mb-3">
-                                <label class="form-label">Today's Notes</label>
-                                <textarea class="form-control" name="notes" rows="4" placeholder="How was your day? Any challenges, successes, or insights you'd like to share?"></textarea>
-                            </div>
-                            
-                            <!-- Checkboxes -->
-                            <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="trigger_avoided" id="triggerAvoided">
-                                    <label class="form-check-label" for="triggerAvoided">I successfully avoided a trigger today</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="support_used" id="supportUsed">
-                                    <label class="form-check-label" for="supportUsed">I used my support system today</label>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">Save Daily Entry</button>
-                                <button type="reset" class="btn btn-outline-secondary">Clear Form</button>
-                            </div>
-                        </form>
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-slate-900">Recovery Tracking</h1>
+
+    <div class="mt-8 grid gap-6 lg:grid-cols-3">
+        <div class="space-y-6 lg:col-span-2">
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-2xl font-semibold">Today's Check-in</h2>
+
+                {% if messages %}
+                <div class="mb-3 mt-4">
+                    {% for message in messages %}
+                    <div class="mb-2 rounded-xl border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
+                        {{ message }}
                     </div>
+                    {% endfor %}
                 </div>
-                
-                <!-- Progress Overview -->
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Progress Overview</h4>
-                        
-                        <!-- Stats Row -->
-                        <div class="row text-center mb-4">
-                            <div class="col-md-3">
-                                <div class="streak-counter">{{ days_sober|default:"0" }}</div>
-                                <p class="text-muted">Days Sober</p>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="h3 text-primary">{{ recovery_progress|default:"0" }}%</div>
-                                <p class="text-muted">Recovery Progress</p>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="h3 text-primary">{{ milestones|default:"0" }}</div>
-                                <p class="text-muted">Milestones</p>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="h3 text-secondary">{{ checkins|default:"0" }}</div>
-                                <p class="text-muted">Check-ins</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Simple Progress Bars -->
-                        <div class="mb-4">
-                            <h5>This Week's Progress</h5>
-                            <div class="progress mb-2" style="height: 25px;">
-                                <div class="progress-bar bg-primary" style="width: 70%">5 Good Days</div>
-                            </div>
-                            <div class="progress mb-2" style="height: 25px;">
-                                <div class="progress-bar bg-primary" style="width: 30%">2 Challenging Days</div>
-                            </div>
-                            <div class="progress" style="height: 25px;">
-                                <div class="progress-bar bg-primary" style="width: 85%">7 Triggers Avoided</div>
-                            </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'save_daily_entry' %}" class="mt-4">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-semibold">How are you feeling today?</label>
+                        <div class="flex flex-wrap gap-2">
+                            <label class="cursor-pointer rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium"><input type="radio" class="mr-2" name="mood" value="great" checked>😊 Great</label>
+                            <label class="cursor-pointer rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium"><input type="radio" class="mr-2" name="mood" value="okay">😐 Okay</label>
+                            <label class="cursor-pointer rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium"><input type="radio" class="mr-2" name="mood" value="struggling">😔 Struggling</label>
                         </div>
                     </div>
-                </div>
+
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-semibold">Cravings Level: <strong id="cravingsValue">5/10</strong></label>
+                        <input type="range" class="w-full" name="cravings_level" id="cravingsLevel" min="1" max="10" value="5" oninput="updateCravingsValue(this.value)">
+                        <div class="mt-1 flex justify-between text-xs text-slate-500">
+                            <small>Minimal (1)</small>
+                            <small>Severe (10)</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-semibold">Today's Notes</label>
+                        <textarea class="w-full rounded-xl border border-slate-300 px-4 py-3" name="notes" rows="4" placeholder="How was your day? Any challenges, successes, or insights?"></textarea>
+                    </div>
+
+                    <div class="mb-4 space-y-2 text-sm">
+                        <label class="flex items-center gap-2"><input type="checkbox" name="trigger_avoided" id="triggerAvoided">I successfully avoided a trigger today</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" name="support_used" id="supportUsed">I used my support system today</label>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button type="submit" class="rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white">Save Daily Entry</button>
+                        <button type="reset" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700">Clear Form</button>
+                    </div>
+                </form>
             </div>
-            
-            <div class="col-lg-4">
-                <!-- Recent Entries -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h4 class="card-title">Recent Entries</h4>
-                        <div class="list-group list-group-flush">
-                            <!-- Sample entries - replace with actual data from backend -->
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Today</h6>
-                                    <p class="mb-1 small text-muted">Feeling positive, good day overall</p>
-                                    <small class="text-muted">😊 Great</small>
-                                </div>
-                                <span class="badge bg-primary rounded-pill">3/10</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Yesterday</h6>
-                                    <p class="mb-1 small text-muted">Challenging but stayed strong</p>
-                                    <small class="text-muted">😐 Okay</small>
-                                </div>
-                                <span class="badge bg-primary rounded-pill">6/10</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">2 days ago</h6>
-                                    <p class="mb-1 small text-muted">Attended support group meeting</p>
-                                    <small class="text-muted">😊 Great</small>
-                                </div>
-                                <span class="badge bg-primary rounded-pill">2/10</span>
-                            </div>
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="#" class="btn btn-sm btn-outline-primary">View All Entries</a>
-                        </div>
-                    </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-2xl font-semibold">Progress Overview</h2>
+
+                <div class="mt-5 grid gap-4 text-center md:grid-cols-4">
+                    <div><p class="text-4xl font-bold text-[var(--color-primary)]">{{ days_sober|default:"0" }}</p><p class="text-xs text-slate-500">Days Sober</p></div>
+                    <div><p class="text-4xl font-bold text-[var(--color-primary)]">{{ recovery_progress|default:"0" }}%</p><p class="text-xs text-slate-500">Recovery Progress</p></div>
+                    <div><p class="text-4xl font-bold text-[var(--color-primary)]">{{ milestones|default:"0" }}</p><p class="text-xs text-slate-500">Milestones</p></div>
+                    <div><p class="text-4xl font-bold text-[var(--color-secondary)]">{{ checkins|default:"0" }}</p><p class="text-xs text-slate-500">Check-ins</p></div>
                 </div>
-                
-                <!-- Quick Actions -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h4 class="card-title">Quick Actions</h4>
-                        <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-outline-primary btn-sm">View Full History</a>
-                            <a href="#" class="btn btn-outline-primary btn-sm">Set Recovery Goals</a>
-                            <a href="#" class="btn btn-outline-primary btn-sm">Progress Reports</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Milestone Progress -->
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Next Milestone</h4>
-                        <div class="text-center py-3">
-                            <h3 class="text-primary">30 Days</h3>
-                            <p class="text-muted">One Month Sober</p>
-                            <div class="progress mb-3" style="height: 20px;">
-                                <div class="progress-bar progress-bar-striped" style="width: 70%">70%</div>
-                            </div>
-                            <p class="mb-0"><strong>9</strong> days to go!</p>
-                        </div>
-                    </div>
+
+                <div class="mt-6 space-y-4">
+                    <div><p class="mb-1 text-sm font-semibold">This Week's Progress</p><div class="h-6 rounded-full bg-slate-200"><div class="h-6 w-[70%] rounded-full bg-[var(--color-primary)] text-center text-xs font-semibold leading-6 text-white">5 Good Days</div></div></div>
+                    <div><div class="h-6 rounded-full bg-slate-200"><div class="h-6 w-[30%] rounded-full bg-[var(--color-secondary)] text-center text-xs font-semibold leading-6 text-white">2 Challenging Days</div></div></div>
+                    <div><div class="h-6 rounded-full bg-slate-200"><div class="h-6 w-[85%] rounded-full bg-[var(--color-accent)] text-center text-xs font-semibold leading-6 text-white">7 Triggers Avoided</div></div></div>
                 </div>
             </div>
         </div>
+
+        <aside class="space-y-6">
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-semibold">Recent Entries</h3>
+                <div class="mt-4 space-y-3">
+                    <article class="rounded-xl border border-slate-200 p-3"><div class="flex items-start justify-between"><div><p class="font-semibold">Today</p><p class="text-xs text-slate-500">Feeling positive, good day overall</p><p class="text-xs">😊 Great</p></div><span class="rounded-full bg-[var(--color-primary)]/10 px-2 py-1 text-xs font-semibold text-[var(--color-primary)]">3/10</span></div></article>
+                    <article class="rounded-xl border border-slate-200 p-3"><div class="flex items-start justify-between"><div><p class="font-semibold">Yesterday</p><p class="text-xs text-slate-500">Challenging but stayed strong</p><p class="text-xs">😐 Okay</p></div><span class="rounded-full bg-[var(--color-primary)]/10 px-2 py-1 text-xs font-semibold text-[var(--color-primary)]">6/10</span></div></article>
+                    <article class="rounded-xl border border-slate-200 p-3"><div class="flex items-start justify-between"><div><p class="font-semibold">2 days ago</p><p class="text-xs text-slate-500">Attended support group meeting</p><p class="text-xs">😊 Great</p></div><span class="rounded-full bg-[var(--color-primary)]/10 px-2 py-1 text-xs font-semibold text-[var(--color-primary)]">2/10</span></div></article>
+                </div>
+                <a href="#" class="mt-4 inline-flex w-full justify-center rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700">View All Entries</a>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-semibold">Quick Actions</h3>
+                <div class="mt-4 grid gap-2 text-sm">
+                    <a href="#" class="rounded-xl border border-slate-300 px-4 py-2.5 font-semibold text-slate-700">View Full History</a>
+                    <a href="#" class="rounded-xl border border-slate-300 px-4 py-2.5 font-semibold text-slate-700">Set Recovery Goals</a>
+                    <a href="#" class="rounded-xl border border-slate-300 px-4 py-2.5 font-semibold text-slate-700">Progress Reports</a>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-semibold">Next Milestone</h3>
+                <div class="mt-4 text-center">
+                    <p class="text-4xl font-bold text-[var(--color-primary)]">30 Days</p>
+                    <p class="text-xs text-slate-500">One Month Sober</p>
+                    <div class="mt-3 h-5 rounded-full bg-slate-200"><div class="h-5 w-[70%] rounded-full bg-[var(--color-primary)] text-xs font-semibold leading-5 text-white">70%</div></div>
+                    <p class="mt-2 text-sm"><strong>9</strong> days to go!</p>
+                </div>
+            </div>
+        </aside>
     </div>
 </section>
 
-<!-- Simple JavaScript -->
 <script>
 function updateCravingsValue(value) {
-    document.getElementById('cravingsValue').textContent = value + '/10';
-    
-    // Add emoji based on cravings level
     let emoji = '';
     if (value <= 3) {
         emoji = ' 😊';
@@ -211,36 +128,8 @@ function updateCravingsValue(value) {
     document.getElementById('cravingsValue').textContent = value + '/10' + emoji;
 }
 
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-    updateCravingsValue(5); // Set initial value
+    updateCravingsValue(5);
 });
 </script>
-
-<style>
-.streak-counter {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--bs-primary);
-}
-
-.progress-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    padding: 1.5rem;
-}
-
-.feature-card {
-    border-radius: 10px;
-    transition: transform 0.3s;
-    border: none;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    height: 100%;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-}
-</style>
 {% endblock %}

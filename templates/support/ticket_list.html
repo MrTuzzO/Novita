@@ -1,215 +1,92 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
-{% block title %}My Support Tickets - Empower Recovery{% endblock %}
+{% block title %}My Support Tickets - Novita{% endblock %}
 
 {% block content %}
-<section class="py-5">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col-lg-8">
-                <h1>My Support Tickets</h1>
-                <p class="text-muted">Track and manage your support requests</p>
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">My Support Tickets</h1>
+            <p class="mt-1 text-sm text-slate-500">Track and manage your support requests.</p>
+        </div>
+        <a href="{% url 'support:create_ticket' %}" class="rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white"><i class="fas fa-plus mr-2"></i>New Ticket</a>
+    </div>
+
+    <form method="get" class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="grid gap-3 lg:grid-cols-12">
+            <div class="lg:col-span-4"><label for="search" class="text-xs font-semibold text-slate-500">Search tickets</label><input type="text" class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2.5" id="search" name="search" placeholder="Search by subject, ID, or description..." value="{{ request.GET.search }}"></div>
+            <div class="lg:col-span-2"><label for="status" class="text-xs font-semibold text-slate-500">Status</label><select class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2.5" id="status" name="status"><option value="">All Status</option><option value="open" {% if request.GET.status == 'open' %}selected{% endif %}>Open</option><option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>In Progress</option><option value="resolved" {% if request.GET.status == 'resolved' %}selected{% endif %}>Resolved</option><option value="closed" {% if request.GET.status == 'closed' %}selected{% endif %}>Closed</option></select></div>
+            <div class="lg:col-span-2"><label for="priority" class="text-xs font-semibold text-slate-500">Priority</label><select class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2.5" id="priority" name="priority"><option value="">All Priority</option><option value="low" {% if request.GET.priority == 'low' %}selected{% endif %}>Low</option><option value="medium" {% if request.GET.priority == 'medium' %}selected{% endif %}>Medium</option><option value="high" {% if request.GET.priority == 'high' %}selected{% endif %}>High</option><option value="critical" {% if request.GET.priority == 'critical' %}selected{% endif %}>Critical</option></select></div>
+            <div class="lg:col-span-2"><label for="category" class="text-xs font-semibold text-slate-500">Category</label><select class="mt-1 w-full rounded-xl border border-slate-300 px-4 py-2.5" id="category" name="category"><option value="">All Categories</option><option value="account" {% if request.GET.category == 'account' %}selected{% endif %}>Account Issues</option><option value="technical" {% if request.GET.category == 'technical' %}selected{% endif %}>Technical Support</option><option value="billing" {% if request.GET.category == 'billing' %}selected{% endif %}>Billing</option><option value="feature" {% if request.GET.category == 'feature' %}selected{% endif %}>Feature Request</option><option value="bug" {% if request.GET.category == 'bug' %}selected{% endif %}>Bug Report</option><option value="other" {% if request.GET.category == 'other' %}selected{% endif %}>Other</option></select></div>
+            <div class="flex items-end gap-2 lg:col-span-2"><button type="submit" class="w-full rounded-xl bg-[var(--color-primary)] px-4 py-2.5 text-sm font-semibold text-white">Search</button><a href="{% url 'support:ticket_list' %}" class="rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700">Clear</a></div>
+        </div>
+    </form>
+
+    <div class="mt-6">
+        {% if page_obj %}
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div class="border-b border-slate-200 px-5 py-4">
+                <h2 class="text-lg font-semibold text-slate-900">Support Tickets <span class="ml-2 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">{{ total_tickets }} total</span></h2>
             </div>
-            <div class="col-lg-4 text-end">
-                <a href="{% url 'support:create_ticket' %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>New Ticket
-                </a>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200 text-sm">
+                    <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500"><tr><th class="px-4 py-3 text-left">Ticket ID</th><th class="px-4 py-3 text-left">Subject</th><th class="px-4 py-3 text-left">Category</th><th class="px-4 py-3 text-left">Priority</th><th class="px-4 py-3 text-left">Status</th><th class="px-4 py-3 text-left">Responses</th><th class="px-4 py-3 text-left">Created</th><th class="px-4 py-3 text-left">Actions</th></tr></thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for ticket in page_obj %}
+                        <tr>
+                            <td class="px-4 py-3 font-semibold text-[var(--color-primary)]">{{ ticket.ticket_id }}</td>
+                            <td class="px-4 py-3"><p class="font-semibold text-slate-900">{{ ticket.subject|truncatechars:40 }}</p>{% if ticket.assigned_to %}<p class="text-xs text-slate-500"><i class="fas fa-user mr-1"></i>{{ ticket.assigned_to.get_full_name }}</p>{% endif %}</td>
+                            <td class="px-4 py-3"><span class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">{{ ticket.get_category_display }}</span></td>
+                            <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold {% if ticket.priority == 'critical' %}bg-red-100 text-red-700{% elif ticket.priority == 'high' %}bg-amber-100 text-amber-700{% elif ticket.priority == 'medium' %}bg-blue-100 text-blue-700{% else %}bg-emerald-100 text-emerald-700{% endif %}">{{ ticket.get_priority_display }}</span></td>
+                            <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-xs font-semibold {% if ticket.status == 'open' %}bg-blue-100 text-blue-700{% elif ticket.status == 'closed' %}bg-slate-100 text-slate-700{% elif ticket.status == 'resolved' %}bg-emerald-100 text-emerald-700{% elif ticket.status == 'in_progress' %}bg-amber-100 text-amber-700{% else %}bg-slate-100 text-slate-700{% endif %}">{{ ticket.get_status_display }}</span></td>
+                            <td class="px-4 py-3"><span class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">{{ ticket.response_count }}</span></td>
+                            <td class="px-4 py-3 text-xs text-slate-500">{{ ticket.created_at|date:"M d, Y" }}<br>{{ ticket.created_at|time:"H:i" }}</td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center gap-2">
+                                    <a href="{% url 'support:ticket_detail' ticket.ticket_id %}" class="rounded-lg border border-slate-300 px-2 py-1 text-xs font-semibold text-slate-700"><i class="fas fa-eye"></i></a>
+                                    {% if ticket.is_open %}
+                                    <form method="post" action="{% url 'support:close_ticket' ticket.ticket_id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="rounded-lg border border-red-300 px-2 py-1 text-xs font-semibold text-red-600" onclick="return confirm('Are you sure you want to close this ticket?')"><i class="fas fa-times"></i></button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Search and Filter -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <form method="get" class="d-flex flex-wrap gap-2 align-items-end">
-                    <div class="flex-grow-1" style="min-width: 250px;">
-                        <label for="search" class="form-label small text-muted mb-1">Search tickets</label>
-                        <input type="text" class="form-control" id="search" name="search" 
-                               placeholder="Search by subject, ID, or description..." 
-                               value="{{ request.GET.search }}">
-                    </div>
-                    <div style="min-width: 120px;">
-                        <label for="status" class="form-label small text-muted mb-1">Status</label>
-                        <select class="form-select" id="status" name="status">
-                            <option value="">All Status</option>
-                            <option value="open" {% if request.GET.status == 'open' %}selected{% endif %}>Open</option>
-                            <option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>In Progress</option>
-                            <option value="resolved" {% if request.GET.status == 'resolved' %}selected{% endif %}>Resolved</option>
-                            <option value="closed" {% if request.GET.status == 'closed' %}selected{% endif %}>Closed</option>
-                        </select>
-                    </div>
-                    <div style="min-width: 120px;">
-                        <label for="priority" class="form-label small text-muted mb-1">Priority</label>
-                        <select class="form-select" id="priority" name="priority">
-                            <option value="">All Priority</option>
-                            <option value="low" {% if request.GET.priority == 'low' %}selected{% endif %}>Low</option>
-                            <option value="medium" {% if request.GET.priority == 'medium' %}selected{% endif %}>Medium</option>
-                            <option value="high" {% if request.GET.priority == 'high' %}selected{% endif %}>High</option>
-                            <option value="critical" {% if request.GET.priority == 'critical' %}selected{% endif %}>Critical</option>
-                        </select>
-                    </div>
-                    <div style="min-width: 150px;">
-                        <label for="category" class="form-label small text-muted mb-1">Category</label>
-                        <select class="form-select" id="category" name="category">
-                            <option value="">All Categories</option>
-                            <option value="account" {% if request.GET.category == 'account' %}selected{% endif %}>Account Issues</option>
-                            <option value="technical" {% if request.GET.category == 'technical' %}selected{% endif %}>Technical Support</option>
-                            <option value="billing" {% if request.GET.category == 'billing' %}selected{% endif %}>Billing</option>
-                            <option value="feature" {% if request.GET.category == 'feature' %}selected{% endif %}>Feature Request</option>
-                            <option value="bug" {% if request.GET.category == 'bug' %}selected{% endif %}>Bug Report</option>
-                            <option value="other" {% if request.GET.category == 'other' %}selected{% endif %}>Other</option>
-                        </select>
-                    </div>
-                    <div class="d-flex gap-1">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-search"></i><span class="d-none d-sm-inline ms-1">Search</span>
-                        </button>
-                        <a href="{% url 'support:ticket_list' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-times"></i><span class="d-none d-sm-inline ms-1">Clear</span>
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Tickets List -->
-        <div class="row">
-            <div class="col-lg-12">
-                {% if page_obj %}
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            Support Tickets 
-                            <span class="badge bg-secondary">{{ total_tickets }} total</span>
-                        </h5>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Ticket ID</th>
-                                        <th>Subject</th>
-                                        <th>Category</th>
-                                        <th>Priority</th>
-                                        <th>Status</th>
-                                        <th>Responses</th>
-                                        <th>Created</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for ticket in page_obj %}
-                                    <tr>
-                                        <td>
-                                            <strong class="text-primary">{{ ticket.ticket_id }}</strong>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <strong>{{ ticket.subject|truncatechars:40 }}</strong>
-                                                {% if ticket.assigned_to %}
-                                                <br><small class="text-muted">
-                                                    <i class="fas fa-user me-1"></i>{{ ticket.assigned_to.get_full_name }}
-                                                </small>
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-primary">{{ ticket.get_category_display }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-{% if ticket.priority == 'critical' %}danger{% elif ticket.priority == 'high' %}warning{% elif ticket.priority == 'medium' %}primary{% else %}success{% endif %}">
-                                                {{ ticket.get_priority_display }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-{% if ticket.status == 'open' %}primary{% elif ticket.status == 'closed' %}secondary{% elif ticket.status == 'resolved' %}success{% elif ticket.status == 'in_progress' %}info{% else %}warning{% endif %}">
-                                                {{ ticket.get_status_display }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-secondary">{{ ticket.response_count }}</span>
-                                        </td>
-                                        <td>
-                                            <small>{{ ticket.created_at|date:"M d, Y" }}<br>{{ ticket.created_at|time:"H:i" }}</small>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <a href="{% url 'support:ticket_detail' ticket.ticket_id %}" class="btn btn-outline-primary" title="View Details">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                {% if ticket.is_open %}
-                                                <form method="post" action="{% url 'support:close_ticket' ticket.ticket_id %}" style="display: inline;">
-                                                    {% csrf_token %}
-                                                    <button type="submit" class="btn btn-outline-secondary" title="Close Ticket" onclick="return confirm('Are you sure you want to close this ticket?')">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </form>
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                {% if page_obj.has_other_pages %}
-                <div class="d-flex justify-content-center mt-4">
-                    <nav>
-                        <ul class="pagination">
-                            {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                                    <i class="fas fa-chevron-left"></i> Previous
-                                </a>
-                            </li>
-                            {% endif %}
-                            
-                            {% for num in page_obj.paginator.page_range %}
-                            {% if page_obj.number == num %}
-                            <li class="page-item active">
-                                <span class="page-link">{{ num }}</span>
-                            </li>
-                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
-                            </li>
-                            {% endif %}
-                            {% endfor %}
-                            
-                            {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                                    Next <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                </div>
+        {% if page_obj.has_other_pages %}
+        <div class="mt-6 flex justify-center">
+            <div class="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-2">
+                {% if page_obj.has_previous %}
+                <a class="rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"><i class="fas fa-chevron-left mr-1"></i>Previous</a>
                 {% endif %}
-
-                {% else %}
-                <div class="card">
-                    <div class="card-body text-center py-5">
-                        <i class="fas fa-inbox fa-4x text-muted mb-4"></i>
-                        <h4>No Support Tickets Found</h4>
-                        <p class="text-muted">You haven't created any support tickets yet, or no tickets match your search criteria.</p>
-                        <a href="{% url 'support:create_ticket' %}" class="btn btn-primary me-2">
-                            <i class="fas fa-plus me-2"></i>Create Your First Ticket
-                        </a>
-                        <a href="?" class="btn btn-outline-secondary">
-                            <i class="fas fa-refresh me-2"></i>Clear Filters
-                        </a>
-                    </div>
-                </div>
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="rounded-lg bg-[var(--color-primary)] px-3 py-2 text-sm font-semibold text-white">{{ num }}</span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <a class="rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next <i class="fas fa-chevron-right ml-1"></i></a>
                 {% endif %}
             </div>
         </div>
+        {% endif %}
+
+        {% else %}
+        <div class="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+            <i class="fas fa-inbox text-5xl text-slate-300"></i>
+            <h3 class="mt-4 text-xl font-semibold text-slate-900">No Support Tickets Found</h3>
+            <p class="mt-2 text-sm text-slate-500">Create a ticket or adjust your search filters.</p>
+            <a href="{% url 'support:create_ticket' %}" class="mt-4 inline-flex rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white"><i class="fas fa-plus mr-2"></i>Create Your First Ticket</a>
+        </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

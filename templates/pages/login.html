@@ -1,35 +1,50 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
-{% block title %}Login - Empower Recovery{% endblock %}
+{% block title %}Login - Novita{% endblock %}
 
 {% block content %}
-<section class="py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-5">
-                <div class="card shadow">
-                    <div class="card-body p-5">
-                        <div class="text-center mb-4">
-                            <p class="text-muted">Welcome back! Please enter your credentials to access your account.</p>
-                        </div>
-                        
-                        <form method="post">
-                            {% csrf_token %}
-                            {% crispy form %}
-                        </form>
-                        
-                        <div class="text-center mt-3">
-                            <a href="{% url 'password_reset' %}">Forgot your password?</a>
-                        </div>
-                        
-                        <hr class="my-4">
-                        
-                        <div class="text-center">
-                            <p class="mb-0">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
-                        </div>
-                    </div>
+<section class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:grid-cols-2">
+        <div class="hidden bg-[var(--color-primary)] p-10 text-white lg:block">
+            <h2 class="text-3xl font-bold">Welcome back</h2>
+            <p class="mt-3 text-blue-100">Sign in to continue your recovery, community, and safety journey.</p>
+            <ul class="mt-8 space-y-2 text-sm text-blue-100">
+                <li><i class="fas fa-check mr-2"></i>Private check-ins</li>
+                <li><i class="fas fa-check mr-2"></i>Support tickets and responses</li>
+                <li><i class="fas fa-check mr-2"></i>Mentor and group access</li>
+            </ul>
+        </div>
+        <div class="p-7 sm:p-10">
+            <h1 class="text-3xl font-bold text-slate-900">Login</h1>
+            <p class="mt-2 text-sm text-slate-500">Enter your credentials to access your account.</p>
+
+            <form method="post" class="mt-6 space-y-4">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="rounded-xl border border-red-200 bg-red-50 p-3">
+                    {% for error in form.non_field_errors %}<p class="text-sm text-red-700">{{ error }}</p>{% endfor %}
                 </div>
+                {% endif %}
+                <div>
+                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.username.label }}</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}{% for error in form.username.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.password.label }}</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}{% for error in form.password.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
+                </div>
+                <button type="submit" class="w-full rounded-xl bg-[var(--color-primary)] px-6 py-3 font-semibold text-white hover:bg-[var(--color-primary-dark)] transition-colors">Sign In</button>
+            </form>
+
+            <div class="mt-4 text-sm">
+                <a href="{% url 'password_reset' %}" class="font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Forgot your password?</a>
+            </div>
+
+            <div class="mt-6 border-t border-slate-200 pt-5 text-sm text-slate-600">
+                Don't have an account?
+                <a href="{% url 'signup' %}" class="font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Sign up</a>
             </div>
         </div>
     </div>

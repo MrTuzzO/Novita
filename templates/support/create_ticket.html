@@ -1,92 +1,101 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
 {% block title %}Get Support - Novita{% endblock %}
 
 {% block content %}
-<section class="py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-hands-helping me-2"></i>Get Support from Novita</h3>
+<section class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div class="bg-[var(--color-primary)] px-7 py-7 text-white">
+            <h1 class="text-2xl font-bold"><i class="fas fa-hands-helping mr-2"></i>Get Support from Novita</h1>
+        </div>
+        <div class="p-7 sm:p-8">
+            <div class="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                <i class="fas fa-exclamation-triangle mr-2"></i><strong>Emergency?</strong> If you are in immediate danger, contact emergency services (999) or trusted local authorities first.
+            </div>
+
+            <p class="mb-5 text-sm text-slate-600">Need recovery support, mental health assistance, or cyber safety help? Share what you are comfortable with and our team will assist you.</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-3 rounded-xl border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="rounded-xl border border-red-200 bg-red-50 p-3">
+                    {% for error in form.non_field_errors %}<p class="text-sm text-red-700">{{ error }}</p>{% endfor %}
+                </div>
+                {% endif %}
+                <div>
+                    <label for="{{ form.subject.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.subject.label }}</label>
+                    {{ form.subject }}
+                    {% if form.subject.help_text %}<p class="mt-1 text-xs text-slate-500">{{ form.subject.help_text }}</p>{% endif %}
+                    {% if form.subject.errors %}{% for error in form.subject.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="{{ form.category.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.category.label }}</label>
+                        {{ form.category }}
+                        {% if form.category.help_text %}<p class="mt-1 text-xs text-slate-500">{{ form.category.help_text }}</p>{% endif %}
+                        {% if form.category.errors %}{% for error in form.category.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
                     </div>
-                    <div class="card-body">
-                        <div class="alert alert-warning mb-4">
-                            <i class="fas fa-exclamation-triangle me-2"></i><strong>Emergency?</strong> 
-                            If you're in immediate danger or crisis, please contact local emergency services (999), 
-                            crisis hotlines, or trusted authorities right away. This support system is for non-emergency assistance.
-                        </div>
-                        <p class="text-muted mb-4">
-                            Whether you need recovery support, mental health assistance, cyber safety help, or general guidance, 
-                            our team is here for you. Share what you're comfortable with - we're here to help.
-                        </p>
-
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                        <form method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {% crispy form %}
-                        </form>
+                    <div>
+                        <label for="{{ form.priority.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.priority.label }}</label>
+                        {{ form.priority }}
+                        {% if form.priority.help_text %}<p class="mt-1 text-xs text-slate-500">{{ form.priority.help_text }}</p>{% endif %}
+                        {% if form.priority.errors %}{% for error in form.priority.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
                     </div>
                 </div>
-
-                <!-- Support Guidelines -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Support Guidelines</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6><i class="fas fa-check-circle text-primary me-2"></i>For Best Support:</h6>
-                                <ul class="list-unstyled">
-                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Share only what you're comfortable with</li>
-                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Be specific about your situation</li>
-                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Include screenshots for cyber safety issues</li>
-                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Mention what support you've already received</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><i class="fas fa-shield-alt text-primary me-2"></i>Privacy & Safety:</h6>
-                                <ul class="list-unstyled">
-                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Never share passwords or personal IDs</li>
-                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>Your identity remains protected</li>
-                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>All communications are confidential</li>
-                                    <li><i class="fas fa-arrow-right text-muted me-2"></i>We follow strict privacy protocols</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="alert alert-primary mt-3">
-                            <h6><i class="fas fa-heart me-2"></i>Different Types of Support Available:</h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <small><strong>Recovery & Mental Health:</strong> Substance abuse support, therapy guidance, crisis intervention</small>
-                                </div>
-                                <div class="col-md-6">
-                                    <small><strong>Cyber Safety:</strong> Online harassment, blackmail, digital threats, privacy protection</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div>
+                    <label for="{{ form.description.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.description.label }}</label>
+                    {{ form.description }}
+                    {% if form.description.help_text %}<p class="mt-1 text-xs text-slate-500">{{ form.description.help_text }}</p>{% endif %}
+                    {% if form.description.errors %}{% for error in form.description.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
                 </div>
-
-                <div class="text-center mt-4">
-                    <a href="{% url 'support:dashboard' %}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Support Center
-                    </a>
+                <div>
+                    <label for="{{ form.attachments.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.attachments.label }}</label>
+                    {{ form.attachments }}
+                    <p class="mt-1 text-xs text-slate-500">Supported file types: JPG, PNG, GIF, PDF (Max 10MB each)</p>
                 </div>
+                <div class="flex justify-center pt-2">
+                    <button type="submit" class="rounded-xl bg-[var(--color-primary)] px-8 py-3 font-semibold text-white hover:bg-[var(--color-primary-dark)] transition-colors">Create Support Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-6 rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
+        <h2 class="text-xl font-semibold text-slate-900"><i class="fas fa-info-circle mr-2 text-[var(--color-primary)]"></i>Support Guidelines</h2>
+        <div class="mt-5 grid gap-5 md:grid-cols-2">
+            <div>
+                <h3 class="text-sm font-semibold text-slate-900"><i class="fas fa-check-circle mr-2 text-[var(--color-secondary)]"></i>For Best Support</h3>
+                <ul class="mt-2 space-y-2 text-sm text-slate-600">
+                    <li>Share only what you are comfortable with</li>
+                    <li>Be specific about your situation</li>
+                    <li>Attach screenshots for cyber safety issues</li>
+                    <li>Mention support already received</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-sm font-semibold text-slate-900"><i class="fas fa-shield-alt mr-2 text-[var(--color-primary)]"></i>Privacy & Safety</h3>
+                <ul class="mt-2 space-y-2 text-sm text-slate-600">
+                    <li>Never share passwords or personal IDs</li>
+                    <li>Your identity remains protected</li>
+                    <li>All communications are confidential</li>
+                    <li>Strict privacy protocols are followed</li>
+                </ul>
             </div>
         </div>
+
+        <div class="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
+            <strong>Support Types:</strong> Recovery and mental health support, plus cyber safety response for harassment, blackmail, and digital threats.
+        </div>
+    </div>
+
+    <div class="mt-6 text-center">
+        <a href="{% url 'support:dashboard' %}" class="inline-flex rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700"><i class="fas fa-arrow-left mr-2"></i>Back to Support Center</a>
     </div>
 </section>
 
@@ -97,8 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInput.addEventListener('change', function(e) {
             const files = Array.from(e.target.files);
             const fileCount = files.length;
-            
-            // Create or update file list display
+
             let fileList = document.getElementById('file-list');
             if (!fileList) {
                 fileList = document.createElement('div');
@@ -106,12 +114,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 fileList.className = 'mt-2';
                 e.target.parentNode.appendChild(fileList);
             }
-            
+
             if (fileCount > 0) {
-                const fileNames = files.map(file => 
-                    `<small class="text-muted d-block"><i class="fas fa-paperclip me-1"></i>${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</small>`
+                const fileNames = files.map(file =>
+                    `<small class="block text-slate-600"><i class="fas fa-paperclip mr-1"></i>${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</small>`
                 );
-                fileList.innerHTML = `<div class="alert alert-info py-2 mt-2"><strong>${fileCount} file(s) selected:</strong><br>${fileNames.join('')}</div>`;
+                fileList.innerHTML = `<div class="mt-2 rounded-xl border border-blue-200 bg-blue-50 p-3 text-sm"><strong>${fileCount} file(s) selected:</strong><br>${fileNames.join('')}</div>`;
             } else {
                 fileList.innerHTML = '';
             }
@@ -119,5 +127,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 {% endblock %}

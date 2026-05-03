@@ -1,75 +1,70 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-    <div class="container">
-        <a class="navbar-brand text-primary" href="{% url 'home' %}">
-            <i class="fas fa-star me-2"></i>Novita
+<nav class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-white/90 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        <a class="inline-flex items-center gap-2 text-xl font-bold text-[var(--color-primary)]" href="{% url 'home' %}">
+            <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-primary)]/10">
+                <i class="fas fa-star text-sm"></i>
+            </span>
+            <span class="font-heading">Novita</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
+
+        <button id="mobile-menu-button" class="rounded-xl border border-slate-200 p-2 text-slate-700 md:hidden" type="button">
+            <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'how_it_works' %}active{% endif %}" href="{% url 'how_it_works' %}">How It Works</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'resources' %}active{% endif %}" href="{% url 'resources' %}">Resources</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if 'blog' in request.resolver_match.namespace %}active{% endif %}" href="{% url 'blog:home' %}">Community</a>
-                </li>
-                
-                {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        Dashboard
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'dashboard' %}">Overview</a></li>
-                        <li><a class="dropdown-item" href="{% url 'recovery_tracking' %}">Recovery Tracking</a></li>
-                        <li><a class="dropdown-item" href="{% url 'groups' %}">Support Groups</a></li>
-                        <li><a class="dropdown-item" href="{% url 'mentors' %}">Mentors</a></li>
-                        <li><a class="dropdown-item" href="{% url 'milestones' %}">Milestones</a></li>
-                    </ul>
-                </li>
-                {% endif %}
-            </ul>
-            
-            <div class="d-flex align-items-center">
-                <!-- Support Link -->
-                <a class="btn btn-outline-primary me-2 {% if 'support' in request.resolver_match.namespace %}active{% endif %}" href="{% url 'support:dashboard' %}">
-                    <i class="fas fa-headset me-1"></i>Support
+
+        <div class="hidden items-center gap-2 md:flex">
+            <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'home' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'home' %}">Home</a>
+            <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'about' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'about' %}">About</a>
+            <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'how_it_works' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'how_it_works' %}">How It Works</a>
+            <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'resources' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'resources' %}">Resources</a>
+            <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if 'blog' in request.resolver_match.namespace %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'blog:home' %}">Community</a>
+            {% if user.is_authenticated %}
+                <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'dashboard' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+            {% endif %}
+
+            <a class="ml-2 inline-flex items-center gap-2 rounded-xl border border-[var(--color-primary)] px-3 py-2 text-sm font-semibold text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 {% if 'support' in request.resolver_match.namespace %}bg-[var(--color-primary)]/10{% endif %}" href="{% url 'support:dashboard' %}">
+                <i class="fas fa-headset"></i> Support
+            </a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="ml-1 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800">
+                    <i class="fas fa-user"></i>
+                    {% if user.is_anonymous_mode %}
+                        Anonymous User
+                    {% else %}
+                        {{ user.username }}
+                    {% endif %}
                 </a>
-                
-                {% if user.is_authenticated %}
-                    <div class="dropdown">
-                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user me-1"></i>
-                            {% if user.is_anonymous_mode %}
-                                Anonymous User
-                            {% else %}
-                                {{ user.username }}
-                            {% endif %}
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user-cog me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'blog:my_posts' %}"><i class="fas fa-pen me-2"></i>My Posts</a></li>
-                            <li><a class="dropdown-item" href="{% url 'support:ticket_list' %}"><i class="fas fa-ticket-alt me-2"></i>My Tickets</a></li>
-                            <li><a class="dropdown-item" href="{% url 'appointments' %}"><i class="fas fa-calendar me-2"></i>Appointments</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                        </ul>
-                    </div>
-                {% else %}
-                    <a class="btn btn-outline-primary me-2" href="{% url 'login' %}">Login</a>
-                    <a class="btn btn-primary" href="{% url 'signup' %}">Sign Up</a>
-                {% endif %}
-            </div>
+                <a href="{% url 'logout' %}" class="rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Logout</a>
+            {% else %}
+                <a class="rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100" href="{% url 'login' %}">Login</a>
+                <a class="inline-flex items-center rounded-xl bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--color-primary-dark)]" href="{% url 'signup' %}">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden border-t border-[var(--color-border)] bg-white px-4 py-3 md:hidden">
+        <div class="space-y-2">
+            <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'home' %}">Home</a>
+            <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'about' %}">About</a>
+            <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'how_it_works' %}">How It Works</a>
+            <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'resources' %}">Resources</a>
+            <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'blog:home' %}">Community</a>
+            {% if user.is_authenticated %}
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'recovery_tracking' %}">Recovery Tracking</a>
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'groups' %}">Support Groups</a>
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'mentors' %}">Mentors</a>
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'milestones' %}">Milestones</a>
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'blog:my_posts' %}">My Posts</a>
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'support:ticket_list' %}">My Tickets</a>
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'appointments' %}">Appointments</a>
+                <a class="block rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white" href="{% url 'profile' %}">Profile</a>
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'login' %}">Login</a>
+                <a class="block rounded-lg bg-[var(--color-primary)] px-3 py-2 text-sm font-medium text-white" href="{% url 'signup' %}">Sign Up</a>
+            {% endif %}
+            <a class="block rounded-lg border border-[var(--color-primary)] px-3 py-2 text-sm font-medium text-[var(--color-primary)]" href="{% url 'support:dashboard' %}">Support Center</a>
         </div>
     </div>
 </nav>

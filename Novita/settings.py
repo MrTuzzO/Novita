@@ -26,8 +26,6 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     # Installed apps
     'django_cleanup.apps.CleanupConfig',
-    'crispy_forms',
-    'crispy_bootstrap5',
     'ckeditor',
     'ckeditor_uploader',
 

@@ -1,24 +1,54 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
-{% block title %}Profile - Empower Recovery{% endblock %}
+{% block title %}Profile - Novita{% endblock %}
 
 {% block content %}
-<section class="py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        {% crispy form %}
-                    </div>
+<section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <h1 class="mb-2 text-3xl font-bold text-slate-900">Your Profile</h1>
+        <p class="mb-6 text-sm text-slate-500">All fields are optional. You can update this information anytime.</p>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="rounded-xl border border-red-200 bg-red-50 p-3">
+                {% for error in form.non_field_errors %}<p class="text-sm text-red-700">{{ error }}</p>{% endfor %}
+            </div>
+            {% endif %}
+            <div>
+                <label for="{{ form.full_name.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.full_name.label }}</label>
+                {{ form.full_name }}
+                {% if form.full_name.errors %}{% for error in form.full_name.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                    <label for="{{ form.date_of_birth.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.date_of_birth.label }}</label>
+                    {{ form.date_of_birth }}
+                    {% if form.date_of_birth.errors %}{% for error in form.date_of_birth.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
                 </div>
-                
-                <div class="mt-4 text-center">
-                    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Back to Dashboard</a>
+                <div>
+                    <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.phone_number.label }}</label>
+                    {{ form.phone_number }}
+                    {% if form.phone_number.errors %}{% for error in form.phone_number.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
                 </div>
             </div>
-        </div>
+            <div>
+                <label for="{{ form.school_college_name.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.school_college_name.label }}</label>
+                {{ form.school_college_name }}
+                {% if form.school_college_name.errors %}{% for error in form.school_college_name.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
+            </div>
+            <div>
+                <label for="{{ form.address.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.address.label }}</label>
+                {{ form.address }}
+                {% if form.address.errors %}{% for error in form.address.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}{% endif %}
+            </div>
+            <div class="flex justify-end pt-2">
+                <button type="submit" class="rounded-xl bg-[var(--color-primary)] px-8 py-2.5 font-semibold text-white hover:bg-[var(--color-primary-dark)] transition-colors">Update Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="mt-6 text-center">
+        <a href="{% url 'dashboard' %}" class="inline-flex rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back to Dashboard</a>
     </div>
 </section>
 {% endblock %}

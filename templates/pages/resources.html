@@ -1,37 +1,28 @@
 {% extends 'base.html' %}
 
-{% block title %}Resources - Empower Recovery{% endblock %}
+{% block title %}Resources - Novita{% endblock %}
 
 {% block content %}
-<section class="py-5">
-    <div class="container">
-        <h1 class="section-title">Recovery Resources</h1>
-        <p class="lead mb-5">Access educational materials, empowerment resources, and tools to support your recovery journey. These resources are available to everyone.</p>
-        
-        <div class="row g-4">
-            {% for resource in resources %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card resource-card h-100">
-                    <div class="card-body">
-                        <span class="badge bg-{{ resource.badge_color }} mb-2">{{ resource.category }}</span>
-                        <h5 class="card-title">{{ resource.title }}</h5>
-                        <p class="card-text">{{ resource.description }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">{{ resource.duration }}</small>
-                            <a href="{{ resource.url }}" class="btn btn-sm btn-outline-primary">View Resource</a>
-                        </div>
-                    </div>
-                </div>
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-slate-900">Recovery Resources</h1>
+    <p class="mt-3 max-w-3xl text-lg text-slate-600">Access educational materials, empowerment resources, and practical tools to support your journey.</p>
+
+    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {% for resource in resources %}
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <span class="inline-flex rounded-full bg-[var(--color-primary)]/10 px-3 py-1 text-xs font-semibold text-[var(--color-primary)]">{{ resource.category }}</span>
+            <h2 class="mt-4 text-xl font-semibold text-slate-900">{{ resource.title }}</h2>
+            <p class="mt-2 text-sm leading-7 text-slate-600">{{ resource.description }}</p>
+            <div class="mt-5 flex items-center justify-between">
+                <span class="text-xs text-slate-500">{{ resource.duration }}</span>
+                <a href="{{ resource.url }}" class="inline-flex rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">View Resource</a>
             </div>
-            {% endfor %}
-        </div>
-        
-        <!-- Emergency Resources -->
-        <div class="row mt-5">
-            <div class="col-12">
-                {% include 'partials/_emergency_resources.html' %}
-            </div>
-        </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    <div class="mt-12 rounded-2xl bg-slate-950 p-6 text-white">
+        {% include 'partials/_emergency_resources.html' %}
     </div>
 </section>
 {% endblock %}
