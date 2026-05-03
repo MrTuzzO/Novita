@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from blog.models import BlogPost
+from .models import Banner
 
 # Create your views here.
 
@@ -9,9 +10,12 @@ def home(request):
         status='published',
         is_featured=True
     ).select_related('author', 'category').order_by('-created_at')[:3]
+
+    banners = Banner.objects.filter(is_active=True).order_by('-id')
     
     context = {
         'featured_posts': featured_posts,
+        'banners': banners,
     }
     return render(request, 'pages/home.html', context)
 
