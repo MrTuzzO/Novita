@@ -15,10 +15,14 @@
             <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'home' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'home' %}">Home</a>
             <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'about' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'about' %}">About</a>
             <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'how_it_works' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'how_it_works' %}">How It Works</a>
-            <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'resources' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'resources' %}">Resources</a>
+            <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if 'service' in request.resolver_match.namespace %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'service:service_list' %}">Services</a>
             <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if 'blog' in request.resolver_match.namespace %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'blog:home' %}">Community</a>
             {% if user.is_authenticated %}
-                <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'dashboard' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+                {% if user.role == 'expert' %}
+                    <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'expert_inbox' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'service:expert_inbox' %}">Expert Inbox</a>
+                {% else %}
+                    <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'inquiry_list' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'service:inquiry_list' %}">My Requests</a>
+                {% endif %}
             {% endif %}
 
             <a class="ml-2 inline-flex items-center gap-2 rounded-xl border border-[var(--color-primary)] px-3 py-2 text-sm font-semibold text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 {% if 'support' in request.resolver_match.namespace %}bg-[var(--color-primary)]/10{% endif %}" href="{% url 'support:dashboard' %}">
@@ -27,12 +31,12 @@
 
             {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="ml-1 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800">
-                    <i class="fas fa-user"></i>
-                    {% if user.is_anonymous_mode %}
-                        Anonymous User
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile" class="h-6 w-6 rounded-full object-cover border border-white/20">
                     {% else %}
-                        {{ user.username }}
+                        <i class="fas fa-user"></i>
                     {% endif %}
+                    {{ user.get_short_name }}
                 </a>
                 <a href="{% url 'logout' %}" class="rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Logout</a>
             {% else %}
@@ -47,16 +51,20 @@
             <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'home' %}">Home</a>
             <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'about' %}">About</a>
             <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'how_it_works' %}">How It Works</a>
-            <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'resources' %}">Resources</a>
+            <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'service:service_list' %}">Services</a>
             <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'blog:home' %}">Community</a>
             {% if user.is_authenticated %}
-                <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'dashboard' %}">Dashboard</a>
                 <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'recovery_tracking' %}">Recovery Tracking</a>
                 <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'groups' %}">Support Groups</a>
                 <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'mentors' %}">Mentors</a>
                 <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'milestones' %}">Milestones</a>
                 <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'blog:my_posts' %}">My Posts</a>
                 <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'support:ticket_list' %}">My Tickets</a>
+                {% if user.role == 'expert' %}
+                    <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'service:expert_inbox' %}">Expert Inbox</a>
+                {% else %}
+                    <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'service:inquiry_list' %}">My Service Requests</a>
+                {% endif %}
                 <a class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100" href="{% url 'appointments' %}">Appointments</a>
                 <a class="block rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white" href="{% url 'profile' %}">Profile</a>
                 <a class="block rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50" href="{% url 'logout' %}">Logout</a>

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from blog.models import BlogPost
 from .models import Banner
+from service.models import ServiceType
 
 # Create your views here.
 
@@ -12,10 +13,12 @@ def home(request):
     ).select_related('author', 'category').order_by('-created_at')[:3]
 
     banners = Banner.objects.filter(is_active=True).order_by('-id')
+    service_types = ServiceType.objects.filter(is_active=True).order_by('name')
     
     context = {
         'featured_posts': featured_posts,
         'banners': banners,
+        'service_types': service_types,
     }
     return render(request, 'pages/home.html', context)
 
@@ -24,12 +27,6 @@ def about(request):
 
 def how_it_works(request):
     return render(request, 'pages/how_it_works.html')
-
-def resources(request):
-    return render(request, 'pages/resources.html')
-
-def dashboard(request):
-    return render(request, 'pages/dashboard.html')
 
 def recovery_tracking(request):
     # Sample data for the recovery tracking page

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Professional Services - Novita{% endblock %}
+
+{% block content %}
+
+<!-- Hero Banner -->
+<section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-[#1a0533] to-slate-900 py-20 text-white">
+    <!-- Decorative blobs -->
+    <div class="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[var(--color-primary)]/20 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-20 right-0 h-72 w-72 rounded-full bg-purple-700/20 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white/80 backdrop-blur-sm">
+            <i class="fas fa-shield-halved text-[var(--color-primary)]"></i> Expert Services
+        </span>
+        <h1 class="mt-5 text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+            Professional Help,<br class="hidden sm:block"> When You Need It Most
+        </h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 text-slate-300">
+            Connect with verified experts across cyber security, legal advisory, medical consultation, and investigative services. Private, async, and fully documented — every step of the way.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#services" class="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:brightness-110">
+                <i class="fas fa-arrow-down"></i> Explore Services
+            </a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'service:inquiry_list' %}" class="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/20">
+                <i class="fas fa-list-check"></i> My Requests
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Stats strip -->
+<div class="border-b border-slate-200 bg-white shadow-sm">
+    <div class="mx-auto grid max-w-7xl divide-x divide-slate-200 px-4 sm:grid-cols-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center py-6 text-center">
+            <span class="text-3xl font-bold text-[var(--color-primary)]">4</span>
+            <span class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Service Areas</span>
+        </div>
+        <div class="flex flex-col items-center py-6 text-center">
+            <span class="text-3xl font-bold text-[var(--color-primary)]">100%</span>
+            <span class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Admin-Verified Experts</span>
+        </div>
+        <div class="flex flex-col items-center py-6 text-center">
+            <span class="text-3xl font-bold text-[var(--color-primary)]">Async</span>
+            <span class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">No Real-Time Pressure</span>
+        </div>
+        <div class="flex flex-col items-center py-6 text-center">
+            <span class="text-3xl font-bold text-[var(--color-primary)]">Secure</span>
+            <span class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">File-Safe & Private</span>
+        </div>
+    </div>
+</div>
+
+<!-- Services Grid -->
+<section id="services" class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="mb-12 text-center">
+        <h2 class="text-3xl font-bold text-slate-900">Choose A Service</h2>
+        <p class="mt-3 text-slate-500">Select a service area, read how it works, then connect with an available expert.</p>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        {% for service in services %}
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+            <div class="h-1 w-full bg-[var(--color-primary)]"></div>
+            <div class="flex flex-1 flex-col p-7">
+                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-primary)]/10 text-[var(--color-primary)] ring-1 ring-[var(--color-primary)]/15 transition duration-300 group-hover:scale-110 group-hover:bg-[var(--color-primary)]/15">
+                    <i class="fas {{ service.icon_class|default:'fa-user-shield' }} text-2xl"></i>
+                </div>
+                <h2 class="mt-5 text-xl font-bold text-slate-900">{{ service.name }}</h2>
+                <p class="mt-2 flex-1 text-sm leading-6 text-slate-500">{{ service.short_description }}</p>
+                <hr class="my-5 border-slate-100">
+                <a href="{% url 'service:service_detail' service.slug %}"
+                   class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--color-primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110">
+                    View Experts <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="col-span-4 rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500">
+            <i class="fas fa-folder-open mb-3 text-4xl text-slate-300"></i>
+            <p>No services are available right now.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- How it works strip -->
+<section class="bg-slate-50 py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-10 text-center">
+            <h2 class="text-3xl font-bold text-slate-900">How It Works</h2>
+            <p class="mt-3 text-slate-500">Four simple steps to get expert help, completely async.</p>
+        </div>
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {% for step in "1234" %}
+            <div class="relative text-center">
+                {% if not forloop.last %}
+                <div class="absolute left-full top-8 hidden h-px w-full -translate-x-6 border-t-2 border-dashed border-slate-300 lg:block"></div>
+                {% endif %}
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-primary)] text-xl font-bold text-white shadow-lg">
+                    {{ forloop.counter }}
+                </div>
+                <h3 class="mt-4 font-semibold text-slate-900">
+                    {% if forloop.counter == 1 %}Choose a Service
+                    {% elif forloop.counter == 2 %}Pick an Expert
+                    {% elif forloop.counter == 3 %}Send Your Request
+                    {% else %}Get Expert Reply
+                    {% endif %}
+                </h3>
+                <p class="mt-2 text-sm text-slate-500">
+                    {% if forloop.counter == 1 %}Browse our four service categories and find the right fit for your situation.
+                    {% elif forloop.counter == 2 %}Read expert profiles, review their specializations, and select your preferred professional.
+                    {% elif forloop.counter == 3 %}Describe your case, upload evidence or documents, and send your first message.
+                    {% else %}Your assigned expert will review and reply on their own schedule — no pressure, full privacy.
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Trust badges -->
+<section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                <i class="fas fa-user-check text-xl"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-slate-900">Admin-Verified Experts</h3>
+                <p class="mt-1 text-sm text-slate-500">Every expert is manually added and verified by Novita administrators before appearing on the platform.</p>
+            </div>
+        </div>
+        <div class="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                <i class="fas fa-lock text-xl"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-slate-900">Private & Confidential</h3>
+                <p class="mt-1 text-sm text-slate-500">Your conversations and uploaded files are only visible to you, your assigned expert, and Novita staff.</p>
+            </div>
+        </div>
+        <div class="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-600">
+                <i class="fas fa-file-arrow-up text-xl"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-slate-900">Secure File Sharing</h3>
+                <p class="mt-1 text-sm text-slate-500">Share images, documents, and evidence files directly in your request thread — up to 10 MB per file.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

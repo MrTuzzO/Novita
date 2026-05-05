@@ -1,0 +1,40 @@
+{% if page_obj.has_other_pages %}
+<div class="mt-6 flex items-center justify-between text-sm text-slate-500">
+    <span>
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        &mdash; {{ page_obj.paginator.count }} total
+    </span>
+    <div class="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">
+        {% if page_obj.has_previous %}
+        <a class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+           href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+            <i class="fas fa-chevron-left mr-1 text-xs"></i>Prev
+        </a>
+        {% else %}
+        <span class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 cursor-not-allowed">
+            <i class="fas fa-chevron-left mr-1 text-xs"></i>Prev
+        </span>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-primary)] text-sm font-bold text-white">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-sm text-slate-700 hover:bg-slate-100"
+               href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+           href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+            Next<i class="fas fa-chevron-right ml-1 text-xs"></i>
+        </a>
+        {% else %}
+        <span class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 cursor-not-allowed">
+            Next<i class="fas fa-chevron-right ml-1 text-xs"></i>
+        </span>
+        {% endif %}
+    </div>
+</div>
+{% endif %}

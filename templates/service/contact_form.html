@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Expert - Novita{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="bg-gradient-to-br from-slate-900 via-[#1a0533] to-slate-900 py-10 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav class="mb-3 flex items-center gap-2 text-sm text-slate-400">
+            <a href="{% url 'service:service_list' %}" class="hover:text-white">Services</a>
+            <i class="fas fa-chevron-right text-xs"></i>
+            <span class="text-white">New Request</span>
+        </nav>
+        <h1 class="text-3xl font-bold">Create a Service Request</h1>
+        <p class="mt-2 text-slate-300">Describe your case and connect with a verified expert in a private, async thread.</p>
+    </div>
+</div>
+
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="grid gap-8 lg:grid-cols-3">
+
+        <!-- Form -->
+        <div class="lg:col-span-2">
+            <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
+                {% if form.non_field_errors %}
+                <div class="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data" class="space-y-5">
+                    {% csrf_token %}
+
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label for="{{ form.service_type.id_for_label }}" class="mb-1.5 block text-sm font-semibold text-slate-700"><i class="fas fa-layer-group mr-1.5 text-[var(--color-primary)]" ></i>Service</label>
+                            {{ form.service_type }}
+                            {% for error in form.service_type.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                        </div>
+                        <div>
+                            <label for="{{ form.expert.id_for_label }}" class="mb-1.5 block text-sm font-semibold text-slate-700"><i class="fas fa-user-tie mr-1.5 text-[var(--color-primary)]"></i>Expert</label>
+                            {{ form.expert }}
+                            {% if form.expert.help_text %}<p class="mt-1 text-xs text-slate-500">{{ form.expert.help_text }}</p>{% endif %}
+                            {% for error in form.expert.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="{{ form.subject.id_for_label }}" class="mb-1.5 block text-sm font-semibold text-slate-700"><i class="fas fa-heading mr-1.5 text-[var(--color-primary)]"></i>Subject</label>
+                        {{ form.subject }}
+                        {% for error in form.subject.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.message.id_for_label }}" class="mb-1.5 block text-sm font-semibold text-slate-700"><i class="fas fa-pen-to-square mr-1.5 text-[var(--color-primary)]"></i>Message</label>
+                        {{ form.message }}
+                        <p class="mt-1 text-xs text-slate-400">Be as detailed as possible. Include dates, platforms, or any relevant context.</p>
+                        {% for error in form.message.errors %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.attachments.id_for_label }}" class="mb-1.5 block text-sm font-semibold text-slate-700"><i class="fas fa-paperclip mr-1.5 text-[var(--color-primary)]"></i>Attachments <span class="font-normal text-slate-400">(optional)</span></label>
+                        {{ form.attachments }}
+                        <p class="mt-1 text-xs text-slate-400">JPG, PNG, GIF, PDF, TXT, DOC, DOCX &mdash; max 10 MB per file.</p>
+                    </div>
+
+                    <div class="flex justify-end gap-3 border-t border-slate-100 pt-4">
+                        <a href="{% url 'service:service_list' %}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+                        <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-6 py-2.5 text-sm font-semibold text-white shadow hover:brightness-110">
+                            <i class="fas fa-paper-plane"></i> Send Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sidebar tips -->
+        <aside class="space-y-5">
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="font-semibold text-slate-900"><i class="fas fa-lightbulb mr-2 text-amber-400"></i>Tips for a Better Response</h3>
+                <ul class="mt-4 space-y-3 text-sm text-slate-600">
+                    <li class="flex items-start gap-2"><i class="fas fa-check-circle mt-0.5 text-emerald-500"></i> Provide specific dates, platforms, and usernames involved.</li>
+                    <li class="flex items-start gap-2"><i class="fas fa-check-circle mt-0.5 text-emerald-500"></i> Attach screenshots or documents that support your case.</li>
+                    <li class="flex items-start gap-2"><i class="fas fa-check-circle mt-0.5 text-emerald-500"></i> Describe any steps you've already taken.</li>
+                    <li class="flex items-start gap-2"><i class="fas fa-check-circle mt-0.5 text-emerald-500"></i> Keep your message focused on one issue for clarity.</li>
+                </ul>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="font-semibold text-slate-900"><i class="fas fa-lock mr-2 text-[var(--color-primary)]"></i>Privacy Notice</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Your request is private and visible only to you, your assigned expert, and Novita staff. All uploaded files are stored securely.</p>
+            </div>
+
+            <div class="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+                <h3 class="font-semibold text-amber-900"><i class="fas fa-triangle-exclamation mr-2 text-amber-500"></i>Emergency?</h3>
+                <p class="mt-2 text-sm leading-6 text-amber-800">For immediate general support, also
+                    <a href="{% url 'support:create_ticket' %}" class="font-semibold underline hover:text-amber-900">submit a support ticket</a>.
+                </p>
+            </div>
+        </aside>
+
+    </div>
+</section>
+{% endblock %}

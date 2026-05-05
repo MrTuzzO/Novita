@@ -34,6 +34,7 @@ INSTALLED_APPS += [
     'user',
     'blog',
     'support',
+    'service',
 ]
 
 MIDDLEWARE = [
@@ -85,9 +86,9 @@ AUTH_PASSWORD_VALIDATORS = [
     # {
     #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     # },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
     # {
     #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     # },
@@ -131,7 +132,7 @@ AUTH_USER_MODEL = 'user.CustomUser'
 
 # Login/Logout URLs
 LOGIN_URL = '/auth/login/'
-LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Static and Media Files

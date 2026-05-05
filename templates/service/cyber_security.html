@@ -1,0 +1,31 @@
+{% extends 'service/detail.html' %}
+
+{% block content %}
+<!-- Cyber Security Hero -->
+<section class="relative overflow-hidden bg-gradient-to-br from-cyan-950 via-slate-900 to-slate-950 py-20 text-white">
+    <div class="pointer-events-none absolute -right-24 top-0 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl"></div>
+    <div class="pointer-events-none absolute bottom-0 left-10 h-64 w-64 rounded-full bg-blue-600/10 blur-3xl"></div>
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <span class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-cyan-200">
+            <i class="fas fa-shield-halved"></i> Cyber Security Service
+        </span>
+        <h1 class="mt-5 text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">Defend Identity, Privacy,<br class="hidden lg:block"> And Digital Assets</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 text-cyan-100">Get practical incident response support for harassment, data theft, account takeover, blackmail, and personal security hardening.</p>
+        <div class="mt-8 grid gap-4 sm:grid-cols-3 lg:max-w-2xl">
+            <div class="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
+                <i class="fas fa-user-secret text-cyan-300 text-xl"></i>
+                <span class="text-sm font-medium">Account Takeover</span>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
+                <i class="fas fa-database text-cyan-300 text-xl"></i>
+                <span class="text-sm font-medium">Data Breach</span>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
+                <i class="fas fa-eye-slash text-cyan-300 text-xl"></i>
+                <span class="text-sm font-medium">Privacy Hardening</span>
+            </div>
+        </div>
+    </div>
+</section>
+{{ block.super }}
+{% endblock %}

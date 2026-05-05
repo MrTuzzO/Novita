@@ -46,7 +46,7 @@ class CustomUserChangeForm(UserChangeForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['full_name', 'date_of_birth', 'address', 'school_college_name', 'phone_number']
+        fields = ['full_name', 'profile_image', 'date_of_birth', 'address', 'school_college_name', 'phone_number']
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
             'address': forms.Textarea(attrs={'rows': 3}),
@@ -59,6 +59,7 @@ class UserProfileForm(forms.ModelForm):
             field.widget.attrs.setdefault('class', _INPUT)
 
         self.fields['full_name'].label = 'Full Name'
+        self.fields['profile_image'].label = 'Profile Picture'
         self.fields['date_of_birth'].label = 'Date of Birth'
         self.fields['address'].label = 'Address'
         self.fields['school_college_name'].label = 'School/College Name'

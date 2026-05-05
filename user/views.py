@@ -13,7 +13,7 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = True
     
     def get_success_url(self):
-        return '/dashboard/'
+        return '/'
     
     def form_valid(self, form):
         messages.success(self.request, f'Welcome back, {form.get_user().get_short_name()}!')
@@ -36,7 +36,7 @@ def signup_view(request):
 @login_required
 def profile_view(request):
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=request.user)
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated successfully!')

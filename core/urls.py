@@ -1,16 +1,11 @@
 from django.urls import path
 from . import views
-from user.views import dashboard_view
 
 urlpatterns = [
     # Main pages
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('how-it-works/', views.how_it_works, name='how_it_works'),
-    path('resources/', views.resources, name='resources'),
-    
-    # Dashboard and tracking (using user app view for dashboard)
-    path('dashboard/', dashboard_view, name='dashboard'),
     path('recovery-tracking/', views.recovery_tracking, name='recovery_tracking'),
     
     # Additional recovery tracking URLs
