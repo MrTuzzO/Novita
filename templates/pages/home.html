@@ -118,7 +118,7 @@
                 <h3 class="text-lg font-semibold text-slate-900">{{ post.title|truncatechars:60 }}</h3>
                 <p class="mt-2 text-sm text-slate-600">{{ post.excerpt|truncatewords:20 }}</p>
                 <div class="mt-4 flex items-center justify-between text-xs text-slate-500"><span>{{ post.created_at|date:"M d, Y" }}</span><span><i class="fas fa-eye mr-1"></i>{{ post.views_count }} <i class="fas fa-heart ml-2 mr-1"></i>{{ post.likes_count }}</span></div>
-                <a href="{% url 'blog:detail' post.slug %}" class="mt-4 inline-flex items-center text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+                <a href="{% url 'blog:detail' post.pk %}" class="mt-4 inline-flex items-center text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Read More <i class="fas fa-arrow-right ml-2"></i></a>
             </div>
         </article>
         {% endfor %}

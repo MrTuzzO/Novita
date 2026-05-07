@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from .models import BlogPost, Comment, Category
 
@@ -40,12 +41,28 @@ class BlogPostForm(forms.ModelForm):
         self.fields['category'].label = 'Blog Category'
         self.fields['category'].help_text = 'Choose the most relevant topic for your post'
         self.fields['status'].label = 'Post Status'
-        self.fields['status'].help_text = 'Draft: Only visible to you | Published: Visible to community | Archived: Hidden from everyone'
+        self.fields['status'].help_text = 'Draft: Only visible to you | Published: Sent for staff approval before visible to community | Archived: Hidden from everyone'
 
     def save(self, commit=True):
         blog_post = super().save(commit=False)
         if self.user:
             blog_post.author = self.user
+
+            if blog_post.status == 'published':
+                if self.user.is_staff or self.user.is_superuser:
+                    blog_post.is_approved = True
+                    blog_post.approved_by = self.user
+                    if not blog_post.approved_at:
+                        blog_post.approved_at = timezone.now()
+                else:
+                    blog_post.is_approved = False
+                    blog_post.approved_at = None
+                    blog_post.approved_by = None
+            else:
+                blog_post.is_approved = False
+                blog_post.approved_at = None
+                blog_post.approved_by = None
+
         if commit:
             blog_post.save()
             self.save_m2m()

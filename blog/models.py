@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from django.utils.text import slugify
 from ckeditor_uploader.fields import RichTextUploadingField
 from PIL import Image
 
@@ -9,8 +8,8 @@ User = get_user_model()
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(max_length=100, unique=True, blank=True)
     description = models.TextField(blank=True)
+    is_featured = models.BooleanField(default=False, help_text="Show this category as featured in community sidebar")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -20,13 +19,8 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
     def get_absolute_url(self):
-        return reverse('blog:category', kwargs={'slug': self.slug})
+        return reverse('blog:category', kwargs={'pk': self.pk})
 
 class BlogPost(models.Model):
     STATUS_CHOICES = [
@@ -36,7 +30,6 @@ class BlogPost(models.Model):
     ]
 
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts')
     
@@ -46,6 +39,15 @@ class BlogPost(models.Model):
     
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     is_featured = models.BooleanField(default=False, help_text="Feature this post on homepage")
+    is_approved = models.BooleanField(default=False, help_text="Post is publicly visible only after staff/admin approval")
+    approved_at = models.DateTimeField(blank=True, null=True)
+    approved_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='approved_blog_posts'
+    )
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -63,8 +65,10 @@ class BlogPost(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+        # Keep approval metadata consistent when a post is unapproved.
+        if not self.is_approved:
+            self.approved_at = None
+            self.approved_by = None
         
         # Resize featured image if uploaded
         super().save(*args, **kwargs)
@@ -77,7 +81,7 @@ class BlogPost(models.Model):
                 img.save(self.featured_image.path)
 
     def get_absolute_url(self):
-        return reverse('blog:detail', kwargs={'slug': self.slug})
+        return reverse('blog:detail', kwargs={'pk': self.pk})
 
     @property
     def reading_time(self):

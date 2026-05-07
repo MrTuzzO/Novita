@@ -11,12 +11,12 @@ urlpatterns = [
     path('my-posts/', views.my_posts, name='my_posts'),
     
     # Post management
-    path('post/<slug:slug>/', views.blog_detail, name='detail'),
-    path('post/<slug:slug>/edit/', views.edit_post, name='edit'),
-    path('post/<slug:slug>/delete/', views.delete_post, name='delete'),
-    path('post/<slug:slug>/comment/', views.add_comment, name='add_comment'),
-    path('post/<slug:slug>/like/', views.toggle_like, name='toggle_like'),
-    
+    path('post/<int:pk>/', views.blog_detail, name='detail'),
+    path('post/<int:pk>/edit/', views.edit_post, name='edit'),
+    path('post/<int:pk>/delete/', views.delete_post, name='delete'),
+    path('post/<int:pk>/comment/', views.add_comment, name='add_comment'),
+    path('post/<int:pk>/like/', views.toggle_like, name='toggle_like'),
+
     # Filtering
-    path('category/<slug:slug>/', views.category_posts, name='category'),
+    path('category/<int:pk>/', views.category_posts, name='category'),
 ]

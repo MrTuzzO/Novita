@@ -12,16 +12,18 @@ def blog_home(request):
     """Community forum homepage with recent posts and popular content"""
     # Show recent community posts
     recent_posts = BlogPost.objects.filter(
-        status='published'
+        status='published',
+        is_approved=True,
     ).select_related('author', 'category')[:9]
     
     # Show popular posts (most liked)
     popular_posts = BlogPost.objects.filter(
-        status='published'
+        status='published',
+        is_approved=True,
     ).select_related('author', 'category').order_by('-likes_count', '-views_count')[:3]
     
     categories = Category.objects.annotate(
-        post_count=Count('posts', filter=Q(posts__status='published'))
+        post_count=Count('posts', filter=Q(posts__status='published', posts__is_approved=True))
     ).filter(post_count__gt=0)
     
     context = {
@@ -33,9 +35,13 @@ def blog_home(request):
 
 def blog_list(request):
     """Blog post list with pagination and filtering"""
-    posts = BlogPost.objects.filter(status='published').select_related(
+    posts = BlogPost.objects.filter(status='published', is_approved=True).select_related(
         'author', 'category'
     )
+
+    categories = Category.objects.annotate(
+        post_count=Count('posts', filter=Q(posts__status='published', posts__is_approved=True))
+    ).filter(post_count__gt=0)
     
     # Search functionality
     search_form = BlogSearchForm(request.GET)
@@ -62,30 +68,45 @@ def blog_list(request):
         'page_obj': page_obj,
         'search_form': search_form,
         'total_posts': posts.count(),
+        'categories': categories,
     }
     return render(request, 'blog/list.html', context)
 
-def blog_detail(request, slug):
+def blog_detail(request, pk):
     """Individual blog post detail view"""
-    # Get post - handle different status levels
-    try:
-        post = BlogPost.objects.select_related('author', 'category').get(slug=slug)
-        
-        # Archived posts are not visible to anyone (including author)
-        if post.status == 'archived':
-            raise BlogPost.DoesNotExist
-            
-        # Draft posts are only visible to the author
-        if post.status == 'draft':
-            if not request.user.is_authenticated or request.user != post.author:
-                raise BlogPost.DoesNotExist
-                
-    except BlogPost.DoesNotExist:
-        # Try to find published post or show 404
+    post = get_object_or_404(
+        BlogPost.objects.select_related('author', 'category'),
+        pk=pk,
+    )
+
+    can_preview = request.user.is_authenticated and (
+        request.user == post.author or request.user.is_staff or request.user.is_superuser
+    )
+
+    # Archived posts are not visible from detail page.
+    if post.status == 'archived' and not can_preview:
         post = get_object_or_404(
             BlogPost.objects.select_related('author', 'category'),
-            slug=slug,
-            status='published'
+            pk=pk,
+            status='published',
+            is_approved=True,
+        )
+
+    # Draft posts can only be previewed by author/staff/admin.
+    if post.status == 'draft' and not can_preview:
+        post = get_object_or_404(
+            BlogPost.objects.select_related('author', 'category'),
+            pk=pk,
+            status='published',
+            is_approved=True,
+        )
+
+    if post.status == 'published' and not post.is_approved and not can_preview:
+        post = get_object_or_404(
+            BlogPost.objects.select_related('author', 'category'),
+            pk=pk,
+            status='published',
+            is_approved=True,
         )
     
     # Increment view count
@@ -106,7 +127,8 @@ def blog_detail(request, slug):
     # Related posts
     related_posts = BlogPost.objects.filter(
         category=post.category,
-        status='published'
+        status='published',
+        is_approved=True,
     ).exclude(id=post.id)[:3]
     
     # Comment form
@@ -133,7 +155,10 @@ def create_post(request):
             if post.status == 'draft':
                 messages.success(request, f'Draft "{post.title}" has been saved successfully!')
             elif post.status == 'published':
-                messages.success(request, f'Post "{post.title}" has been published successfully!')
+                if post.is_approved:
+                    messages.success(request, f'Post "{post.title}" has been published successfully!')
+                else:
+                    messages.success(request, f'Post "{post.title}" was submitted and is waiting for staff approval.')
             elif post.status == 'archived':
                 messages.success(request, f'Post "{post.title}" has been archived successfully!')
             
@@ -141,7 +166,7 @@ def create_post(request):
             if post.status == 'archived':
                 return redirect('blog:my_posts')
             else:
-                return redirect('blog:detail', slug=post.slug)
+                return redirect('blog:detail', pk=post.pk)
     else:
         form = BlogPostForm(user=request.user)
     
@@ -152,9 +177,9 @@ def create_post(request):
     return render(request, 'blog/create_post.html', context)
 
 @login_required
-def edit_post(request, slug):
+def edit_post(request, pk):
     """Edit existing blog post"""
-    post = get_object_or_404(BlogPost, slug=slug, author=request.user)
+    post = get_object_or_404(BlogPost, pk=pk, author=request.user)
     
     if request.method == 'POST':
         form = BlogPostForm(request.POST, request.FILES, instance=post, user=request.user)
@@ -165,7 +190,10 @@ def edit_post(request, slug):
             if post.status == 'draft':
                 messages.success(request, f'Draft "{post.title}" has been updated successfully!')
             elif post.status == 'published':
-                messages.success(request, f'Post "{post.title}" has been updated and is published!')
+                if post.is_approved:
+                    messages.success(request, f'Post "{post.title}" has been updated and is published!')
+                else:
+                    messages.success(request, f'Post "{post.title}" has been updated and is waiting for staff approval.')
             elif post.status == 'archived':
                 messages.success(request, f'Post "{post.title}" has been archived successfully!')
                 
@@ -173,7 +201,7 @@ def edit_post(request, slug):
             if post.status == 'archived':
                 return redirect('blog:my_posts')
             else:
-                return redirect('blog:detail', slug=post.slug)
+                return redirect('blog:detail', pk=post.pk)
     else:
         form = BlogPostForm(instance=post, user=request.user)
     
@@ -185,9 +213,9 @@ def edit_post(request, slug):
     return render(request, 'blog/edit_post.html', context)
 
 @login_required
-def delete_post(request, slug):
+def delete_post(request, pk):
     """Delete a blog post (author only)"""
-    post = get_object_or_404(BlogPost, slug=slug, author=request.user)
+    post = get_object_or_404(BlogPost, pk=pk, author=request.user)
     
     if request.method == 'POST':
         post_title = post.title
@@ -202,9 +230,9 @@ def delete_post(request, slug):
 
 @login_required
 @require_POST
-def add_comment(request, slug):
+def add_comment(request, pk):
     """Add comment to blog post"""
-    post = get_object_or_404(BlogPost, slug=slug, status='published')
+    post = get_object_or_404(BlogPost, pk=pk, status='published', is_approved=True)
     form = CommentForm(request.POST)
     
     if form.is_valid():
@@ -223,13 +251,13 @@ def add_comment(request, slug):
     else:
         messages.error(request, 'Please correct the errors in your comment.')
     
-    return redirect('blog:detail', slug=slug)
+    return redirect('blog:detail', pk=pk)
 
 @login_required
 @require_POST
-def toggle_like(request, slug):
+def toggle_like(request, pk):
     """Toggle like/unlike for a blog post"""
-    post = get_object_or_404(BlogPost, slug=slug, status='published')
+    post = get_object_or_404(BlogPost, pk=pk, status='published', is_approved=True)
     
     like, created = PostLike.objects.get_or_create(
         post=post,
@@ -253,13 +281,18 @@ def toggle_like(request, slug):
         'likes_count': post.likes_count
     })
 
-def category_posts(request, slug):
+def category_posts(request, pk):
     """Posts filtered by category"""
-    category = get_object_or_404(Category, slug=slug)
+    category = get_object_or_404(Category, pk=pk)
     posts = BlogPost.objects.filter(
         category=category,
-        status='published'
+        status='published',
+        is_approved=True,
     ).select_related('author', 'category')
+
+    categories = Category.objects.annotate(
+        post_count=Count('posts', filter=Q(posts__status='published', posts__is_approved=True))
+    ).filter(post_count__gt=0)
     
     # Pagination
     paginator = Paginator(posts, 6)
@@ -270,6 +303,7 @@ def category_posts(request, slug):
         'category': category,
         'page_obj': page_obj,
         'total_posts': posts.count(),
+        'categories': categories,
     }
     return render(request, 'blog/category.html', context)
 

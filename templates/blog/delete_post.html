@@ -23,7 +23,7 @@
 
             <form method="post" class="mt-6 flex flex-wrap justify-center gap-3">
                 {% csrf_token %}
-                <a href="{% url 'blog:detail' post.slug %}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700"><i class="fas fa-arrow-left mr-1"></i>Cancel</a>
+                <a href="{% url 'blog:detail' post.pk %}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700"><i class="fas fa-arrow-left mr-1"></i>Cancel</a>
                 <button type="submit" class="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-700"><i class="fas fa-trash-alt mr-1"></i>Yes, Delete Post</button>
             </form>
         </div>
