@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Milestones — Novita{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mb-6 flex items-center gap-3">
+    <a href="{% url 'recovery:dashboard' %}" class="rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"><i class="fas fa-arrow-left"></i></a>
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900">Milestones</h1>
+      <p class="text-sm text-slate-500">{{ patient.days_clean }} days clean · {{ achieved|length }} milestones achieved</p>
+    </div>
+  </div>
+
+  {% include 'partials/_messages.html' %}
+
+  {# Auto day-clean milestones progress #}
+  <div class="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="mb-4 text-lg font-semibold text-slate-900">Days-Clean Milestones</h2>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {% for target in day_targets %}
+      {% with days=patient.days_clean %}
+      <div class="rounded-xl border {% if days >= target %}border-amber-200 bg-amber-50{% else %}border-slate-200 bg-slate-50{% endif %} p-4 text-center">
+        <div class="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full {% if days >= target %}bg-amber-400 text-white{% else %}bg-slate-200 text-slate-400{% endif %}">
+          <i class="fas {% if days >= target %}fa-trophy{% else %}fa-lock{% endif %}"></i>
+        </div>
+        <p class="text-lg font-bold {% if days >= target %}text-amber-700{% else %}text-slate-400{% endif %}">{{ target }} Days</p>
+        {% if days < target %}
+        <div class="mt-2 h-1.5 w-full rounded-full bg-slate-200">
+          <div class="h-1.5 rounded-full bg-[var(--color-primary)]" style="width: {% widthratio days target 100 %}%"></div>
+        </div>
+        <p class="mt-1 text-xs text-slate-400">{{ target|add:"-0"|add:"-"|add:"0" }}… {{ days }}/{{ target }}</p>
+        {% else %}
+        <p class="mt-1 text-xs font-semibold text-amber-600">Achieved!</p>
+        {% endif %}
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-3">
+
+    {# Add custom milestone #}
+    <div class="lg:col-span-1">
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="mb-4 font-semibold text-slate-900">Add Custom Milestone</h2>
+        <form method="post" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="mb-1.5 block text-sm font-semibold text-slate-700">Title</label>
+            {{ form.title }}
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-semibold text-slate-700">Type</label>
+            {{ form.milestone_type }}
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-semibold text-slate-700">Target Days (optional)</label>
+            {{ form.target_days }}
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-semibold text-slate-700">Description</label>
+            {{ form.description }}
+          </div>
+          <button type="submit" class="w-full rounded-xl bg-[var(--color-primary)] py-2.5 text-sm font-semibold text-white hover:brightness-110">Add Milestone</button>
+        </form>
+      </div>
+    </div>
+
+    {# Milestone list #}
+    <div class="space-y-4 lg:col-span-2">
+      {% if achieved %}
+      <h2 class="text-base font-semibold text-emerald-700"><i class="fas fa-check-circle mr-2"></i>Achieved ({{ achieved|length }})</h2>
+      {% for m in achieved %}
+      <div class="flex items-center gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+        <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-emerald-400 text-white">
+          <i class="fas fa-trophy text-sm"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-slate-900">{{ m.title }}</p>
+          <p class="text-xs text-slate-500">{{ m.get_milestone_type_display }}{% if m.achieved_date %} · Achieved {{ m.achieved_date|date:"M d, Y" }}{% endif %}</p>
+          {% if m.description %}<p class="mt-1 text-sm text-slate-600 line-clamp-2">{{ m.description }}</p>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      {% if pending %}
+      <h2 class="text-base font-semibold text-slate-600 {% if achieved %}mt-4{% endif %}"><i class="fas fa-circle mr-2 text-slate-300"></i>Pending ({{ pending|length }})</h2>
+      {% for m in pending %}
+      <div class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+          <i class="fas fa-star text-sm"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-slate-900">{{ m.title }}</p>
+          <p class="text-xs text-slate-500">{{ m.get_milestone_type_display }}{% if m.target_days %} · {{ m.target_days }} days{% endif %}</p>
+          {% if m.description %}<p class="mt-1 text-sm text-slate-600 line-clamp-2">{{ m.description }}</p>{% endif %}
+        </div>
+        <a href="{% url 'recovery:milestone_achieve' m.pk %}" class="flex-shrink-0 rounded-xl border border-emerald-300 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-50">Mark Achieved</a>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      {% if not milestones %}
+      <div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white py-12 text-center">
+        <i class="fas fa-trophy text-5xl text-slate-200"></i>
+        <p class="mt-4 text-slate-500">No custom milestones yet. Add one to the left!</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

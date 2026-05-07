@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Patient List — Novita{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-slate-900">Patient Management</h1>
+    <a href="{% url 'recovery:analytics' %}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+      <i class="fas fa-chart-bar"></i> Analytics
+    </a>
+  </div>
+
+  <form method="get" class="mb-6 flex gap-2">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search by name or email…"
+           class="flex-1 rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20">
+    <button type="submit" class="rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white hover:brightness-110">Search</button>
+  </form>
+
+  {% include 'partials/_messages.html' %}
+
+  <div class="space-y-3">
+    {% for p in patients %}
+    <div class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
+      <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-bold text-lg">
+        {{ p.user.full_name|first|upper|default:"U" }}
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="font-semibold text-slate-900">{{ p.user.full_name|default:p.user.email }}</p>
+        <p class="text-xs text-slate-500">{{ p.user.email }} · {{ p.get_addiction_type_display }}</p>
+        <div class="mt-1 flex flex-wrap gap-2">
+          <span class="rounded-full px-2 py-0.5 text-xs font-semibold
+            {% if p.status == 'active' %}bg-emerald-100 text-emerald-700
+            {% elif p.status == 'completed' %}bg-blue-100 text-blue-700
+            {% else %}bg-slate-100 text-slate-600{% endif %}">
+            {{ p.get_status_display }}
+          </span>
+          <span class="text-xs text-slate-400">{{ p.days_clean }} days clean</span>
+          <span class="text-xs text-slate-400">{{ p.total_checkins }} check-ins</span>
+        </div>
+      </div>
+      <div class="flex gap-2 flex-shrink-0">
+        <a href="{% url 'recovery:patient_detail' p.pk %}" class="rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">View</a>
+        <a href="{% url 'recovery:session_log' %}?patient={{ p.pk }}" class="rounded-xl bg-[var(--color-primary)] px-3 py-2 text-xs font-semibold text-white hover:brightness-110">Log Session</a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center">
+      <i class="fas fa-users text-5xl text-slate-200"></i>
+      <p class="mt-4 text-slate-500">No patients found.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

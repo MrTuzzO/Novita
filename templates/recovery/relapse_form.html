@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Log Relapse — Novita{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-2xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="mb-6 flex items-center gap-3">
+    <a href="{% url 'recovery:dashboard' %}" class="rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"><i class="fas fa-arrow-left"></i></a>
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900">Log Relapse</h1>
+      <p class="text-sm text-slate-500">Honesty takes courage. This is a safe, private space.</p>
+    </div>
+  </div>
+
+  <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+    <p class="text-sm text-amber-800"><i class="fas fa-heart mr-2 text-red-400"></i>Relapse is not failure — it is part of many recovery journeys. What matters is that you seek support and continue forward.</p>
+  </div>
+
+  {% include 'partials/_messages.html' %}
+
+  <form method="post" class="space-y-5 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    {% csrf_token %}
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label class="mb-1.5 block text-sm font-semibold text-slate-700">Date <span class="text-red-500">*</span></label>
+        {{ form.date }}
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-semibold text-slate-700">Substance <span class="text-red-500">*</span></label>
+        {{ form.substance }}
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-semibold text-slate-700">Severity <span class="text-red-500">*</span></label>
+        {{ form.severity }}
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-semibold text-slate-700">Duration</label>
+        {{ form.duration }}
+      </div>
+    </div>
+
+    <div>
+      <label class="mb-1.5 block text-sm font-semibold text-slate-700">What triggered it? <span class="text-red-500">*</span></label>
+      {{ form.trigger }}
+    </div>
+
+    <label class="flex items-center gap-3 cursor-pointer">
+      {{ form.support_received }}
+      <span class="text-sm text-slate-700">I received or reached out for support after this relapse</span>
+    </label>
+
+    <div>
+      <label class="mb-1.5 block text-sm font-semibold text-slate-700">Additional Notes</label>
+      {{ form.notes }}
+    </div>
+
+    <div class="flex gap-3 pt-2">
+      <button type="submit" class="rounded-xl bg-amber-500 px-6 py-3 font-semibold text-white hover:bg-amber-600">Save Record</button>
+      <a href="{% url 'recovery:dashboard' %}" class="rounded-xl border border-slate-300 px-6 py-3 font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

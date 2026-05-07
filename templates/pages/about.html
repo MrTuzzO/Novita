@@ -1,52 +1,40 @@
 {% extends 'base.html' %}
-{% load static %}
 
-{% block title %}About Us - Novita{% endblock %}
+{% block title %}How It Works - Novita{% endblock %}
 
 {% block content %}
 <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-4xl">
-        <h1 class="text-4xl font-bold text-slate-900">About Novita</h1>
-        <p class="mt-5 text-lg leading-8 text-slate-600">Novita is a social welfare platform helping people recover from addiction, access mental health support, and stay protected from digital harm. The name comes from nova, symbolizing new hope, new life, and new beginnings.</p>
+        <h1 class="text-4xl font-bold text-slate-900">How Novita Works</h1>
+        <p class="mt-4 text-lg text-slate-600">Each feature is designed to work together so your support system feels connected, safe, and reliable.</p>
 
-        <div class="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-6">
-            <h2 class="text-xl font-semibold text-slate-900"><i class="fas fa-star mr-2 text-[var(--color-primary)]"></i>Our Core Services</h2>
-            <ul class="mt-4 space-y-3 text-sm text-slate-700">
-                <li><i class="fas fa-heart mr-2 text-red-500"></i><strong>Recovery & Mental Health:</strong> Progress tracking, mentorship, and therapy guidance.</li>
-                <li><i class="fas fa-shield-halved mr-2 text-[var(--color-primary)]"></i><strong>Cyber Safety:</strong> Report abuse, harassment, blackmail, and get digital protection support.</li>
-                <li><i class="fas fa-phone mr-2 text-amber-500"></i><strong>Emergency Support:</strong> Fast links to crisis response, authorities, and counselors.</li>
-            </ul>
-        </div>
-
-        <div class="mt-10 grid gap-8 lg:grid-cols-2">
+        <div class="mt-10 grid gap-5 md:grid-cols-2">
+            {% for step in steps %}
             <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 class="text-2xl font-semibold text-slate-900">Our Mission</h3>
-                <p class="mt-3 text-sm leading-7 text-slate-600">To bridge mental wellness and digital protection through one safe, private, and empowering digital platform for vulnerable individuals.</p>
+                <div class="flex items-start gap-4">
+                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                        <i class="fas fa-{{ step.icon }}"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-semibold text-slate-900">{{ step.number }}. {{ step.title }}</h2>
+                        <p class="mt-2 text-sm leading-7 text-slate-600">{{ step.description }}</p>
+                    </div>
+                </div>
             </article>
-            <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 class="text-2xl font-semibold text-slate-900">Our Vision</h3>
-                <p class="mt-3 text-sm leading-7 text-slate-600">A world where no one feels alone in their struggles and everyone has access to hope, help, and healing.</p>
-            </article>
+            {% endfor %}
         </div>
 
-        <h3 class="mt-12 text-2xl font-semibold text-slate-900">Why Novita Matters</h3>
-        <div class="mt-6 grid gap-4 sm:grid-cols-2">
-            <article class="rounded-xl border border-slate-200 bg-white p-4"><h4 class="font-semibold"><i class="fas fa-user-shield mr-2 text-[var(--color-primary)]"></i>Safe & Anonymous</h4><p class="mt-2 text-sm text-slate-600">Anonymous account options and privacy-first participation.</p></article>
-            <article class="rounded-xl border border-slate-200 bg-white p-4"><h4 class="font-semibold"><i class="fas fa-globe mr-2 text-[var(--color-primary)]"></i>Digital Protection</h4><p class="mt-2 text-sm text-slate-600">Support against modern online threats and abuse.</p></article>
-            <article class="rounded-xl border border-slate-200 bg-white p-4"><h4 class="font-semibold"><i class="fas fa-hands-helping mr-2 text-[var(--color-secondary)]"></i>Holistic Care</h4><p class="mt-2 text-sm text-slate-600">Mental health, recovery, and cyber support in one place.</p></article>
-            <article class="rounded-xl border border-slate-200 bg-white p-4"><h4 class="font-semibold"><i class="fas fa-phone-volume mr-2 text-[var(--color-danger)]"></i>Crisis Response</h4><p class="mt-2 text-sm text-slate-600">Rapid response pathways for high-risk moments.</p></article>
-        </div>
-
-        <h3 class="mt-12 text-2xl font-semibold text-slate-900">Our Expert Team</h3>
-        <div class="mt-6 grid gap-6 md:grid-cols-3">
-            <article class="text-center"><img src="{% static 'images/team1.jpg' %}" alt="Clinical Director" class="mx-auto h-28 w-28 rounded-full object-cover shadow"><h4 class="mt-3 font-semibold">Dr. Sarah Johnson</h4><p class="text-xs text-slate-500">Clinical Director</p><p class="mt-2 text-sm text-slate-600">15+ years in addiction and trauma recovery.</p></article>
-            <article class="text-center"><img src="{% static 'images/team2.jpg' %}" alt="Cyber Safety Director" class="mx-auto h-28 w-28 rounded-full object-cover shadow"><h4 class="mt-3 font-semibold">Alex Chen</h4><p class="text-xs text-slate-500">Cyber Safety Director</p><p class="mt-2 text-sm text-slate-600">Expert in online harassment prevention and digital rights.</p></article>
-            <article class="text-center"><img src="{% static 'images/team3.jpg' %}" alt="Community Manager" class="mx-auto h-28 w-28 rounded-full object-cover shadow"><h4 class="mt-3 font-semibold">Jennifer Martinez</h4><p class="text-xs text-slate-500">Community & Crisis Coordinator</p><p class="mt-2 text-sm text-slate-600">Specialist in crisis intervention and victim advocacy.</p></article>
-        </div>
-
-        <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h4 class="text-lg font-semibold text-slate-900"><i class="fas fa-handshake mr-2 text-[var(--color-primary)]"></i>Our Commitment</h4>
-            <p class="mt-3 text-sm leading-7 text-slate-600">We are committed to confidentiality, compassionate support, and user safety. With the right support, recovery and empowerment are always possible.</p>
+        <div class="mt-10 rounded-3xl border border-blue-200 bg-blue-50 p-7">
+            <h3 class="text-2xl font-bold text-slate-900">Ready to Get Started?</h3>
+            <p class="mt-2 text-sm text-slate-600">Join today and begin building long-term recovery with digital safety and human support.</p>
+            <div class="mt-5 flex flex-wrap gap-3">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="inline-flex rounded-xl bg-[var(--color-primary)] px-5 py-3 font-semibold text-white hover:bg-[var(--color-primary-dark)]">Go to Profile</a>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="inline-flex rounded-xl bg-[var(--color-primary)] px-5 py-3 font-semibold text-white hover:bg-[var(--color-primary-dark)]">Sign Up Now</a>
+                {% endif %}
+                <a href="{% url 'service:service_list' %}" class="inline-flex rounded-xl border border-slate-300 px-5 py-3 font-semibold text-slate-700 hover:bg-white">Explore Services</a>
+            </div>
         </div>
     </div>
 </section>

@@ -3,38 +3,99 @@
 {% block title %}How It Works - Novita{% endblock %}
 
 {% block content %}
-<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-4xl">
-        <h1 class="text-4xl font-bold text-slate-900">How Novita Works</h1>
-        <p class="mt-4 text-lg text-slate-600">Each feature is designed to work together so your support system feels connected, safe, and reliable.</p>
+<section class="relative overflow-hidden bg-gradient-to-br from-[#11263d] via-slate-900 to-[#0f1f31] py-16 text-white">
+    <div class="pointer-events-none absolute -left-20 -top-24 h-80 w-80 rounded-full bg-[var(--color-primary)]/25 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-[var(--color-secondary)]/20 blur-3xl"></div>
 
-        <div class="mt-10 grid gap-5 md:grid-cols-2">
-            {% for step in steps %}
-            <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div class="flex items-start gap-4">
-                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
-                        <i class="fas fa-{{ step.icon }}"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-semibold text-slate-900">{{ step.number }}. {{ step.title }}</h2>
-                        <p class="mt-2 text-sm leading-7 text-slate-600">{{ step.description }}</p>
-                    </div>
-                </div>
-            </article>
-            {% endfor %}
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-white/85 backdrop-blur-sm">
+            <i class="fas fa-compass text-[var(--color-accent)]"></i> Platform Journey
+        </span>
+        <h1 class="mt-5 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl">How Novita Works From First Step to Ongoing Support</h1>
+        <p class="mt-5 max-w-3xl text-base leading-8 text-slate-200 sm:text-lg">Novita is designed as a complete workflow, not a single-page service. Users can start with immediate needs, access experts, and continue long-term recovery with structured progress tracking.</p>
+    </div>
+</section>
+
+<section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="mb-10 text-center">
+        <h2 class="text-3xl font-bold text-slate-900">Six-Step Support Lifecycle</h2>
+        <p class="mt-3 text-slate-600">A predictable process that keeps users, experts, and administrators aligned.</p>
+    </div>
+
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary)] text-sm font-bold text-white">1</div>
+            <h3 class="text-lg font-semibold text-slate-900">Create Account & Profile</h3>
+            <p class="mt-2 text-sm leading-7 text-slate-600">Users register securely and set up a profile so the platform can personalize support pathways and content visibility.</p>
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary)] text-sm font-bold text-white">2</div>
+            <h3 class="text-lg font-semibold text-slate-900">Choose a Support Path</h3>
+            <p class="mt-2 text-sm leading-7 text-slate-600">Users may enter recovery tracking, request expert services, access support resources, or combine all tracks based on current needs.</p>
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary)] text-sm font-bold text-white">3</div>
+            <h3 class="text-lg font-semibold text-slate-900">Submit Structured Requests</h3>
+            <p class="mt-2 text-sm leading-7 text-slate-600">For professional services, users create structured requests so experts can review details, documents, and context efficiently.</p>
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary)] text-sm font-bold text-white">4</div>
+            <h3 class="text-lg font-semibold text-slate-900">Engage with Experts</h3>
+            <p class="mt-2 text-sm leading-7 text-slate-600">Experts respond asynchronously, provide guidance, and maintain clear communication records across each request timeline.</p>
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary)] text-sm font-bold text-white">5</div>
+            <h3 class="text-lg font-semibold text-slate-900">Track Recovery Progress</h3>
+            <p class="mt-2 text-sm leading-7 text-slate-600">In the recovery module, users complete daily check-ins, counseling sessions, and milestones while monitoring changes over time.</p>
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary)] text-sm font-bold text-white">6</div>
+            <h3 class="text-lg font-semibold text-slate-900">Review Outcomes & Adjust</h3>
+            <p class="mt-2 text-sm leading-7 text-slate-600">Counselors and admins use analytics to identify risk patterns, adjust plans, and ensure better continuity and intervention quality.</p>
+        </article>
+    </div>
+</section>
+
+<section class="bg-slate-50 py-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-9 text-center">
+            <h2 class="text-3xl font-bold text-slate-900">How Features Connect Together</h2>
+            <p class="mt-3 text-slate-600">Each module is connected so users do not need to restart context at every step.</p>
         </div>
 
-        <div class="mt-10 rounded-3xl border border-blue-200 bg-blue-50 p-7">
-            <h3 class="text-2xl font-bold text-slate-900">Ready to Get Started?</h3>
-            <p class="mt-2 text-sm text-slate-600">Join today and begin building long-term recovery with digital safety and human support.</p>
-            <div class="mt-5 flex flex-wrap gap-3">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="inline-flex rounded-xl bg-[var(--color-primary)] px-5 py-3 font-semibold text-white hover:bg-[var(--color-primary-dark)]">Go to Profile</a>
-                {% else %}
-                    <a href="{% url 'signup' %}" class="inline-flex rounded-xl bg-[var(--color-primary)] px-5 py-3 font-semibold text-white hover:bg-[var(--color-primary-dark)]">Sign Up Now</a>
-                {% endif %}
-                <a href="{% url 'service:service_list' %}" class="inline-flex rounded-xl border border-slate-300 px-5 py-3 font-semibold text-slate-700 hover:bg-white">Explore Services</a>
-            </div>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="font-semibold text-slate-900">Profile Layer</h3>
+                <p class="mt-2 text-sm text-slate-600">Identity, role, and recovery profile establish baseline data for personalized support.</p>
+            </article>
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="font-semibold text-slate-900">Care Layer</h3>
+                <p class="mt-2 text-sm text-slate-600">Plans, sessions, appointments, and relapse records keep treatment structured and auditable.</p>
+            </article>
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="font-semibold text-slate-900">Service Layer</h3>
+                <p class="mt-2 text-sm text-slate-600">Expert requests and responses provide legal, cyber, medical, and investigative guidance.</p>
+            </article>
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="font-semibold text-slate-900">Insight Layer</h3>
+                <p class="mt-2 text-sm text-slate-600">Dashboards and trends help stakeholders evaluate outcomes and intervene earlier.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
+        <h2 class="text-3xl font-bold text-slate-900">Ready to Start?</h2>
+        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600">Whether you need immediate expert help or a long-term recovery management flow, Novita lets you begin securely and continue with consistent support.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+            {% if user.is_authenticated %}
+                <a href="{% url 'recovery:dashboard' %}" class="inline-flex items-center rounded-xl bg-[var(--color-primary)] px-6 py-3 font-semibold text-white hover:brightness-110">Open Recovery Dashboard</a>
+                <a href="{% url 'service:inquiry_list' %}" class="inline-flex items-center rounded-xl border border-slate-300 px-6 py-3 font-semibold text-slate-700 hover:bg-slate-50">My Requests</a>
+            {% else %}
+                <a href="{% url 'signup' %}" class="inline-flex items-center rounded-xl bg-[var(--color-primary)] px-6 py-3 font-semibold text-white hover:brightness-110">Create Account</a>
+                <a href="{% url 'service:service_list' %}" class="inline-flex items-center rounded-xl border border-slate-300 px-6 py-3 font-semibold text-slate-700 hover:bg-slate-50">Explore Services</a>
+            {% endif %}
         </div>
     </div>
 </section>

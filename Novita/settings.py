@@ -35,6 +35,7 @@ INSTALLED_APPS += [
     'blog',
     'support',
     'service',
+    'recovery',
 ]
 
 MIDDLEWARE = [

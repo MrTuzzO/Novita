@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Recovery Dashboard — Novita{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+  {# ── Page header ── #}
+  <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">Recovery Dashboard</h1>
+      <p class="mt-1 text-slate-500">Welcome back, <span class="font-semibold text-[var(--color-primary)]">{{ request.user.full_name|default:request.user.email }}</span></p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      {% if not todays_checkin %}
+      <a href="{% url 'recovery:checkin_create' %}" class="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-4 py-2.5 text-sm font-semibold text-white hover:brightness-110">
+        <i class="fas fa-plus"></i> Today's Check-In
+      </a>
+      {% else %}
+      <span class="inline-flex items-center gap-2 rounded-xl bg-emerald-100 px-4 py-2.5 text-sm font-semibold text-emerald-700">
+        <i class="fas fa-check-circle"></i> Checked In Today
+      </span>
+      {% endif %}
+      <a href="{% url 'recovery:appointment_create' %}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+        <i class="fas fa-calendar-plus"></i> Book Appointment
+      </a>
+    </div>
+  </div>
+
+  {# ── Stat cards ── #}
+  <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Days Clean</p>
+          <p class="mt-1 text-4xl font-bold text-[var(--color-primary)]">{{ patient.days_clean }}</p>
+        </div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+          <i class="fas fa-leaf text-xl"></i>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-slate-500">Since {{ patient.program_start_date|date:"M d, Y" }}</p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Check-Ins</p>
+          <p class="mt-1 text-4xl font-bold text-[var(--color-secondary)]">{{ patient.total_checkins }}</p>
+        </div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-secondary)]/10 text-[var(--color-secondary)]">
+          <i class="fas fa-clipboard-check text-xl"></i>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-slate-500">Total daily entries logged</p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Milestones</p>
+          <p class="mt-1 text-4xl font-bold text-amber-500">{{ patient.achieved_milestones_count }}</p>
+        </div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-500">
+          <i class="fas fa-trophy text-xl"></i>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-slate-500">Badges earned on your journey</p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Upcoming Appts</p>
+          <p class="mt-1 text-4xl font-bold text-slate-800">{{ upcoming_appointments.count }}</p>
+        </div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">
+          <i class="fas fa-calendar-alt text-xl"></i>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-slate-500">Scheduled appointments ahead</p>
+    </div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-3">
+
+    {# ── Left column ── #}
+    <div class="space-y-6 lg:col-span-2">
+
+      {# Next milestone progress #}
+      {% if next_milestone %}
+      <div class="rounded-2xl border border-[var(--color-primary)]/20 bg-gradient-to-r from-[var(--color-primary)]/5 to-transparent p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-primary)]">Next Milestone</p>
+            <h3 class="mt-1 text-xl font-bold text-slate-900">{{ next_milestone.title }}</h3>
+            <p class="mt-1 text-sm text-slate-500">{{ next_milestone.days_remaining }} days to go</p>
+          </div>
+          <div class="text-3xl font-bold text-[var(--color-primary)]">{{ next_milestone.progress }}%</div>
+        </div>
+        <div class="mt-4 h-3 w-full rounded-full bg-slate-200">
+          <div class="h-3 rounded-full bg-[var(--color-primary)] transition-all duration-500" style="width: {{ next_milestone.progress }}%"></div>
+        </div>
+      </div>
+      {% endif %}
+
+      {# Mood / craving chart #}
+      {% if checkin_dates %}
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-slate-900">Mood & Cravings (Last 7 Check-Ins)</h2>
+        <canvas id="moodChart" class="mt-4 max-h-52"></canvas>
+      </div>
+      {% endif %}
+
+      {# Recent check-ins #}
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-slate-900">Recent Check-Ins</h2>
+          <a href="{% url 'recovery:checkin_history' %}" class="text-sm font-semibold text-[var(--color-primary)] hover:underline">View All</a>
+        </div>
+        {% if recent_checkins %}
+        <div class="mt-4 space-y-3">
+          {% for c in recent_checkins %}
+          <div class="flex items-center gap-4 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
+            <div class="text-2xl">{{ c.get_mood_emoji }}</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-slate-800">{{ c.date|date:"D, M d" }}</p>
+              <p class="truncate text-xs text-slate-500">Craving: {{ c.craving_level }}/10 · {{ c.get_mood_display }}</p>
+            </div>
+            {% if c.used_substance %}
+            <span class="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">Relapsed</span>
+            {% elif c.trigger_avoided %}
+            <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">Trigger Avoided</span>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="mt-4 text-sm text-slate-500">No check-ins yet. <a href="{% url 'recovery:checkin_create' %}" class="font-semibold text-[var(--color-primary)] hover:underline">Start today!</a></p>
+        {% endif %}
+      </div>
+
+      {# Active recovery plan #}
+      {% if active_plan %}
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-slate-900">Active Recovery Plan</h2>
+          <a href="{% url 'recovery:plan_detail' active_plan.pk %}" class="text-sm font-semibold text-[var(--color-primary)] hover:underline">View Full Plan</a>
+        </div>
+        <h3 class="mt-3 text-base font-semibold text-slate-800">{{ active_plan.title }}</h3>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+          <div class="rounded-xl bg-[var(--color-primary)]/5 p-4">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-primary)]">Short-Term Goals</p>
+            <p class="mt-2 text-sm text-slate-700 line-clamp-3">{{ active_plan.short_term_goals }}</p>
+          </div>
+          <div class="rounded-xl bg-[var(--color-secondary)]/5 p-4">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-secondary)]">Strategies</p>
+            <p class="mt-2 text-sm text-slate-700 line-clamp-3">{{ active_plan.strategies }}</p>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center">
+        <i class="fas fa-clipboard-list text-3xl text-slate-300"></i>
+        <p class="mt-3 text-sm text-slate-500">No active recovery plan.</p>
+        <a href="{% url 'recovery:plan_create' %}" class="mt-3 inline-flex items-center rounded-xl bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white hover:brightness-110">Create a Plan</a>
+      </div>
+      {% endif %}
+    </div>
+
+    {# ── Right sidebar ── #}
+    <div class="space-y-6">
+
+      {# Patient info #}
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center gap-3">
+          {% if request.user.profile_image %}
+          <img src="{{ request.user.profile_image.url }}" class="h-12 w-12 rounded-full object-cover ring-2 ring-[var(--color-primary)]/20" alt="Profile">
+          {% else %}
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-bold text-lg">
+            {{ request.user.full_name|first|upper|default:"U" }}
+          </div>
+          {% endif %}
+          <div>
+            <p class="font-semibold text-slate-900">{{ request.user.full_name|default:"Patient" }}</p>
+            <span class="inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">{{ patient.get_status_display }}</span>
+          </div>
+        </div>
+        <dl class="mt-4 space-y-2 text-sm">
+          <div class="flex justify-between">
+            <dt class="text-slate-500">Addiction Type</dt>
+            <dd class="font-semibold text-slate-800">{{ patient.get_addiction_type_display }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-slate-500">Program Start</dt>
+            <dd class="font-semibold text-slate-800">{{ patient.program_start_date|date:"M d, Y" }}</dd>
+          </div>
+          {% if patient.assigned_counselor %}
+          <div class="flex justify-between">
+            <dt class="text-slate-500">Counselor</dt>
+            <dd class="font-semibold text-slate-800">{{ patient.assigned_counselor.full_name|default:patient.assigned_counselor.email }}</dd>
+          </div>
+          {% endif %}
+          {% if patient.rehab_center %}
+          <div class="flex justify-between">
+            <dt class="text-slate-500">Rehab Center</dt>
+            <dd class="font-semibold text-slate-800 text-right">{{ patient.rehab_center }}</dd>
+          </div>
+          {% endif %}
+        </dl>
+        <a href="{% url 'recovery:edit_profile' %}" class="mt-4 block rounded-xl border border-slate-300 py-2 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">Edit Profile</a>
+      </div>
+
+      {# Upcoming appointments #}
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold text-slate-900">Upcoming Appointments</h2>
+          <a href="{% url 'recovery:appointments' %}" class="text-xs text-[var(--color-primary)] hover:underline">All</a>
+        </div>
+        {% if upcoming_appointments %}
+        <div class="mt-4 space-y-3">
+          {% for appt in upcoming_appointments %}
+          <div class="rounded-xl border border-slate-100 bg-slate-50 p-3">
+            <p class="text-sm font-semibold text-slate-800">{{ appt.title }}</p>
+            <p class="text-xs text-slate-500"><i class="fas fa-calendar mr-1"></i>{{ appt.appointment_date|date:"D, M d" }} at {{ appt.appointment_time|time:"H:i" }}</p>
+            <span class="mt-1 inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700">{{ appt.get_appointment_type_display }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="mt-3 text-sm text-slate-500">No upcoming appointments. <a href="{% url 'recovery:appointment_create' %}" class="text-[var(--color-primary)] hover:underline">Book one</a></p>
+        {% endif %}
+      </div>
+
+      {# Recent sessions #}
+      {% if recent_sessions %}
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold text-slate-900">Recent Sessions</h2>
+          <a href="{% url 'recovery:session_list' %}" class="text-xs text-[var(--color-primary)] hover:underline">All</a>
+        </div>
+        <div class="mt-4 space-y-3">
+          {% for s in recent_sessions %}
+          <div class="rounded-xl border border-slate-100 bg-slate-50 p-3">
+            <p class="text-xs text-slate-500">{{ s.session_date|date:"M d, Y" }} · {{ s.get_session_type_display }}</p>
+            <p class="mt-1 text-sm text-slate-700 line-clamp-2">{{ s.topics_discussed }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {# Quick links #}
+      <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h2 class="mb-3 font-semibold text-slate-900">Quick Actions</h2>
+        <div class="grid grid-cols-2 gap-2">
+          <a href="{% url 'recovery:plan_create' %}" class="flex flex-col items-center gap-1 rounded-xl border border-slate-200 p-3 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            <i class="fas fa-clipboard-list text-[var(--color-primary)] text-lg"></i> New Plan
+          </a>
+          <a href="{% url 'recovery:relapse_log' %}" class="flex flex-col items-center gap-1 rounded-xl border border-slate-200 p-3 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            <i class="fas fa-triangle-exclamation text-amber-500 text-lg"></i> Log Relapse
+          </a>
+          <a href="{% url 'recovery:milestones' %}" class="flex flex-col items-center gap-1 rounded-xl border border-slate-200 p-3 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            <i class="fas fa-trophy text-amber-500 text-lg"></i> Milestones
+          </a>
+          <a href="{% url 'recovery:relapse_list' %}" class="flex flex-col items-center gap-1 rounded-xl border border-slate-200 p-3 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            <i class="fas fa-chart-line text-[var(--color-secondary)] text-lg"></i> History
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+{% if checkin_dates %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  const labels = {{ checkin_dates|safe }};
+  const moodData = {{ mood_data|safe }};
+  const cravingData = {{ craving_data|safe }};
+
+  const ctx = document.getElementById('moodChart');
+  if (!ctx) return;
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Mood (1–5)',
+          data: moodData,
+          borderColor: 'rgba(236,0,140,0.8)',
+          backgroundColor: 'rgba(236,0,140,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: 'rgba(236,0,140,1)',
+        },
+        {
+          label: 'Craving (1–10)',
+          data: cravingData,
+          borderColor: 'rgba(21,183,158,0.8)',
+          backgroundColor: 'rgba(21,183,158,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: 'rgba(21,183,158,1)',
+          yAxisID: 'y2',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        y: { min: 0, max: 5, title: { display: true, text: 'Mood' } },
+        y2: { min: 0, max: 10, position: 'right', title: { display: true, text: 'Craving' }, grid: { drawOnChartArea: false } }
+      },
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+})();
+</script>
+{% endif %}
+{% endblock %}

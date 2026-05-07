@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}{{ plan.title }} — Novita{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="mb-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="{% url 'recovery:plan_list' %}" class="rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"><i class="fas fa-arrow-left"></i></a>
+      <h1 class="text-2xl font-bold text-slate-900">{{ plan.title }}</h1>
+    </div>
+    <a href="{% url 'recovery:plan_edit' plan.pk %}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+      <i class="fas fa-edit"></i> Edit
+    </a>
+  </div>
+
+  <div class="space-y-5">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center gap-3 flex-wrap">
+        <span class="rounded-full px-3 py-1 text-sm font-semibold
+          {% if plan.status == 'active' %}bg-emerald-100 text-emerald-700
+          {% elif plan.status == 'completed' %}bg-blue-100 text-blue-700
+          {% elif plan.status == 'on_hold' %}bg-amber-100 text-amber-700
+          {% else %}bg-slate-100 text-slate-600{% endif %}">
+          {{ plan.get_status_display }}
+        </span>
+        <span class="text-sm text-slate-500">Started {{ plan.start_date|date:"M d, Y" }}</span>
+        {% if plan.review_date %}<span class="text-sm text-slate-500">· Review: {{ plan.review_date|date:"M d, Y" }}</span>{% endif %}
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-[var(--color-primary)]/20 bg-[var(--color-primary)]/5 p-6">
+      <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-primary)]">Short-Term Goals</h2>
+      <p class="whitespace-pre-line text-slate-700">{{ plan.short_term_goals }}</p>
+    </div>
+
+    <div class="rounded-2xl border border-[var(--color-secondary)]/20 bg-[var(--color-secondary)]/5 p-6">
+      <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-secondary)]">Long-Term Goals</h2>
+      <p class="whitespace-pre-line text-slate-700">{{ plan.long_term_goals }}</p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-500">Coping Strategies</h2>
+      <p class="whitespace-pre-line text-slate-700">{{ plan.strategies }}</p>
+    </div>
+
+    <p class="text-xs text-slate-400 text-right">Created {{ plan.created_at|date:"M d, Y" }}{% if plan.created_by %} by {{ plan.created_by.full_name|default:plan.created_by.email }}{% endif %}</p>
+  </div>
+</div>
+{% endblock %}

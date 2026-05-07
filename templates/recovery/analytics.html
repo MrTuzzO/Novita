@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block title %}Analytics Dashboard — Novita{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mb-8 flex items-center justify-between">
+    <h1 class="text-3xl font-bold text-slate-900">Recovery Analytics</h1>
+    <a href="{% url 'recovery:patient_list' %}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+      <i class="fas fa-users"></i> All Patients
+    </a>
+  </div>
+
+  {# KPI cards #}
+  <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm text-center">
+      <p class="text-3xl font-bold text-[var(--color-primary)]">{{ total_patients }}</p>
+      <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Total Patients</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm text-center">
+      <p class="text-3xl font-bold text-emerald-600">{{ active_patients }}</p>
+      <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Active</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm text-center">
+      <p class="text-3xl font-bold text-[var(--color-secondary)]">{{ total_checkins }}</p>
+      <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Total Check-Ins</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm text-center">
+      <p class="text-3xl font-bold text-amber-500">{{ relapses_this_month }}</p>
+      <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Relapses This Month</p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm text-center">
+      <p class="text-3xl font-bold text-blue-600">{{ upcoming_appointments }}</p>
+      <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Upcoming Appts</p>
+    </div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-3">
+    {# Mood trend chart #}
+    <div class="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="mb-4 text-lg font-semibold text-slate-900">Average Mood Trend (Last 30 Days)</h2>
+      {% if mood_trend %}
+      <canvas id="moodTrendChart" class="max-h-64"></canvas>
+      {% else %}
+      <div class="flex h-40 items-center justify-center text-slate-400">
+        <p>Not enough data yet.</p>
+      </div>
+      {% endif %}
+    </div>
+
+    {# Addiction breakdown #}
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="mb-4 text-lg font-semibold text-slate-900">Addiction Breakdown</h2>
+      <canvas id="addictionChart" class="max-h-64"></canvas>
+    </div>
+  </div>
+
+  {# Patient table #}
+  <div class="mt-8 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+    <div class="flex items-center justify-between p-6 border-b border-slate-100">
+      <h2 class="text-lg font-semibold text-slate-900">All Patients</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 border-b border-slate-100">
+          <tr>
+            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Patient</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Addiction</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Days Clean</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Counselor</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {% for p in patients %}
+          <tr class="hover:bg-slate-50">
+            <td class="px-5 py-3">
+              <p class="font-semibold text-slate-900">{{ p.user.full_name|default:p.user.email }}</p>
+              <p class="text-xs text-slate-400">{{ p.user.email }}</p>
+            </td>
+            <td class="px-5 py-3 text-slate-600">{{ p.get_addiction_type_display }}</td>
+            <td class="px-5 py-3">
+              <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold
+                {% if p.status == 'active' %}bg-emerald-100 text-emerald-700
+                {% elif p.status == 'completed' %}bg-blue-100 text-blue-700
+                {% else %}bg-slate-100 text-slate-600{% endif %}">
+                {{ p.get_status_display }}
+              </span>
+            </td>
+            <td class="px-5 py-3 font-semibold text-[var(--color-primary)]">{{ p.days_clean }} days</td>
+            <td class="px-5 py-3 text-slate-600">{{ p.assigned_counselor.full_name|default:"—" }}</td>
+            <td class="px-5 py-3">
+              <a href="{% url 'recovery:patient_detail' p.pk %}" class="rounded-lg border border-slate-300 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50">View</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="py-8 text-center text-slate-400">No patients yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  // Mood trend
+  const moodCtx = document.getElementById('moodTrendChart');
+  if (moodCtx) {
+    const trendData = {{ mood_trend|safe }};
+    new Chart(moodCtx, {
+      type: 'line',
+      data: {
+        labels: trendData.map(d => d.date),
+        datasets: [{
+          label: 'Avg Mood',
+          data: trendData.map(d => parseFloat(d.avg_mood).toFixed(1)),
+          borderColor: 'rgba(236,0,140,0.8)',
+          backgroundColor: 'rgba(236,0,140,0.08)',
+          fill: true,
+          tension: 0.4,
+        }]
+      },
+      options: {
+        scales: { y: { min: 1, max: 5 } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  // Addiction breakdown
+  const addCtx = document.getElementById('addictionChart');
+  if (addCtx) {
+    const labels = [{% for p in patients %}'{{ p.get_addiction_type_display }}',{% endfor %}];
+    const counts = {};
+    labels.forEach(l => { counts[l] = (counts[l] || 0) + 1; });
+    new Chart(addCtx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(counts),
+        datasets: [{
+          data: Object.values(counts),
+          backgroundColor: ['#ec008c','#15b79e','#ff8a00','#3b82f6','#8b5cf6','#dc2626','#f59e0b','#6b7280'],
+        }]
+      },
+      options: { plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+})();
+</script>
+{% endblock %}
