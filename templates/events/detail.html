@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.title }} - Novita{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+        <article class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" class="h-[320px] w-full object-cover sm:h-[420px]">
+            {% else %}
+                <div class="flex h-[320px] items-center justify-center bg-[var(--color-primary)]/10 text-[var(--color-primary)] sm:h-[420px]">
+                    <i class="fas fa-calendar-heart text-6xl"></i>
+                </div>
+            {% endif %}
+            <div class="p-8">
+                <div class="flex flex-wrap items-center gap-3 text-sm">
+                    <span class="rounded-full bg-[var(--color-primary)]/10 px-3 py-1 font-semibold text-[var(--color-primary)]">{{ event.get_category_display }}</span>
+                    <span class="text-slate-500"><i class="fas fa-calendar-days mr-2"></i>{{ event.event_date|date:"F d, Y" }}</span>
+                    <span class="text-slate-500"><i class="fas fa-location-dot mr-2"></i>{{ event.location }}</span>
+                </div>
+                <h1 class="mt-5 text-4xl font-bold text-slate-900">{{ event.title }}</h1>
+                <p class="mt-4 text-base leading-8 text-slate-600">{{ event.summary }}</p>
+                <div class="mt-6 flex flex-wrap items-center gap-4">
+                    <div class="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                        <i class="fas fa-heart mr-2 text-[var(--color-primary)]"></i>{{ event.interested_count }} users interested
+                    </div>
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'events:toggle_interest' event.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'events:detail' event.pk %}">
+                        <button type="submit" class="no-auto-btn inline-flex items-center rounded-xl bg-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--color-primary-dark)]">
+                            {% if user in event.interested_users.all %}You are interested{% else %}Show Interest{% endif %}
+                        </button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'login' %}?next={% url 'events:detail' event.pk %}" class="inline-flex items-center rounded-xl bg-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--color-primary-dark)]">
+                        Show Interest
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+
+        <aside class="space-y-6">
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900">Need support before the event?</h2>
+                <p class="mt-3 text-sm leading-7 text-slate-600">Use Novita to connect with a counselor, create a recovery plan, and keep your support system active before attending community programs.</p>
+                <div class="mt-5 flex flex-col gap-3">
+                    <a href="{% url 'service:service_list' %}" class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-4 py-3 text-sm font-semibold text-white hover:bg-[var(--color-primary-dark)]">Talk to a Counselor</a>
+                    <a href="{% url 'recovery:dashboard' %}" class="inline-flex items-center justify-center rounded-xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Open Recovery Dashboard</a>
+                </div>
+            </div>
+
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900">More Events</h2>
+                <div class="mt-4 space-y-4">
+                    {% for item in related_events %}
+                    <a href="{% url 'events:detail' item.pk %}" class="block rounded-2xl border border-slate-100 p-4 transition hover:bg-slate-50">
+                        <p class="text-sm font-semibold text-slate-900">{{ item.title }}</p>
+                        <p class="mt-1 text-xs text-slate-500">{{ item.event_date|date:"M d, Y" }} · {{ item.location }}</p>
+                    </a>
+                    {% empty %}
+                    <p class="text-sm text-slate-500">No additional events available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}

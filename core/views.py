@@ -1,7 +1,11 @@
 from django.shortcuts import render
+
 from blog.models import BlogPost
+from events.models import Event
 from .models import Banner
-from service.models import ServiceType
+from recovery.models import PatientProfile
+from service.models import ExpertProfile, ServiceInquiry, ServiceType
+from user.models import CustomUser
 
 # Create your views here.
 
@@ -14,11 +18,21 @@ def home(request):
 
     banners = Banner.objects.filter(is_active=True).order_by('-id')
     service_types = ServiceType.objects.filter(is_active=True).order_by('name')
+    upcoming_events = Event.objects.filter(is_active=True).order_by('event_date')[:3]
+
+    stats = {
+        'members': CustomUser.objects.filter(is_active=True).count(),
+        'experts': ExpertProfile.objects.count(),
+        'recovery_profiles': PatientProfile.objects.count(),
+        'service_requests': ServiceInquiry.objects.count(),
+    }
     
     context = {
         'featured_posts': featured_posts,
         'banners': banners,
         'service_types': service_types,
+        'upcoming_events': upcoming_events,
+        'stats': stats,
     }
     return render(request, 'pages/home.html', context)
 

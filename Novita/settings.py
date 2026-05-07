@@ -36,6 +36,7 @@ INSTALLED_APPS += [
     'support',
     'service',
     'recovery',
+    'events',
 ]
 
 MIDDLEWARE = [
