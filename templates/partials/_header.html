@@ -1,10 +1,9 @@
+{% load static %}
+
 <nav class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-white/90 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <a class="inline-flex items-center gap-2 text-xl font-bold text-[var(--color-primary)]" href="{% url 'home' %}">
-            <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-primary)]/10">
-                <i class="fas fa-star text-sm"></i>
-            </span>
-            <span class="font-heading">Novita</span>
+        <a class="inline-flex items-center" href="{% url 'home' %}" aria-label="Novita home">
+            <img src="{% static 'images/Header_logo.webp' %}" alt="Novita" class="h-14 sm:h-16 w-auto object-contain">
         </a>
 
         <button id="mobile-menu-button" class="rounded-xl border border-slate-200 p-2 text-slate-700 md:hidden" type="button">

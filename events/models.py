@@ -16,7 +16,7 @@ class Event(models.Model):
     ]
 
     title = models.CharField(max_length=160)
-    summary = models.CharField(max_length=220)
+    summary = models.TextField()
     image = models.ImageField(upload_to='events/', blank=True, null=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default=CATEGORY_RECOVERY)
     event_date = models.DateField()

@@ -9,12 +9,13 @@ SECRET_KEY = 'django-insecure-_(d$u1ksijlg5*p6t)*)&49pr^0-us0u6wsfv94=(y8%mee=au
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -205,3 +206,70 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Novita Admin",
+    "site_header": "Novita Admin",
+    "site_brand": "Novita",
+    "welcome_sign": "Welcome to Novita Admin Panel",
+    "copyright": "Novita",
+    "search_model": "auth.User",
+    "icons": {
+        # Authentication
+        "auth.User": "fas fa-user",
+        "auth.Group": "fas fa-users",
+
+        # User app
+        "user.CustomUser": "fas fa-user-circle",
+
+        # Blog
+        "blog.BlogPost": "fas fa-newspaper",
+        "blog.Category": "fas fa-tags",
+        "blog.Comment": "fas fa-comments",
+        "blog.PostLike": "fas fa-thumbs-up",
+
+        # Core
+        "core.Banner": "fas fa-image",
+
+        # Events
+        "events.Event": "fas fa-calendar-alt",
+
+        # Recovery
+        "recovery.Appointment": "fas fa-calendar-check",
+        "recovery.CounselingSession": "fas fa-user-friends",
+        "recovery.DailyCheckIn": "fas fa-clipboard-check",
+        "recovery.Milestone": "fas fa-flag",
+        "recovery.PatientProfile": "fas fa-user-injured",
+        "recovery.RecoveryPlan": "fas fa-clipboard-list",
+        "recovery.RelapseRecord": "fas fa-exclamation-triangle",
+
+        # Service
+        "service.ExpertProfile": "fas fa-user-tie",
+        "service.ServiceType": "fas fa-concierge-bell",
+        "service.ServiceInquiry": "fas fa-question-circle",
+        "service.ServiceMessage": "fas fa-comments",
+        "service.ServiceMessageAttachment": "fas fa-paperclip",
+
+        # Support
+        "support.SupportTicket": "fas fa-ticket-alt",
+        "support.TicketAttachment": "fas fa-paperclip",
+        "support.TicketResponse": "fas fa-reply",
+    },
+
+    # Allow searching across commonly used models in the admin search
+    "search_model": [
+        "user.CustomUser",
+        "recovery.PatientProfile",
+        "support.SupportTicket",
+    ],
+
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index"},
+        {"name": "View Site", "url": "home", "new_window": True},
+    ],
+    
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "changeform_format": "horizontal_tabs",
+}
+
