@@ -99,6 +99,12 @@ def appointments_view(request):
     # Placeholder view for appointments
     return render(request, 'pages/appointments.html')
 
+def rehab_center(request):
+    return render(request, 'pages/rehab_center.html')
+
+def baby_care_center(request):
+    return render(request, 'pages/baby_care_center.html')
+
 def save_daily_entry(request):
     # Placeholder view for saving daily entry
     return render(request, 'pages/recovery_tracking.html')

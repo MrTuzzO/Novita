@@ -18,5 +18,7 @@ urlpatterns = [
     path('mentors/', views.mentors_view, name='mentors'),
     path('milestones/', views.milestones_view, name='milestones'),
     path('appointments/', views.appointments_view, name='appointments'),
+    path('rehab-center/', views.rehab_center, name='rehab_center'),
+    path('baby-care-center/', views.baby_care_center, name='baby_care_center'),
     path('save-daily-entry/', views.save_daily_entry, name='save_daily_entry'),
 ]
