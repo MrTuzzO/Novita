@@ -4,6 +4,7 @@ from django.db.models import Count, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 import stripe
 
+from core.utils.email_utils import send_email_async
 from blog.models import BlogPost
 from events.models import Event
 from .forms import ContactMessageForm, ExpertApplicationForm
@@ -124,7 +125,17 @@ def contact_page(request):
     if request.method == 'POST':
         form = ContactMessageForm(request.POST)
         if form.is_valid():
-            form.save()
+            message_obj = form.save()
+            if message_obj.email:
+                send_email_async(
+                    subject='We received your message',
+                    message=(
+                        f'Hi {message_obj.full_name},\n\n'
+                        'Thank you for contacting Novita. We received your message and will reply soon.\n\n'
+                        'Thanks,\nNovita Team'
+                    ),
+                    recipient_list=[message_obj.email],
+                )
             return render(request, 'pages/contact.html', {'form': ContactMessageForm(), 'submitted': True})
     else:
         initial = {}
@@ -142,7 +153,18 @@ def become_expert(request):
     if request.method == 'POST':
         form = ExpertApplicationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            application = form.save()
+            if application.email:
+                send_email_async(
+                    subject='Expert application received',
+                    message=(
+                        f'Hi {application.full_name},\n\n'
+                        'Your expert application has been submitted successfully. '
+                        'Our team will review it and contact you soon.\n\n'
+                        'Thanks,\nNovita Team'
+                    ),
+                    recipient_list=[application.email],
+                )
             return render(request, 'pages/become_expert.html', {'form': ExpertApplicationForm(), 'submitted': True})
     else:
         initial = {}
@@ -245,7 +267,25 @@ def donate_success(request):
     try:
         session = stripe.checkout.Session.retrieve(session_id)
         if session.payment_status == 'paid':
-            Donation.objects.filter(stripe_session_id=session_id).update(is_confirmed=True)
+            donation = Donation.objects.filter(stripe_session_id=session_id).first()
+            just_confirmed = bool(donation and not donation.is_confirmed)
+
+            if donation and not donation.is_confirmed:
+                donation.is_confirmed = True
+                donation.save(update_fields=['is_confirmed'])
+
+            if donation and just_confirmed and donation.donor_email:
+                send_email_async(
+                    subject='Donation received successfully',
+                    message=(
+                        f'Hi {donation.donor_name or "Supporter"},\n\n'
+                        f'Thank you for your donation of BDT {donation.amount}. '
+                        'Your support helps Novita programs continue.\n\n'
+                        'With gratitude,\nNovita Team'
+                    ),
+                    recipient_list=[donation.donor_email],
+                )
+
             messages.success(request, 'Thank you! Your donation has been received.')
     except stripe.error.StripeError:
         pass

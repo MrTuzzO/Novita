@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 import stripe
 
+from core.utils.email_utils import send_email_async
 from .models import Course, Enrollment, LessonProgress, ModuleLesson
 
 
@@ -257,11 +258,27 @@ def payment_success(request):
     try:
         session = stripe.checkout.Session.retrieve(session_id)
         if session.payment_status == 'paid':
+            just_confirmed = enrollment.payment_confirmed_at is None
+
             # Update enrollment to active with payment confirmed
             enrollment.status = Enrollment.STATUS_ACTIVE
-            enrollment.payment_confirmed_at = timezone.now()
+            if just_confirmed:
+                enrollment.payment_confirmed_at = timezone.now()
             enrollment.stripe_session_id = session_id
             enrollment.save()
+
+            if just_confirmed and request.user.email:
+                send_email_async(
+                    subject='Course payment confirmed',
+                    message=(
+                        f'Hi {request.user.get_full_name() or request.user.username},\n\n'
+                        f'Your payment for "{course.title}" has been confirmed. '
+                        'You now have full access to the course.\n\n'
+                        'Thanks,\nNovita Team'
+                    ),
+                    recipient_list=[request.user.email],
+                )
+
             messages.success(request, f'Payment confirmed! You now have access to "{course.title}".')
             return redirect('women:course_detail', course_id=course.id)
         else:

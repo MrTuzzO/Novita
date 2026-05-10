@@ -8,6 +8,7 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 import os
 
+from core.utils.email_utils import send_email_async
 from .models import SupportTicket, TicketResponse, TicketAttachment
 from .forms import SupportTicketForm, TicketResponseForm, TicketSearchForm
 
@@ -82,6 +83,34 @@ def create_ticket(request):
                     )
                 else:
                     messages.warning(request, f'File {file.name} is too large (max 10MB)')
+
+            if request.user.email:
+                send_email_async(
+                    subject=f'Support ticket received: {ticket.ticket_id}',
+                    message=(
+                        f'Hi {request.user.get_full_name() or request.user.username},\n\n'
+                        f'Your support ticket {ticket.ticket_id} has been created successfully.\n'
+                        f'Subject: {ticket.subject}\n\n'
+                        'Our team will get back to you soon.\n\n'
+                        'Thanks,\nNovita Support Team'
+                    ),
+                    recipient_list=[request.user.email],
+                )
+
+            if getattr(settings, 'SUPPORT_NOTIFY_EMAIL', ''):
+                send_email_async(
+                    subject=f'New support ticket: {ticket.ticket_id}',
+                    message=(
+                        f'New support ticket submitted.\n\n'
+                        f'Ticket: {ticket.ticket_id}\n'
+                        f'User: {request.user.get_full_name() or request.user.username}\n'
+                        f'Email: {request.user.email}\n'
+                        f'Subject: {ticket.subject}\n'
+                        f'Priority: {ticket.priority}\n'
+                        f'Category: {ticket.category}'
+                    ),
+                    recipient_list=[settings.SUPPORT_NOTIFY_EMAIL],
+                )
             
             messages.success(request, f'Support ticket #{ticket.ticket_id} has been created successfully!')
             return redirect('support:ticket_detail', ticket_id=ticket.ticket_id)
@@ -153,6 +182,30 @@ def ticket_detail(request, ticket_id):
                 if not request.user.is_staff and ticket.status == 'waiting_for_customer':
                     ticket.status = 'open'
                     ticket.save()
+
+                if request.user.is_staff and ticket.user.email:
+                    send_email_async(
+                        subject=f'Update on your ticket: {ticket.ticket_id}',
+                        message=(
+                            f'Hi {ticket.user.get_full_name() or ticket.user.username},\n\n'
+                            f'There is a new response to your support ticket {ticket.ticket_id}.\n'
+                            f'Subject: {ticket.subject}\n\n'
+                            'Please log in to view and reply.\n\n'
+                            'Thanks,\nNovita Support Team'
+                        ),
+                        recipient_list=[ticket.user.email],
+                    )
+                elif (not request.user.is_staff) and getattr(settings, 'SUPPORT_NOTIFY_EMAIL', ''):
+                    send_email_async(
+                        subject=f'Customer replied: {ticket.ticket_id}',
+                        message=(
+                            f'Customer added a reply to ticket {ticket.ticket_id}.\n\n'
+                            f'User: {request.user.get_full_name() or request.user.username}\n'
+                            f'Email: {request.user.email}\n'
+                            f'Subject: {ticket.subject}'
+                        ),
+                        recipient_list=[settings.SUPPORT_NOTIFY_EMAIL],
+                    )
                 
                 messages.success(request, 'Your response has been added successfully!')
                 return redirect('support:ticket_detail', ticket_id=ticket.ticket_id)
@@ -181,6 +234,19 @@ def close_ticket(request, ticket_id):
     
     ticket.status = 'closed'
     ticket.save()
+
+    if ticket.user.email:
+        send_email_async(
+            subject=f'Ticket closed: {ticket.ticket_id}',
+            message=(
+                f'Hi {ticket.user.get_full_name() or ticket.user.username},\n\n'
+                f'Your support ticket {ticket.ticket_id} has been marked as closed.\n'
+                f'Subject: {ticket.subject}\n\n'
+                'If you still need help, you can create a new ticket anytime.\n\n'
+                'Thanks,\nNovita Support Team'
+            ),
+            recipient_list=[ticket.user.email],
+        )
     
     messages.success(request, f'Ticket #{ticket.ticket_id} has been closed.')
     return redirect('support:ticket_detail', ticket_id=ticket.ticket_id)

@@ -142,4 +142,6 @@ class TicketAttachment(models.Model):
     
     @property
     def file_size_mb(self):
+        if self.file_size is None:
+            return 0
         return round(self.file_size / (1024 * 1024), 2)

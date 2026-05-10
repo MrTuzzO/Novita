@@ -1,12 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView
 
+from core.utils.email_utils import send_email_async
 from .forms import ServiceInquiryForm, ServiceInquiryStatusForm, ServiceMessageForm
 from .models import ExpertProfile, ServiceInquiry, ServiceMessage, ServiceMessageAttachment, ServiceType
 
@@ -71,6 +73,32 @@ def create_inquiry(request):
                 message=form.cleaned_data['message'],
             )
             _save_attachments(request, form.cleaned_data.get('attachments', []), first_message)
+
+            if request.user.email:
+                send_email_async(
+                    subject=f'Service request received: {inquiry.inquiry_id}',
+                    message=(
+                        f'Hi {request.user.get_full_name() or request.user.username},\n\n'
+                        f'Your request {inquiry.inquiry_id} has been submitted successfully.\n'
+                        f'Service: {inquiry.service_type.name}\n\n'
+                        'Our team/expert will follow up soon.\n\n'
+                        'Thanks,\nNovita Team'
+                    ),
+                    recipient_list=[request.user.email],
+                )
+
+            if getattr(settings, 'SERVICE_NOTIFY_EMAIL', ''):
+                send_email_async(
+                    subject=f'New service inquiry: {inquiry.inquiry_id}',
+                    message=(
+                        f'New service inquiry submitted.\n\n'
+                        f'Inquiry: {inquiry.inquiry_id}\n'
+                        f'User: {request.user.get_full_name() or request.user.username}\n'
+                        f'Email: {request.user.email}\n'
+                        f'Service: {inquiry.service_type.name}'
+                    ),
+                    recipient_list=[settings.SERVICE_NOTIFY_EMAIL],
+                )
 
             messages.success(request, f'Your service request {inquiry.inquiry_id} has been sent.')
             return redirect('service:inquiry_detail', inquiry_id=inquiry.inquiry_id)
@@ -169,6 +197,29 @@ def inquiry_detail(request, inquiry_id):
                 if request.user == inquiry.expert and inquiry.status == ServiceInquiry.STATUS_OPEN:
                     inquiry.status = ServiceInquiry.STATUS_IN_PROGRESS
                     inquiry.save(update_fields=['status', 'updated_at'])
+
+                if request.user == inquiry.expert and inquiry.user.email:
+                    send_email_async(
+                        subject=f'New expert reply: {inquiry.inquiry_id}',
+                        message=(
+                            f'Hi {inquiry.user.get_full_name() or inquiry.user.username},\n\n'
+                            f'You have a new reply from your expert on request {inquiry.inquiry_id}.\n\n'
+                            'Please log in to continue the conversation.\n\n'
+                            'Thanks,\nNovita Team'
+                        ),
+                        recipient_list=[inquiry.user.email],
+                    )
+                elif request.user == inquiry.user and inquiry.expert and inquiry.expert.email:
+                    send_email_async(
+                        subject=f'Client replied: {inquiry.inquiry_id}',
+                        message=(
+                            f'Client sent a new message on inquiry {inquiry.inquiry_id}.\n\n'
+                            f'Client: {inquiry.user.get_full_name() or inquiry.user.username}\n'
+                            f'Client email: {inquiry.user.email}\n'
+                            f'Service: {inquiry.service_type.name}'
+                        ),
+                        recipient_list=[inquiry.expert.email],
+                    )
 
                 messages.success(request, 'Message sent successfully.')
                 return redirect('service:inquiry_detail', inquiry_id=inquiry.inquiry_id)

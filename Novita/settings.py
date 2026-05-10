@@ -1,5 +1,9 @@
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')
 
 
 
@@ -130,8 +134,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# Email Configuration (for password reset)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
+# Email Configuration (hardcoded, credentials from .env)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'novita.org.bd@gmail.com'
+SERVER_EMAIL = 'novita.org.bd@gmail.com'
+
+SUPPORT_NOTIFY_EMAIL = ''
+SERVICE_NOTIFY_EMAIL = ''
 
 # Custom User Model
 AUTH_USER_MODEL = 'user.CustomUser'
@@ -233,6 +248,9 @@ JAZZMIN_SETTINGS = {
 
         # Core
         "core.Banner": "fas fa-image",
+        "core.ContactMessage": "fas fa-envelope",
+        "core.Donation": "fas fa-heart",
+        "core.ExpertApplication": "fas fa-file-alt",
 
         # Events
         "events.Event": "fas fa-calendar-alt",
@@ -257,6 +275,21 @@ JAZZMIN_SETTINGS = {
         "support.SupportTicket": "fas fa-ticket-alt",
         "support.TicketAttachment": "fas fa-paperclip",
         "support.TicketResponse": "fas fa-reply",
+
+        # Women & Courses
+        "women.Course": "fas fa-book",
+        "women.CourseModule": "fas fa-layer-group",
+        "women.ModuleLesson": "fas fa-book-open",
+        "women.Enrollment": "fas fa-graduation-cap",
+        "women.LessonProgress": "fas fa-tasks",
+
+        # Baby Care
+        "babycare.BabyCareRequest": "fas fa-child",
+        "babycare.BabyCareUpdate": "fas fa-info-circle",
+
+        # Rehab
+        "rehab.AdmissionRequest": "fas fa-file-signature",
+        "rehab.AdmissionUpdate": "fas fa-clipboard-check",
     },
 
     # Allow searching across commonly used models in the admin search
@@ -276,6 +309,7 @@ JAZZMIN_SETTINGS = {
     "changeform_format": "horizontal_tabs",
 }
 
-STRIPE_PUBLIC_KEY = 'pk_test_51TVadn0sWVR02POJlOGDDazazblp1vROXtg5gaCTfKj21Y39yEBS0VSFKmojl1LjJlcYdLZk53tsaRV1suSFczyI00jBBU716n'  
-STRIPE_SECRET_KEY = 'sk_test_51TVadn0sWVR02POJg13BngA70Z57aUvTjxALORVTL50PK2NNffYUhVzVbS9dgvtwvt9KRxoM6TZJlbstnxnUhxJN00UDpuKB2n'
+# Stripe API Keys (from .env file)
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 
