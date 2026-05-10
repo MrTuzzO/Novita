@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Day Care Requests - Novita{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mb-8 flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">Day Care Requests</h1>
+            <p class="mt-2 text-slate-600">Open any request to view status, shift preference, and care team updates.</p>
+        </div>
+        <a href="{% url 'babycare:request_care' %}" class="inline-flex items-center rounded-xl bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--color-primary-dark)]">
+            New Day Care Request
+        </a>
+    </div>
+
+    {% if requests_qs %}
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Request ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Child</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Shift</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Submitted</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">Details</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for item in requests_qs %}
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-semibold text-slate-800">{{ item.request_id }}</td>
+                            <td class="px-4 py-3 text-sm text-slate-700">{{ item.child_name }}</td>
+                            <td class="px-4 py-3 text-sm text-slate-700">{{ item.get_care_shift_display }}</td>
+                            <td class="px-4 py-3 text-sm text-slate-600">{{ item.created_at|date:'M d, Y' }}</td>
+                            <td class="px-4 py-3 text-sm text-[var(--color-primary)]">{{ item.get_status_display }}</td>
+                            <td class="px-4 py-3 text-sm">
+                                <a class="font-semibold text-[var(--color-primary)] hover:underline" href="{% url 'babycare:request_detail' request_id=item.request_id %}">View Request</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
+            <p class="text-slate-600">No day care requests found yet.</p>
+            <a href="{% url 'babycare:request_care' %}" class="mt-4 inline-flex items-center rounded-xl bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--color-primary-dark)]">Create Day Care Request</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

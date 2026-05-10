@@ -1,5 +1,14 @@
 from django.contrib import admin
-from .models import Banner, ContactMessage, ExpertApplication
+from .models import Banner, ContactMessage, Donation, ExpertApplication
+
+
+@admin.register(Donation)
+class DonationAdmin(admin.ModelAdmin):
+    list_display = ('donor_name', 'donor_email', 'amount', 'is_confirmed', 'donated_at')
+    list_filter = ('is_confirmed', 'donated_at')
+    search_fields = ('donor_name', 'donor_email', 'message')
+    readonly_fields = ('donated_at', 'stripe_session_id')
+
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):

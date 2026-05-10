@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}Baby Care Center - Novita{% endblock %}
-
+{% load static %}
 {% block extra_css %}
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap');
@@ -93,10 +93,11 @@
                 <span class="inline-flex items-center gap-2 rounded-full border border-sky-300/60 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-sky-900 shadow-sm">
                     <i class="fas fa-baby"></i> Novita Baby Care Center
                 </span>
-                <h1 class="baby-title mt-5 max-w-4xl text-4xl font-extrabold leading-tight text-slate-900 sm:text-5xl lg:text-6xl">Gentle Child Wellness Care for Newborns, Infants, and Toddlers</h1>
-                <p class="mt-5 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">From first feeding to toddler milestones, our team supports families with practical advice, professional growth monitoring, and responsive everyday care plans.</p>
+                <h1 class="baby-title mt-5 max-w-4xl text-4xl font-extrabold leading-tight text-slate-900 sm:text-5xl lg:text-6xl">Professional Day Care and Early Learning Support for Children</h1>
+                <p class="mt-5 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">Our center follows structured early childhood care practices with supervised routines, play-based learning, nutrition support, hygiene standards, and regular parent communication.</p>
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <a href="{% url 'service:service_list' %}" class="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-6 py-3 font-semibold text-white shadow-md transition hover:brightness-110">Book Child Consultation <i class="fas fa-stethoscope text-sm"></i></a>
+                    <a href="{% url 'babycare:request_care' %}" class="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-6 py-3 font-semibold text-white shadow-md transition hover:brightness-110">Request Day Care Slot <i class="fas fa-school text-sm"></i></a>
+                    <a href="{% url 'babycare:track_status' %}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-50">Track Day Care Request <i class="fas fa-clipboard-check text-sm"></i></a>
                     <a href="{% url 'support:create_ticket' %}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-50">Ask a Care Question <i class="fas fa-comment-dots text-sm"></i></a>
                 </div>
                 <div class="mt-8 grid gap-3 sm:grid-cols-3">
@@ -128,12 +129,12 @@
                 <div class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-700">
                     <i class="fas fa-heart-pulse text-lg"></i>
                 </div>
-                <h2 class="baby-title text-2xl font-bold text-slate-900">Today at the Center</h2>
+                <h2 class="baby-title text-2xl font-bold text-slate-900">Daily Program Standards</h2>
                 <ul class="mt-5 space-y-3 text-sm text-slate-700">
-                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Live lactation support and feeding evaluation</span></li>
-                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Growth chart updates with physician review</span></li>
-                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Sleep and routine coaching sessions for parents</span></li>
-                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Vaccination readiness and preventive guidance</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Secure drop-off and pick-up verification with attendance logging</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Age-appropriate play, language, and social development activities</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Scheduled meals, rest periods, and hygiene supervision by trained caregivers</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Daily parent briefing on participation, meals, and routine behavior</span></li>
                 </ul>
                 <div class="mt-6 rounded-xl border border-sky-200 bg-white p-4">
                     <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Open Hours</p>
@@ -185,39 +186,39 @@
 
     <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div class="mb-8 text-center">
-            <h2 class="baby-title text-3xl font-bold text-slate-900">Complete Baby Care Service Details</h2>
-            <p class="mt-3 text-slate-600">Built for real daily parenting needs, not just clinic visits.</p>
+            <h2 class="baby-title text-3xl font-bold text-slate-900">Core Day Care Service Components</h2>
+            <p class="mt-3 text-slate-600">Designed around child safety, development, and family trust.</p>
         </div>
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <article class="baby-card p-6">
-                <i class="fas fa-notes-medical text-2xl text-[var(--color-primary)]"></i>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Newborn Health Checkups</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">Routine checkups for breathing, feeding, jaundice signs, temperature, hydration and early safety alerts.</p>
+                <i class="fas fa-user-shield text-2xl text-[var(--color-primary)]"></i>
+                <h3 class="mt-4 text-lg font-semibold text-slate-900">Safety and Supervision Protocol</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Structured sign-in/out, monitored play zones, and supervised transitions throughout the day.</p>
             </article>
             <article class="baby-card p-6">
-                <i class="fas fa-chart-line text-2xl text-[var(--color-primary)]"></i>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Growth & Milestone Tracking</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">Weight, height, head circumference, sleep quality and developmental milestone progress tracking.</p>
+                <i class="fas fa-shapes text-2xl text-[var(--color-primary)]"></i>
+                <h3 class="mt-4 text-lg font-semibold text-slate-900">Play-Based Early Learning</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Daily learning blocks for language, motor skills, creativity, and social interaction.</p>
             </article>
             <article class="baby-card p-6">
                 <i class="fas fa-utensils text-2xl text-[var(--color-primary)]"></i>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Feeding & Nutrition Support</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">Lactation support, formula guidance, reflux care, and age-appropriate solid food transition plans.</p>
+                <h3 class="mt-4 text-lg font-semibold text-slate-900">Meal and Nutrition Routine</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Planned meal schedules with parent-provided dietary instructions and allergy awareness.</p>
             </article>
             <article class="baby-card p-6">
-                <i class="fas fa-moon text-2xl text-[var(--color-primary)]"></i>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Sleep Routine Coaching</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">Sleep cycle assessments and practical routines to improve infant rest without harmful practices.</p>
+                <i class="fas fa-pump-soap text-2xl text-[var(--color-primary)]"></i>
+                <h3 class="mt-4 text-lg font-semibold text-slate-900">Hygiene and Wellness Practice</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Regular hand hygiene, cleaning schedules, and daily wellbeing observation routines.</p>
             </article>
             <article class="baby-card p-6">
-                <i class="fas fa-house-chimney-medical text-2xl text-[var(--color-primary)]"></i>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Home Care Safety Guidance</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">Safe bathing, home hygiene setup, infection prevention and emergency readiness checklist for caregivers.</p>
+                <i class="fas fa-bell text-2xl text-[var(--color-primary)]"></i>
+                <h3 class="mt-4 text-lg font-semibold text-slate-900">Parent Communication and Reporting</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Routine updates on attendance, food, rest, participation, and notable observations.</p>
             </article>
             <article class="baby-card p-6">
-                <i class="fas fa-people-roof text-2xl text-[var(--color-primary)]"></i>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Parent Coaching & Follow-up</h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600">One-to-one care coaching with follow-up sessions for milestone transitions and confidence building.</p>
+                <i class="fas fa-triangle-exclamation text-2xl text-[var(--color-primary)]"></i>
+                <h3 class="mt-4 text-lg font-semibold text-slate-900">Emergency Preparedness</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">Documented escalation pathways and immediate parent contact procedures when needed.</p>
             </article>
         </div>
     </section>
@@ -225,21 +226,21 @@
     <section class="bg-slate-50 py-14">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mb-8 text-center">
-                <h2 class="baby-title text-3xl font-bold text-slate-900">Care Packages for Every Family</h2>
-                <p class="mt-3 text-slate-600">Choose a support level based on your child age and family schedule.</p>
+                <h2 class="baby-title text-3xl font-bold text-slate-900">Day Care Plans</h2>
+                <p class="mt-3 text-slate-600">Select the schedule that fits your family's daily routine.</p>
             </div>
             <div class="grid gap-6 lg:grid-cols-3">
                 <article class="baby-card baby-card-lift p-7">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Starter Package</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Plan 01</p>
                         <span class="baby-icon-badge"><i class="fas fa-seedling text-sm"></i></span>
                     </div>
-                    <h3 class="mt-3 text-2xl font-bold text-slate-900">Essential Newborn</h3>
-                    <p class="mt-3 text-sm text-slate-600">For first-time parents during the first 3 months.</p>
+                    <h3 class="mt-3 text-2xl font-bold text-slate-900">Half-Day Care</h3>
+                    <p class="mt-3 text-sm text-slate-600">For families needing shorter daytime supervision support.</p>
                     <ul class="mt-5 list-disc space-y-1.5 pl-5 text-sm text-slate-700 marker:text-[var(--color-primary)]">
-                        <li>2 center visits each month</li>
-                        <li>Feeding and sleep assessment</li>
-                        <li>Parent hotline support</li>
+                        <li>Morning or afternoon shift options</li>
+                        <li>Supervised play and routine activities</li>
+                        <li>Daily handover summary for parents</li>
                     </ul>
                 </article>
                 <article class="rounded-2xl border-2 border-[var(--color-primary)] bg-white p-7 shadow-lg shadow-teal-100/80">
@@ -247,27 +248,27 @@
                         <p class="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-primary)]">Most Popular</p>
                         <span class="baby-icon-badge"><i class="fas fa-chart-line text-sm"></i></span>
                     </div>
-                    <h3 class="mt-3 text-2xl font-bold text-slate-900">Complete Growth Care</h3>
-                    <p class="mt-3 text-sm text-slate-600">Best for families needing continuous development monitoring.</p>
+                    <h3 class="mt-3 text-2xl font-bold text-slate-900">Full-Day Care</h3>
+                    <p class="mt-3 text-sm text-slate-600">Comprehensive daytime care with structured routine blocks.</p>
                     <ul class="mt-5 list-disc space-y-1.5 pl-5 text-sm text-slate-700 marker:text-[var(--color-primary)]">
-                        <li>Weekly growth tracking logs</li>
-                        <li>Nutrition and weaning planning</li>
-                        <li>Monthly pediatric review</li>
-                        <li>Parent coaching workshops</li>
+                        <li>Full-day supervised care and engagement</li>
+                        <li>Meal, nap, and hygiene routine management</li>
+                        <li>Play-based early learning activities</li>
+                        <li>End-of-day parent communication update</li>
                     </ul>
                 </article>
                 <article class="baby-card baby-card-lift p-7">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Premium Package</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Plan 03</p>
                         <span class="baby-icon-badge"><i class="fas fa-people-group text-sm"></i></span>
                     </div>
-                    <h3 class="mt-3 text-2xl font-bold text-slate-900">Family 360 Support</h3>
-                    <p class="mt-3 text-sm text-slate-600">Comprehensive care with direct expert coordination.</p>
+                    <h3 class="mt-3 text-2xl font-bold text-slate-900">Extended-Hours Care</h3>
+                    <p class="mt-3 text-sm text-slate-600">For guardians requiring late pickup or variable schedules.</p>
                     <ul class="mt-5 list-disc space-y-1.5 pl-5 text-sm text-slate-700 marker:text-[var(--color-primary)]">
-                        <li>Personal care coordinator</li>
-                        <li>Priority same-day consultation</li>
-                        <li>Specialist referral management</li>
-                        <li>Home routine optimization plan</li>
+                        <li>Flexible extended-hour support windows</li>
+                        <li>Priority attendance planning</li>
+                        <li>Structured calm-down and transition routines</li>
+                        <li>Direct parent communication channel</li>
                     </ul>
                 </article>
             </div>
@@ -277,23 +278,38 @@
     <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div class="grid gap-8 lg:grid-cols-2">
             <div class="baby-gradient-card p-8">
-                <h2 class="baby-title text-2xl font-bold text-slate-900">Our Care Culture</h2>
-                <p class="mt-3 text-sm leading-7 text-slate-600">Our team blends clinical accuracy with compassionate communication so parents feel supported and informed in every decision.</p>
+                <h2 class="baby-title text-2xl font-bold text-slate-900">Our Care Standards</h2>
+                <p class="mt-3 text-sm leading-7 text-slate-600">Our team follows child-centered care principles that emphasize safety, responsive interaction, inclusion, and age-appropriate learning environments.</p>
                 <ul class="mt-5 space-y-3 text-sm text-slate-700">
-                    <li><i class="fas fa-heart mr-2 text-rose-500"></i>Compassion-first communication with every caregiver</li>
-                    <li><i class="fas fa-scale-balanced mr-2 text-sky-600"></i>Evidence-based recommendations tailored to each child</li>
-                    <li><i class="fas fa-language mr-2 text-emerald-600"></i>Multilingual counseling for inclusive family support</li>
-                    <li><i class="fas fa-user-shield mr-2 text-amber-600"></i>Respectful and private child health record handling</li>
+                    <li><i class="fas fa-heart mr-2 text-rose-500"></i>Responsive caregiver-child interactions and emotional safety</li>
+                    <li><i class="fas fa-scale-balanced mr-2 text-sky-600"></i>Developmentally appropriate daily activities and routines</li>
+                    <li><i class="fas fa-language mr-2 text-emerald-600"></i>Inclusive communication across diverse family backgrounds</li>
+                    <li><i class="fas fa-user-shield mr-2 text-amber-600"></i>Safeguarding and confidentiality in child records and reporting</li>
                 </ul>
             </div>
             <div class="baby-card p-8">
-                <h2 class="baby-title text-2xl font-bold text-slate-900">Parent Support Path</h2>
+                <h2 class="baby-title text-2xl font-bold text-slate-900">Parent Enrollment Path</h2>
                 <ol class="mt-5 space-y-4 text-sm text-slate-700">
-                    <li class="flex gap-3"><span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">1</span><span>Complete a quick child profile with current concerns.</span></li>
-                    <li class="flex gap-3"><span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">2</span><span>Receive a personalized care plan with clear routines.</span></li>
-                    <li class="flex gap-3"><span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">3</span><span>Track daily logs for feeding, sleep and development markers.</span></li>
-                    <li class="flex gap-3"><span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">4</span><span>Adjust care plan during each growth stage milestone.</span></li>
+                    <li class="flex gap-3"><span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">1</span><span>Submit a day care request with child profile and shift preference.</span></li>
+                    <li class="flex gap-3"><span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">2</span><span>Complete orientation and safety checklist with our team.</span></li>
+                    <li class="flex gap-3"><span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">3</span><span>Start daily drop-off and pick-up with routine updates.</span></li>
+                    <li class="flex gap-3"><span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white">4</span><span>Review monthly progress and adjust care support as needed.</span></li>
                 </ol>
+            </div>
+        </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <div class="grid gap-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                <div>
+                    <h2 class="baby-title text-2xl font-bold text-slate-900">Need Day Care Enrollment Assistance?</h2>
+                    <p class="mt-2 text-sm leading-7 text-slate-600">Create a request to receive your case ID, enrollment review updates, and onboarding guidance from our team.</p>
+                </div>
+                <div class="flex flex-wrap gap-3 lg:justify-end">
+                    <a href="{% url 'babycare:request_care' %}" class="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-5 py-2.5 font-semibold text-white hover:brightness-110">Create Request <i class="fas fa-arrow-right text-xs"></i></a>
+                    <a href="{% url 'babycare:track_status' %}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-5 py-2.5 font-semibold text-slate-700 hover:bg-slate-50">My Day Care Requests <i class="fas fa-list-check text-xs"></i></a>
+                </div>
             </div>
         </div>
     </section>
@@ -301,20 +317,20 @@
     <section class="bg-slate-50 py-14">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mb-8 text-center">
-                <h2 class="baby-title text-3xl font-bold text-slate-900">Facility Highlights</h2>
-                <p class="mt-3 text-slate-600">Safe, clean, and child-friendly spaces designed for calm care delivery.</p>
+                <h2 class="baby-title text-3xl font-bold text-slate-900">Center Environment and Facilities</h2>
+                <p class="mt-3 text-slate-600">Safe, clean, and child-friendly spaces built for supervised day care.</p>
             </div>
             <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                 <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-                    <img src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?auto=format&fit=crop&w=1500&q=80" alt="Child wellness consultation room" class="h-full min-h-[320px] w-full object-cover">
+                    <img src="{% static 'images/bby_care.png' %}" alt="Child wellness consultation room" class="h-full min-h-[320px] w-full object-cover">
                 </div>
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div class="baby-card baby-card-lift p-5">
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-bed-pulse text-sm"></i></span>
                             <div>
-                                <p class="text-sm font-semibold text-slate-900">Newborn Observation Room</p>
-                                <p class="mt-1 text-xs text-slate-600">Dedicated monitoring space for early-stage newborn checks.</p>
+                                <p class="text-sm font-semibold text-slate-900">Infant Care Room</p>
+                                <p class="mt-1 text-xs text-slate-600">Comfortable supervised area for infants with regular care routines.</p>
                             </div>
                         </div>
                     </div>
@@ -322,8 +338,8 @@
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-syringe text-sm"></i></span>
                             <div>
-                                <p class="text-sm font-semibold text-slate-900">Vaccination & Screening Area</p>
-                                <p class="mt-1 text-xs text-slate-600">Child-safe setup for routine immunization and basic screening.</p>
+                                <p class="text-sm font-semibold text-slate-900">Learning and Activity Zone</p>
+                                <p class="mt-1 text-xs text-slate-600">Structured play and learning space for age-appropriate activities.</p>
                             </div>
                         </div>
                     </div>
@@ -331,8 +347,8 @@
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-door-closed text-sm"></i></span>
                             <div>
-                                <p class="text-sm font-semibold text-slate-900">Private Consultation Cabins</p>
-                                <p class="mt-1 text-xs text-slate-600">Comfortable, private counseling rooms for family discussions.</p>
+                                <p class="text-sm font-semibold text-slate-900">Parent Meeting Room</p>
+                                <p class="mt-1 text-xs text-slate-600">Private meeting space for parent briefings and progress discussions.</p>
                             </div>
                         </div>
                     </div>
@@ -340,8 +356,8 @@
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-person-breastfeeding text-sm"></i></span>
                             <div>
-                                <p class="text-sm font-semibold text-slate-900">Breastfeeding Comfort Corner</p>
-                                <p class="mt-1 text-xs text-slate-600">Quiet support zone for feeding coaching and parent rest.</p>
+                                <p class="text-sm font-semibold text-slate-900">Rest and Nap Area</p>
+                                <p class="mt-1 text-xs text-slate-600">Quiet environment for scheduled naps and calm transitions.</p>
                             </div>
                         </div>
                     </div>
@@ -349,8 +365,8 @@
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-wind text-sm"></i></span>
                             <div>
-                                <p class="text-sm font-semibold text-slate-900">Hygiene-First Clinical Workflow</p>
-                                <p class="mt-1 text-xs text-slate-600">Scheduled sanitization, air-quality checks, and safe equipment turnover.</p>
+                                <p class="text-sm font-semibold text-slate-900">Hygiene and Cleaning Protocol</p>
+                                <p class="mt-1 text-xs text-slate-600">Scheduled sanitization, regular cleaning cycles, and safe equipment handling.</p>
                             </div>
                         </div>
                     </div>
@@ -362,30 +378,30 @@
     <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div class="grid gap-8 lg:grid-cols-2">
             <div class="baby-card p-8">
-                <h2 class="baby-title text-2xl font-bold text-slate-900">Age-Based Program Tracks</h2>
+                <h2 class="baby-title text-2xl font-bold text-slate-900">Age-Based Day Care Programs</h2>
                 <div class="mt-5 space-y-4 text-sm text-slate-700">
                     <div class="rounded-xl border border-slate-200 p-4">
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-baby text-sm"></i></span>
-                            <div><p class="font-semibold text-slate-900">0-3 Months: Newborn Stability Track</p><p class="mt-1">Feeding rhythm, sleep setup, digestion, skin care and early warning signs.</p></div>
+                            <div><p class="font-semibold text-slate-900">6-12 Months: Infant Care Program</p><p class="mt-1">Structured care routines focused on safety, feeding schedules, and responsive interaction.</p></div>
                         </div>
                     </div>
                     <div class="rounded-xl border border-slate-200 p-4">
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-seedling text-sm"></i></span>
-                            <div><p class="font-semibold text-slate-900">4-6 Months: Foundation Growth Track</p><p class="mt-1">Tummy-time routine, sensory response, sleep transition and weaning prep.</p></div>
+                            <div><p class="font-semibold text-slate-900">1-2 Years: Early Toddler Program</p><p class="mt-1">Guided play, language exposure, routine habits, and supervised social interaction.</p></div>
                         </div>
                     </div>
                     <div class="rounded-xl border border-slate-200 p-4">
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-shoe-prints text-sm"></i></span>
-                            <div><p class="font-semibold text-slate-900">7-12 Months: Mobility & Nutrition Track</p><p class="mt-1">Movement milestones, solid food schedule, hydration and immunity guidance.</p></div>
+                            <div><p class="font-semibold text-slate-900">2-3 Years: Toddler Learning Program</p><p class="mt-1">Play-based activities that support communication, motor skills, and confidence.</p></div>
                         </div>
                     </div>
                     <div class="rounded-xl border border-slate-200 p-4">
                         <div class="flex items-start gap-3">
                             <span class="baby-icon-badge"><i class="fas fa-puzzle-piece text-sm"></i></span>
-                            <div><p class="font-semibold text-slate-900">1-2 Years: Toddler Behavior Track</p><p class="mt-1">Routine consistency, communication skills, safety habits and healthy play.</p></div>
+                            <div><p class="font-semibold text-slate-900">3-5 Years: Preschool Readiness Program</p><p class="mt-1">Foundational routines for self-care, group behavior, and school readiness skills.</p></div>
                         </div>
                     </div>
                 </div>
@@ -394,20 +410,20 @@
                 <h2 class="baby-title text-2xl font-bold text-slate-900">Parent FAQs</h2>
                 <div class="mt-5 space-y-3">
                     <details class="rounded-xl border border-sky-200 bg-white p-4" open>
-                        <summary class="cursor-pointer font-semibold text-slate-900">When should we start growth monitoring?</summary>
-                        <p class="mt-2 text-sm text-slate-600">From the first week after birth. Early tracking helps identify small issues before they become bigger concerns.</p>
+                        <summary class="cursor-pointer font-semibold text-slate-900">What is the enrollment age range for day care?</summary>
+                        <p class="mt-2 text-sm text-slate-600">Programs are organized by age group, from infant care through preschool readiness stages.</p>
                     </details>
                     <details class="rounded-xl border border-sky-200 bg-white p-4">
-                        <summary class="cursor-pointer font-semibold text-slate-900">Do you support first-time parents?</summary>
-                        <p class="mt-2 text-sm text-slate-600">Yes. Our coaching sessions are designed specifically for first-time parents who need practical daily support.</p>
+                        <summary class="cursor-pointer font-semibold text-slate-900">How are children supervised during the day?</summary>
+                        <p class="mt-2 text-sm text-slate-600">Children are supervised continuously through attendance logging, scheduled routines, and caregiver oversight.</p>
                     </details>
                     <details class="rounded-xl border border-sky-200 bg-white p-4">
-                        <summary class="cursor-pointer font-semibold text-slate-900">Can we get specialist referrals?</summary>
-                        <p class="mt-2 text-sm text-slate-600">Yes. If needed, we coordinate referrals for pediatric specialists and follow-up communication.</p>
+                        <summary class="cursor-pointer font-semibold text-slate-900">How do parents receive daily updates?</summary>
+                        <p class="mt-2 text-sm text-slate-600">Parents receive routine handover summaries at pickup, including meals, rest, and participation notes.</p>
                     </details>
                     <details class="rounded-xl border border-sky-200 bg-white p-4">
-                        <summary class="cursor-pointer font-semibold text-slate-900">Is virtual follow-up available?</summary>
-                        <p class="mt-2 text-sm text-slate-600">Virtual follow-up is available for routine check-ins and progress guidance between physical visits.</p>
+                        <summary class="cursor-pointer font-semibold text-slate-900">Do you follow hygiene and emergency protocols?</summary>
+                        <p class="mt-2 text-sm text-slate-600">Yes. The center follows cleaning schedules, hygiene routines, and clear emergency communication protocols.</p>
                     </details>
                 </div>
             </div>
@@ -416,11 +432,12 @@
 
     <section class="mx-auto max-w-7xl px-4 pb-14 sm:px-6 lg:px-8">
         <div class="rounded-3xl bg-[var(--color-primary)] px-8 py-10 text-white sm:px-10">
-            <h2 class="baby-title text-3xl font-bold">Give Your Baby a Strong, Healthy Start</h2>
-            <p class="mt-3 max-w-3xl text-sm text-teal-50">Meet our child wellness team and build a confident care routine from day one to toddler years.</p>
+            <h2 class="baby-title text-3xl font-bold">Reliable Day Care for Your Child While You Work</h2>
+            <p class="mt-3 max-w-3xl text-sm text-teal-50">Book safe, structured day care support and stay updated through your request timeline.</p>
             <div class="mt-6 flex flex-wrap gap-3">
-                <a href="{% url 'service:service_list' %}" class="inline-flex items-center rounded-xl bg-white px-6 py-3 font-semibold text-[var(--color-primary)] hover:bg-slate-100">Find Care Services</a>
-                <a href="{% url 'service:create_inquiry' %}" class="inline-flex items-center rounded-xl border border-white/50 px-6 py-3 font-semibold text-white hover:bg-white/10">Send Inquiry</a>
+                <a href="{% url 'babycare:request_care' %}" class="inline-flex items-center rounded-xl bg-white px-6 py-3 font-semibold text-[var(--color-primary)] hover:bg-slate-100">Request Day Care Slot</a>
+                <a href="{% url 'babycare:track_status' %}" class="inline-flex items-center rounded-xl border border-white/50 px-6 py-3 font-semibold text-white hover:bg-white/10">Track Day Care Status</a>
+                <a href="{% url 'support:create_ticket' %}" class="inline-flex items-center rounded-xl border border-white/50 px-6 py-3 font-semibold text-white hover:bg-white/10">Emergency Help</a>
             </div>
         </div>
     </section>

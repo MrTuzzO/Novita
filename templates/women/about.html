@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}About Women Empowerment - Novita{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
+        <h1 class="text-4xl font-bold text-slate-900">About Our Women Empowerment Initiative</h1>
+        <p class="mt-5 text-base leading-8 text-slate-600">The Novita Women Empowerment initiative is a practical learning and support space for women from every background. We focus on skill-building, safe mentorship, and confidence development through free courses and private support channels.</p>
+
+        <div class="mt-8 grid gap-6 md:grid-cols-3">
+            <div class="rounded-2xl border border-slate-200 p-5">
+                <h2 class="font-bold text-slate-900">Free Learning</h2>
+                <p class="mt-2 text-sm text-slate-600">All core courses are free so financial barriers do not block growth.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 p-5">
+                <h2 class="font-bold text-slate-900">Hybrid Skills</h2>
+                <p class="mt-2 text-sm text-slate-600">Online module-based video courses plus offline community learning.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 p-5">
+                <h2 class="font-bold text-slate-900">Safe Support</h2>
+                <p class="mt-2 text-sm text-slate-600">Private emergency support pathway through the support ticket system.</p>
+            </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+            <a href="{% url 'women:mission_vision' %}" class="rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white hover:brightness-110">Mission & Vision</a>
+            <a href="{% url 'women:course_list' %}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">View Courses</a>
+            <a href="{% url 'support:create_ticket' %}" class="rounded-xl border border-amber-300 bg-amber-50 px-5 py-2.5 text-sm font-semibold text-amber-900 hover:bg-amber-100">Emergency Private Help</a>
+            <a href="{% url 'baby_care_center' %}" class="rounded-xl border border-sky-300 bg-sky-50 px-5 py-2.5 text-sm font-semibold text-sky-900 hover:bg-sky-100">Go to Baby Care Center</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

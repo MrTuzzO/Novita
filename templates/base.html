@@ -123,6 +123,31 @@
         </div>
     </div>
 
+    {% load donation_tags %}
+    {% donation_stats as d_stats %}
+    {% if d_stats.total_count %}
+    <div class="rounded-tl-3xl rounded-tr-3xl bg-gradient-to-r from-[var(--color-primary)] to-teal-600 py-6 text-white mt-12">
+        <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
+            <div class="flex flex-wrap items-center justify-center gap-8 sm:justify-start">
+                <div class="text-center sm:text-left">
+                    <p class="text-2xl font-bold">৳{{ d_stats.total_amount|floatformat:0 }}</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-white/80">Total Raised</p>
+                </div>
+                <div class="h-8 w-px bg-white/30 hidden sm:block"></div>
+                <div class="text-center sm:text-left">
+                    <p class="text-2xl font-bold">{{ d_stats.total_count }}</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-white/80">Donations Made</p>
+                </div>
+                <div class="h-8 w-px bg-white/30 hidden sm:block"></div>
+                <p class="text-sm text-white/90 max-w-xs text-center sm:text-left">Every contribution funds real impact — courses, care, and community.</p>
+            </div>
+            <a href="{% url 'donate' %}" class="shrink-0 rounded-xl border-2 border-white/70 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white hover:text-[var(--color-primary)] transition-colors">
+                <i class="fas fa-heart mr-2"></i>Donate Now
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
     {% include 'partials/_footer.html' %}
 
     <script>

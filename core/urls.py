@@ -25,4 +25,7 @@ urlpatterns = [
     path('become-expert/', views.become_expert, name='become_expert'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
+    path('donate/', views.donate, name='donate'),
+    path('donate/checkout/', views.donate_checkout, name='donate_checkout'),
+    path('donate/success/', views.donate_success, name='donate_success'),
 ]

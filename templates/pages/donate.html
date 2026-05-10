@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Donate – Support Novita{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden bg-gradient-to-br from-rose-50 via-white to-orange-50 py-16">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <span class="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-rose-700">
+                <i class="fas fa-heart"></i> Make a Difference
+            </span>
+            <h1 class="mt-5 text-4xl font-bold leading-tight text-slate-900 sm:text-5xl">Support Our Mission</h1>
+            <p class="mx-auto mt-4 max-w-2xl text-base leading-8 text-slate-600">Your donation helps us provide free courses, rehabilitation support, baby care services, and emergency assistance to women and families across Bangladesh.</p>
+        </div>
+    </div>
+</section>
+
+<section class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr]">
+
+        <!-- Left: Impact -->
+        <div class="space-y-6">
+            <h2 class="text-2xl font-bold text-slate-900">Your Impact</h2>
+            <div class="space-y-4">
+                <div class="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600"><i class="fas fa-graduation-cap"></i></span>
+                    <div>
+                        <p class="font-semibold text-slate-900">৳500 — Free Course Access</p>
+                        <p class="mt-1 text-sm text-slate-600">Funds one woman's enrolment in a skill-building online course.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-600"><i class="fas fa-baby"></i></span>
+                    <div>
+                        <p class="font-semibold text-slate-900">৳1,000 — Day Care Support</p>
+                        <p class="mt-1 text-sm text-slate-600">Covers one week of supervised day care for a child in need.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600"><i class="fas fa-hand-holding-heart"></i></span>
+                    <div>
+                        <p class="font-semibold text-slate-900">৳2,500 — Rehabilitation Session</p>
+                        <p class="mt-1 text-sm text-slate-600">Sponsors a full rehabilitation session for an individual in recovery.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600"><i class="fas fa-shield-halved"></i></span>
+                    <div>
+                        <p class="font-semibold text-slate-900">৳5,000 — Emergency Support Fund</p>
+                        <p class="mt-1 text-sm text-slate-600">Provides immediate crisis assistance to families in urgent need.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Donation Form -->
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900">Donate Now</h2>
+            <p class="mt-1 text-sm text-slate-500">Any amount is welcome. Payments are secured by Stripe.</p>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+
+            <form method="post" action="{% url 'donate_checkout' %}" class="mt-6 space-y-5">
+                {% csrf_token %}
+
+                <!-- Quick amount buttons -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Select or Enter Amount (৳)</label>
+                    <div class="mb-3 flex flex-wrap gap-2">
+                        {% for preset in preset_amounts %}
+                        <button type="button" onclick="setAmount('{{ preset }}')"
+                            class="amount-btn rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)]/5 transition-colors">
+                            ৳{{ preset }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                    <input type="number" name="amount" id="amount-input" placeholder="Enter custom amount" min="10" step="1" required
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Your Name <span class="font-normal text-slate-400">(optional)</span></label>
+                    <input type="text" name="donor_name" placeholder="Anonymous"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Email <span class="font-normal text-slate-400">(for receipt)</span></label>
+                    <input type="email" name="donor_email" placeholder="you@example.com"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Message <span class="font-normal text-slate-400">(optional)</span></label>
+                    <textarea name="message" rows="3" placeholder="Leave a message of support..."
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="no-auto-btn w-full rounded-xl bg-[var(--color-primary)] px-6 py-3 font-semibold text-white hover:brightness-110">
+                    <i class="fas fa-lock mr-2 text-sm"></i> Donate Securely
+                </button>
+
+                <p class="text-center text-xs text-slate-400"><i class="fab fa-stripe mr-1"></i> Secured by Stripe. We do not store your card details.</p>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+function setAmount(val) {
+    document.getElementById('amount-input').value = val;
+    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('border-[var(--color-primary)]', 'bg-[var(--color-primary)]/10'));
+    event.target.classList.add('border-[var(--color-primary)]', 'bg-[var(--color-primary)]/10');
+}
+</script>
+{% endblock %}

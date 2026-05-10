@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.conf import settings
+from django.contrib import messages
+from django.db.models import Count, Sum
+from django.shortcuts import get_object_or_404, redirect, render
+import stripe
 
 from blog.models import BlogPost
 from events.models import Event
 from .forms import ContactMessageForm, ExpertApplicationForm
-from .models import Banner
+from .models import Banner, Donation
 from recovery.models import PatientProfile
 from service.models import ExpertProfile, ServiceInquiry, ServiceType
 from user.models import CustomUser
@@ -158,3 +162,97 @@ def privacy_policy(request):
 
 def terms_of_service(request):
     return render(request, 'pages/terms_of_service.html')
+
+
+def donate(request):
+    return render(request, 'pages/donate.html', {
+        'preset_amounts': [500, 1000, 2500, 5000, 10000],
+    })
+
+
+def donate_checkout(request):
+    if request.method != 'POST':
+        return redirect('donate')
+
+    donor_name = request.POST.get('donor_name', '').strip()
+    donor_email = request.POST.get('donor_email', '').strip()
+    amount_str = request.POST.get('amount', '').strip()
+    message = request.POST.get('message', '').strip()
+
+    # Validate amount
+    try:
+        amount = float(amount_str)
+        if amount < 10:
+            raise ValueError
+    except (ValueError, TypeError):
+        messages.error(request, 'Please enter a valid amount (minimum ৳10).')
+        return redirect('donate')
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'bdt',
+                        'product_data': {
+                            'name': 'Donation to Novita',
+                            'description': 'Your generous donation supports women empowerment and rehabilitation programs.',
+                        },
+                        'unit_amount': int(amount * 100),
+                    },
+                    'quantity': 1,
+                }
+            ],
+            mode='payment',
+            success_url=(
+                request.build_absolute_uri('/donate/success/?session_id=')
+                + '{CHECKOUT_SESSION_ID}'
+            ),
+            cancel_url=request.build_absolute_uri('/donate/'),
+            customer_email=donor_email or None,
+            metadata={
+                'donor_name': donor_name,
+                'donor_email': donor_email,
+                'donor_message': message,
+                'amount': str(amount),
+            },
+        )
+
+        # Store pending donation
+        Donation.objects.create(
+            donor_name=donor_name or 'Anonymous',
+            donor_email=donor_email,
+            amount=amount,
+            message=message,
+            stripe_session_id=checkout_session.id,
+            is_confirmed=False,
+        )
+
+        return redirect(checkout_session.url, code=303)
+    except stripe.error.StripeError as e:
+        messages.error(request, f'Payment error: {str(e)}')
+        return redirect('donate')
+
+
+def donate_success(request):
+    session_id = request.GET.get('session_id', '')
+    if not session_id:
+        return redirect('donate')
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+        if session.payment_status == 'paid':
+            Donation.objects.filter(stripe_session_id=session_id).update(is_confirmed=True)
+            messages.success(request, 'Thank you! Your donation has been received.')
+    except stripe.error.StripeError:
+        pass
+
+    # Aggregate confirmed donation stats
+    stats = Donation.objects.filter(is_confirmed=True).aggregate(
+        total_amount=Sum('amount'),
+        total_count=Count('id'),
+    )
+    return render(request, 'pages/donate_success.html', {'stats': stats})

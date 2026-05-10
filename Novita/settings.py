@@ -39,6 +39,8 @@ INSTALLED_APPS += [
     'recovery',
     'events',
     'rehab',
+    'women',
+    'babycare',
 ]
 
 MIDDLEWARE = [
@@ -273,4 +275,7 @@ JAZZMIN_SETTINGS = {
     "navigation_expanded": True,
     "changeform_format": "horizontal_tabs",
 }
+
+STRIPE_PUBLIC_KEY = 'pk_test_51TVadn0sWVR02POJlOGDDazazblp1vROXtg5gaCTfKj21Y39yEBS0VSFKmojl1LjJlcYdLZk53tsaRV1suSFczyI00jBBU716n'  
+STRIPE_SECRET_KEY = 'sk_test_51TVadn0sWVR02POJg13BngA70Z57aUvTjxALORVTL50PK2NNffYUhVzVbS9dgvtwvt9KRxoM6TZJlbstnxnUhxJN00UDpuKB2n'
 

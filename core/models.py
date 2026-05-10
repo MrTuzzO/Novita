@@ -1,4 +1,22 @@
+from django.conf import settings
 from django.db import models
+
+
+class Donation(models.Model):
+    donor_name = models.CharField(max_length=120)
+    donor_email = models.EmailField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    message = models.TextField(blank=True)
+    stripe_session_id = models.CharField(max_length=200, blank=True)
+    is_confirmed = models.BooleanField(default=False)
+    donated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-donated_at']
+
+    def __str__(self):
+        return f'{self.donor_name} – ৳{self.amount}'
+
 
 class Banner(models.Model):
     title = models.CharField(max_length=200)
