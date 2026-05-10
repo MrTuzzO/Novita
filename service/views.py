@@ -34,6 +34,7 @@ def service_detail(request, slug):
     experts = ExpertProfile.objects.filter(
         is_available=True,
         user__is_active=True,
+        user__role='expert',
         services=service,
     ).select_related('user').distinct()
 

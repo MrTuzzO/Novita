@@ -30,9 +30,6 @@ def request_admission(request):
     return render(request, 'rehab/request_admission.html', {'form': form})
 
 
-def book_counseling_redirect(request):
-    return redirect('service:create_inquiry')
-
 
 @login_required
 def track_status(request):

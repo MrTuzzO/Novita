@@ -17,6 +17,10 @@ def home(request):
         is_featured=True
     ).select_related('author', 'category').order_by('-created_at')[:3]
 
+    recent_posts = BlogPost.objects.filter(
+        status='published'
+    ).select_related('author', 'category').order_by('-created_at')[:4]
+
     banners = Banner.objects.filter(is_active=True).order_by('-id')
     service_types = ServiceType.objects.filter(is_active=True).order_by('name')
     upcoming_events = Event.objects.filter(is_active=True).order_by('event_date')[:3]
@@ -30,6 +34,7 @@ def home(request):
     
     context = {
         'featured_posts': featured_posts,
+        'recent_posts': recent_posts,
         'banners': banners,
         'service_types': service_types,
         'upcoming_events': upcoming_events,
