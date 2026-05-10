@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Privacy Policy – Novita{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-white">
+
+    <!-- Hero -->
+    <div class="border-b border-slate-200 bg-slate-950 text-white">
+        <div class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
+            <p class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Legal</p>
+            <h1 class="mt-2 text-4xl font-bold">Privacy Policy</h1>
+            <p class="mt-3 text-slate-300 text-sm">Last updated: <time datetime="2026-01-01">1 January 2026</time></p>
+            <p class="mt-4 max-w-2xl text-slate-300 text-sm leading-7">This Privacy Policy explains how Novita collects, uses, stores, and protects your personal information when you use our platform and services.</p>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        <div class="prose max-w-none space-y-10 text-slate-700 text-sm leading-7">
+
+            <!-- 1 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">1. Who We Are</h2>
+                <p>Novita is a social welfare platform dedicated to supporting individuals and families through recovery, mental health care, cyber safety awareness, and rehabilitation services. Our platform is operated as a non-commercial educational and welfare project. When we refer to <strong>"Novita"</strong>, <strong>"we"</strong>, <strong>"our"</strong>, or <strong>"us"</strong> in this policy, we mean the Novita platform and its administrators.</p>
+                <p class="mt-3">You can contact us regarding privacy matters at: <a href="{% url 'contact_page' %}" class="text-[var(--color-primary)] underline">our contact page</a>.</p>
+            </section>
+
+            <!-- 2 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">2. Information We Collect</h2>
+                <p>We collect personal information in the following ways:</p>
+                <h3 class="mt-4 font-semibold text-slate-800">2.1 Information You Provide Directly</h3>
+                <ul class="mt-2 list-disc pl-5 space-y-1">
+                    <li><strong>Account registration:</strong> full name, email address, password, date of birth, phone number, address.</li>
+                    <li><strong>Profile:</strong> profile image, school/college name, personal details.</li>
+                    <li><strong>Service inquiries:</strong> subject, messages, and attachments you send when requesting expert support.</li>
+                    <li><strong>Support tickets:</strong> descriptions of issues, category, priority, and related messages.</li>
+                    <li><strong>Admission requests:</strong> full name, email, phone, age, primary concern, preferred admission date.</li>
+                    <li><strong>Expert applications:</strong> professional title, bio, specialization, years of experience, and service interests.</li>
+                    <li><strong>Contact messages:</strong> name, email, subject, and message content.</li>
+                    <li><strong>Blog posts &amp; community content:</strong> text, images, categories you author or interact with.</li>
+                    <li><strong>Recovery data:</strong> check-in logs, mood scores, goals, milestones, and appointment records.</li>
+                </ul>
+
+                <h3 class="mt-4 font-semibold text-slate-800">2.2 Information Collected Automatically</h3>
+                <ul class="mt-2 list-disc pl-5 space-y-1">
+                    <li>Session identifiers and authentication tokens stored in browser cookies.</li>
+                    <li>Pages visited, features used, and navigation patterns (not shared with third parties).</li>
+                    <li>Device type, browser type, and operating system (for compatibility and debugging only).</li>
+                </ul>
+            </section>
+
+            <!-- 3 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">3. How We Use Your Information</h2>
+                <p>We use the personal information we collect for the following purposes:</p>
+                <ul class="mt-3 list-disc pl-5 space-y-2">
+                    <li><strong>Provide platform services:</strong> create and manage your account, process service inquiries, and respond to support requests.</li>
+                    <li><strong>Recovery support:</strong> display your recovery dashboard, milestone tracking, and appointment management.</li>
+                    <li><strong>Expert matching:</strong> connect client requests to qualified experts based on service type.</li>
+                    <li><strong>Admission management:</strong> process rehab admission requests and deliver admin updates to applicants and guardians.</li>
+                    <li><strong>Communication:</strong> respond to contact form submissions and provide system notifications.</li>
+                    <li><strong>Safety and moderation:</strong> review content for compliance with our community standards.</li>
+                    <li><strong>Platform improvement:</strong> analyse usage patterns to improve features and fix issues.</li>
+                    <li><strong>Legal compliance:</strong> comply with applicable laws and protect against abuse.</li>
+                </ul>
+                <p class="mt-3">We do <strong>not</strong> sell your personal data, run advertising on your data, or share it with marketing third parties.</p>
+            </section>
+
+            <!-- 4 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">4. Sensitive Health Information</h2>
+                <p>Novita handles sensitive health and recovery data, including mental health status, substance use history, and rehabilitation records. We treat this information with the highest level of care:</p>
+                <ul class="mt-3 list-disc pl-5 space-y-2">
+                    <li>Only authorised staff and assigned experts can access health-related records.</li>
+                    <li>Recovery check-in data and therapy notes are private and not publicly visible.</li>
+                    <li>Admission requests are visible only to the submitting user and platform administrators.</li>
+                    <li>Admin update notes sent to applicants are for the applicant/guardian only.</li>
+                </ul>
+            </section>
+
+            <!-- 5 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">5. How We Share Information</h2>
+                <p>We only share your personal information in the following circumstances:</p>
+                <ul class="mt-3 list-disc pl-5 space-y-2">
+                    <li><strong>With assigned experts:</strong> when you submit a service inquiry, the assigned expert may see your name, contact details, and inquiry content.</li>
+                    <li><strong>With platform administrators:</strong> staff can access all platform data for moderation, support, and operational purposes.</li>
+                    <li><strong>Legal obligations:</strong> if required by law or a lawful authority request, we may disclose relevant data.</li>
+                    <li><strong>Emergency safety:</strong> if we reasonably believe disclosure is necessary to prevent harm to you or others.</li>
+                </ul>
+                <p class="mt-3">We do not share data with external analytics companies, social networks, or advertising platforms.</p>
+            </section>
+
+            <!-- 6 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">6. Data Retention</h2>
+                <p>We retain your personal data for as long as your account is active or as needed to provide services. Specific retention periods:</p>
+                <ul class="mt-3 list-disc pl-5 space-y-2">
+                    <li><strong>Account data:</strong> retained until you request deletion of your account.</li>
+                    <li><strong>Recovery records:</strong> retained for the duration of your active account.</li>
+                    <li><strong>Contact messages &amp; support tickets:</strong> retained for up to 3 years for audit and safety purposes.</li>
+                    <li><strong>Admission request records:</strong> retained for up to 5 years in line with health service record-keeping practices.</li>
+                    <li><strong>Expert applications:</strong> retained for 2 years from date of submission.</li>
+                </ul>
+                <p class="mt-3">You may request deletion of your account and associated data at any time via the contact page.</p>
+            </section>
+
+            <!-- 7 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">7. Security</h2>
+                <p>We take reasonable technical and organisational measures to protect your data:</p>
+                <ul class="mt-3 list-disc pl-5 space-y-2">
+                    <li>All passwords are hashed using Django's PBKDF2 algorithm — we never store plain-text passwords.</li>
+                    <li>Session tokens and CSRF protection are enforced on all forms.</li>
+                    <li>Access to admin functions is restricted to verified staff accounts.</li>
+                    <li>Uploaded files (attachments, images) are stored in non-public directories.</li>
+                </ul>
+                <p class="mt-3">Despite these measures, no online platform can guarantee absolute security. Please use a strong, unique password and keep your login credentials private.</p>
+            </section>
+
+            <!-- 8 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">8. Cookies</h2>
+                <p>Novita uses only essential session cookies required for authentication and CSRF protection. We do not use advertising, tracking, or analytics cookies. No third-party cookies are set by our platform.</p>
+            </section>
+
+            <!-- 9 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">9. Your Rights</h2>
+                <p>You have the following rights regarding your personal data:</p>
+                <ul class="mt-3 list-disc pl-5 space-y-2">
+                    <li><strong>Access:</strong> request a copy of the data we hold about you.</li>
+                    <li><strong>Correction:</strong> request correction of inaccurate or incomplete data.</li>
+                    <li><strong>Deletion:</strong> request deletion of your account and personal data (subject to legal retention obligations).</li>
+                    <li><strong>Restriction:</strong> request that we limit processing of your data in certain circumstances.</li>
+                    <li><strong>Objection:</strong> object to specific uses of your data.</li>
+                </ul>
+                <p class="mt-3">To exercise any of these rights, <a href="{% url 'contact_page' %}" class="text-[var(--color-primary)] underline">contact us</a>. We will respond within 30 days.</p>
+            </section>
+
+            <!-- 10 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">10. Children's Privacy</h2>
+                <p>Our platform is not intended for children under 13 years of age. We do not knowingly collect personal data from children under 13. If you are a parent or guardian and believe your child has submitted data, please contact us and we will delete it promptly.</p>
+            </section>
+
+            <!-- 11 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">11. Changes to This Policy</h2>
+                <p>We may update this Privacy Policy from time to time. When changes are material, we will update the "Last updated" date at the top of this page. We encourage you to review this policy periodically. Continued use of the platform after changes constitutes acceptance of the updated policy.</p>
+            </section>
+
+            <!-- 12 -->
+            <section>
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">12. Contact Us</h2>
+                <p>If you have any questions about this Privacy Policy or how we handle your data, please contact us via our <a href="{% url 'contact_page' %}" class="text-[var(--color-primary)] underline">contact page</a> or submit a <a href="{% url 'support:create_ticket' %}" class="text-[var(--color-primary)] underline">support ticket</a>.</p>
+            </section>
+
+        </div>
+
+        <!-- Bottom nav -->
+        <div class="mt-12 flex flex-wrap gap-4 border-t border-slate-100 pt-8 text-sm">
+            <a href="{% url 'terms_of_service' %}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-5 py-2.5 font-semibold text-slate-700 hover:bg-slate-50">
+                <i class="fas fa-file-contract text-slate-400"></i> Terms of Service
+            </a>
+            <a href="{% url 'contact_page' %}" class="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-5 py-2.5 font-semibold text-white hover:brightness-110">
+                Contact Us <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

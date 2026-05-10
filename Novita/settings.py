@@ -38,6 +38,7 @@ INSTALLED_APPS += [
     'service',
     'recovery',
     'events',
+    'rehab',
 ]
 
 MIDDLEWARE = [

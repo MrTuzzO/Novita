@@ -12,6 +12,7 @@ urlpatterns = [
     path('support/', include('support.urls')),
     path('services/', include('service.urls')),
     path('recovery/', include('recovery.urls')),
+    path('rehab/', include('rehab.urls')),
     path('events/', include('events.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]

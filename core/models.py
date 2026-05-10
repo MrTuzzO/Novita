@@ -9,3 +9,49 @@ class Banner(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ContactMessage(models.Model):
+    full_name = models.CharField(max_length=120)
+    email = models.EmailField()
+    subject = models.CharField(max_length=180)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.full_name} - {self.subject}'
+
+
+class ExpertApplication(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+    full_name = models.CharField(max_length=120)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20, blank=True)
+    title = models.CharField(max_length=120)
+    bio = models.TextField()
+    specialization = models.CharField(max_length=200, blank=True)
+    years_of_experience = models.PositiveIntegerField(default=0)
+    services = models.ManyToManyField('service.ServiceType', related_name='expert_applications')
+    document = models.FileField(
+        upload_to='expert_applications/documents/%Y/%m/',
+        blank=True,
+        null=True,
+        help_text='Upload your CV, certifications, or any supporting credential documents (PDF, DOC, DOCX, JPG, PNG — max 10 MB).',
+    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-submitted_at']
+        verbose_name = 'Expert Application'
+        verbose_name_plural = 'Expert Applications'
+
+    def __str__(self):
+        return f'{self.full_name} – {self.title}'

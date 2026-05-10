@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}Become an Expert – Novita{% endblock %}
+
+{% block extra_css %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800&display=swap');
+    .expert-title { font-family: 'Space Grotesk', 'Poppins', sans-serif; letter-spacing: -0.01em; }
+    .check-label { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.65rem 0.85rem; border-radius: 0.75rem; border: 1px solid #dbe4ee; cursor: pointer; transition: background 0.15s, border-color 0.15s; font-size: 0.875rem; font-weight: 500; color: #1e293b; }
+    .check-label:hover { background: #f0fdfa; border-color: #06a493; }
+    input[type=checkbox]:checked + .check-label { background: #f0fdfa; border-color: #06a493; color: #0f766e; }
+    #id_document { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen" style="background: radial-gradient(circle at 10% 0%, rgba(6,164,147,0.10), transparent 30%), linear-gradient(180deg,#f4f8fb 0%,#fff 60%)">
+
+    <!-- Hero -->
+    <div style="background: linear-gradient(108deg,rgba(2,6,23,0.93) 20%,rgba(2,6,23,0.80) 55%,rgba(6,164,147,0.55) 100%), url('https://images.unsplash.com/photo-1551836022-deb4988cc6c0?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;" class="text-white">
+        <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20 text-center">
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-sm">
+                <i class="fas fa-user-tie"></i> Join Our Expert Network
+            </span>
+            <h1 class="expert-title mt-5 text-4xl font-extrabold sm:text-5xl">Become a Novita Expert</h1>
+            <p class="mt-4 max-w-2xl mx-auto text-base text-slate-200 leading-7">Share your expertise, support people in recovery, and make a meaningful difference. Tell us about yourself and we'll review your application.</p>
+        </div>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="border-b border-slate-200 bg-white">
+        <div class="mx-auto max-w-4xl grid grid-cols-3 divide-x divide-slate-100 text-center px-4 sm:px-6">
+            <div class="py-4 px-6">
+                <p class="text-xl font-bold text-slate-900">50+</p>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mt-0.5">Active Experts</p>
+            </div>
+            <div class="py-4 px-6">
+                <p class="text-xl font-bold text-slate-900">12</p>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mt-0.5">Service Areas</p>
+            </div>
+            <div class="py-4 px-6">
+                <p class="text-xl font-bold text-slate-900">3,200+</p>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mt-0.5">Clients Served</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+
+        {% if submitted %}
+        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-8 text-center shadow-sm">
+            <div class="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100">
+                <i class="fas fa-check-circle text-2xl text-emerald-600"></i>
+            </div>
+            <h2 class="expert-title text-2xl font-bold text-slate-900">Application Submitted!</h2>
+            <p class="mt-3 text-slate-600 max-w-lg mx-auto">Thank you for applying. Our team will review your application and reach out to you via email within 3–5 business days.</p>
+            <a href="{% url 'home' %}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-6 py-2.5 font-semibold text-white hover:brightness-110">
+                Back to Home <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+        {% else %}
+
+        <div class="grid gap-8 lg:grid-cols-[1fr_2fr]">
+
+            <!-- Left info panel -->
+            <aside class="space-y-5">
+                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h2 class="expert-title text-lg font-bold text-slate-900">Why Join as an Expert?</h2>
+                    <ul class="mt-4 space-y-3 text-sm text-slate-700">
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Help people in genuine need of recovery and mental health support</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Get matched with clients based on your area of expertise</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Flexible engagement — support clients on your own schedule</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle mt-0.5 text-[var(--color-primary)]"></i><span>Be part of a trusted, ethics-driven care network</span></li>
+                    </ul>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h2 class="expert-title text-base font-bold text-slate-900">What Happens Next?</h2>
+                    <ol class="mt-4 space-y-3 text-sm text-slate-700">
+                        <li class="flex gap-3"><span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-bold text-white flex-shrink-0">1</span><span>We review your application within 3–5 days</span></li>
+                        <li class="flex gap-3"><span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-bold text-white flex-shrink-0">2</span><span>Short verification call or credential check</span></li>
+                        <li class="flex gap-3"><span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-bold text-white flex-shrink-0">3</span><span>Expert account activated and profile published</span></li>
+                        <li class="flex gap-3"><span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-bold text-white flex-shrink-0">4</span><span>Start receiving client inquiries via your inbox</span></li>
+                    </ol>
+                </div>
+
+                <div class="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
+                    <p class="font-semibold flex items-center gap-2"><i class="fas fa-circle-info"></i> Important</p>
+                    <p class="mt-1 leading-6">All expert applications are manually reviewed. We may contact you for credentials or a brief verification call before activation.</p>
+                </div>
+            </aside>
+
+            <!-- Form -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <h2 class="expert-title text-xl font-bold text-slate-900">Your Application</h2>
+                <p class="mt-1 text-sm text-slate-500">Fill in your professional details below. Fields marked <span class="text-red-500">*</span> are required.</p>
+
+                <form method="post" enctype="multipart/form-data" class="mt-7 space-y-6" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Personal info -->
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700" for="id_full_name">Full Name <span class="text-red-500">*</span></label>
+                            {{ form.full_name }}
+                            {% if form.full_name.errors %}<p class="mt-1 text-xs text-red-600">{{ form.full_name.errors.0 }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700" for="id_email">Email Address <span class="text-red-500">*</span></label>
+                            {{ form.email }}
+                            {% if form.email.errors %}<p class="mt-1 text-xs text-red-600">{{ form.email.errors.0 }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700" for="id_phone_number">Phone Number</label>
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}<p class="mt-1 text-xs text-red-600">{{ form.phone_number.errors.0 }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700" for="id_years_of_experience">Years of Experience <span class="text-red-500">*</span></label>
+                            {{ form.years_of_experience }}
+                            {% if form.years_of_experience.errors %}<p class="mt-1 text-xs text-red-600">{{ form.years_of_experience.errors.0 }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700" for="id_title">Professional Title <span class="text-red-500">*</span></label>
+                        <p class="text-xs text-slate-500 mb-1">e.g. Clinical Psychologist, Recovery Coach, Trauma Counselor</p>
+                        {{ form.title }}
+                        {% if form.title.errors %}<p class="mt-1 text-xs text-red-600">{{ form.title.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700" for="id_specialization">Area of Specialization</label>
+                        <p class="text-xs text-slate-500 mb-1">e.g. Addiction Recovery, CBT, Family Therapy</p>
+                        {{ form.specialization }}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700" for="id_bio">Professional Bio <span class="text-red-500">*</span></label>
+                        <p class="text-xs text-slate-500 mb-1">Briefly describe your background, experience, and approach to care.</p>
+                        {{ form.bio }}
+                        {% if form.bio.errors %}<p class="mt-1 text-xs text-red-600">{{ form.bio.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <!-- Document upload -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" for="id_document">Supporting Document</label>
+                        <p class="text-xs text-slate-500 mb-2">Upload your CV, degree certificate, professional license, or any relevant credential. Accepted: PDF, DOC, DOCX, JPG, PNG &mdash; max 10 MB.</p>
+                        <label class="flex cursor-pointer flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center transition hover:border-[var(--color-primary)] hover:bg-teal-50/40" id="doc-drop-label">
+                            <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-200 text-slate-500" id="doc-icon">
+                                <i class="fas fa-file-arrow-up text-xl"></i>
+                            </span>
+                            <span class="text-sm font-semibold text-slate-700" id="doc-name">Click to browse or drag &amp; drop</span>
+                            <span class="text-xs text-slate-400">PDF, DOC, DOCX, JPG, PNG &bull; Max 10 MB</span>
+                            {{ form.document }}
+                        </label>
+                        {% if form.document.errors %}<p class="mt-1 text-xs text-red-600">{{ form.document.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <!-- Services checkboxes -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Services You Can Provide <span class="text-red-500">*</span></label>
+                        <p class="text-xs text-slate-500 mb-3">Select all service areas you are qualified to support.</p>
+                        {% if form.services.errors %}<p class="mb-2 text-xs text-red-600">{{ form.services.errors.0 }}</p>{% endif %}
+                        <div class="grid gap-2 sm:grid-cols-2">
+                            {% for choice in form.services %}
+                            <label class="check-label {% if choice.data.selected %}!bg-teal-50 !border-[var(--color-primary)]{% endif %}">
+                                {{ choice.tag }}
+                                <span>{{ choice.choice_label }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        {% if not form.services %}
+                        <p class="text-sm text-slate-500 italic">No active services available at this time.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-600 leading-6">
+                        By submitting this application, you confirm that all information provided is accurate and that you agree to Novita's
+                        <a href="{% url 'terms_of_service' %}" class="underline text-[var(--color-primary)]">Terms of Service</a> and
+                        <a href="{% url 'privacy_policy' %}" class="underline text-[var(--color-primary)]">Privacy Policy</a>.
+                    </div>
+
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-8 py-3 font-semibold text-white hover:brightness-110 transition">
+                        Submit Application <i class="fas fa-paper-plane text-sm"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const input = document.getElementById('id_document');
+    const label = document.getElementById('doc-drop-label');
+    const nameEl = document.getElementById('doc-name');
+    const iconEl = document.getElementById('doc-icon');
+
+    if (!input || !label) return;
+
+    label.addEventListener('click', function (e) {
+        if (e.target !== input) input.click();
+    });
+
+    function showFile(file) {
+        nameEl.textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + ' KB)';
+        iconEl.innerHTML = '<i class="fas fa-file-check text-xl text-emerald-600"></i>';
+        iconEl.classList.remove('bg-slate-200', 'text-slate-500');
+        iconEl.classList.add('bg-emerald-100');
+        label.classList.add('border-emerald-400', 'bg-emerald-50');
+        label.classList.remove('border-slate-300', 'bg-slate-50');
+    }
+
+    input.addEventListener('change', function () {
+        if (this.files && this.files[0]) showFile(this.files[0]);
+    });
+
+    label.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        label.classList.add('border-teal-400', 'bg-teal-50');
+    });
+    label.addEventListener('dragleave', function () {
+        label.classList.remove('border-teal-400', 'bg-teal-50');
+    });
+    label.addEventListener('drop', function (e) {
+        e.preventDefault();
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files[0]) {
+            const transfer = new DataTransfer();
+            transfer.items.add(dt.files[0]);
+            input.files = transfer.files;
+            showFile(dt.files[0]);
+        }
+        label.classList.remove('border-teal-400', 'bg-teal-50');
+    });
+})();
+</script>
+{% endblock %}

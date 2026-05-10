@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from blog.models import BlogPost
 from events.models import Event
+from .forms import ContactMessageForm, ExpertApplicationForm
 from .models import Banner
 from recovery.models import PatientProfile
 from service.models import ExpertProfile, ServiceInquiry, ServiceType
@@ -108,3 +109,47 @@ def baby_care_center(request):
 def save_daily_entry(request):
     # Placeholder view for saving daily entry
     return render(request, 'pages/recovery_tracking.html')
+
+
+def contact_page(request):
+    if request.method == 'POST':
+        form = ContactMessageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/contact.html', {'form': ContactMessageForm(), 'submitted': True})
+    else:
+        initial = {}
+        if request.user.is_authenticated:
+            initial = {
+                'full_name': request.user.get_full_name(),
+                'email': request.user.email,
+            }
+        form = ContactMessageForm(initial=initial)
+
+    return render(request, 'pages/contact.html', {'form': form})
+
+
+def become_expert(request):
+    if request.method == 'POST':
+        form = ExpertApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/become_expert.html', {'form': ExpertApplicationForm(), 'submitted': True})
+    else:
+        initial = {}
+        if request.user.is_authenticated:
+            initial = {
+                'full_name': request.user.get_full_name(),
+                'email': request.user.email,
+                'phone_number': getattr(request.user, 'phone_number', ''),
+            }
+        form = ExpertApplicationForm(initial=initial)
+    return render(request, 'pages/become_expert.html', {'form': form})
+
+
+def privacy_policy(request):
+    return render(request, 'pages/privacy_policy.html')
+
+
+def terms_of_service(request):
+    return render(request, 'pages/terms_of_service.html')

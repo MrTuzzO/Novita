@@ -23,6 +23,7 @@
                 <li><a href="{% url 'how_it_works' %}" class="hover:text-white">How It Works</a></li>
                 <li><a href="{% url 'service:service_list' %}" class="hover:text-white">Services</a></li>
                 <li><a href="{% url 'blog:home' %}" class="hover:text-white">Community</a></li>
+                <li><a href="{% url 'become_expert' %}" class="hover:text-white">Become an Expert</a></li>
             </ul>
         </div>
 
@@ -44,8 +45,8 @@
         <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-xs text-slate-500 sm:px-6 sm:flex-row sm:items-center sm:justify-between lg:px-8">
             <p>&copy; 2026 Novita. All rights reserved.</p>
             <div class="flex items-center gap-4">
-                <a href="#" class="hover:text-slate-300">Privacy Policy</a>
-                <a href="#" class="hover:text-slate-300">Terms of Service</a>
+                <a href="{% url 'privacy_policy' %}" class="hover:text-slate-300">Privacy Policy</a>
+                <a href="{% url 'terms_of_service' %}" class="hover:text-slate-300">Terms of Service</a>
             </div>
         </div>
     </div>
