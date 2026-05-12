@@ -12,7 +12,7 @@
 
         <div class="hidden items-center gap-2 md:flex">
             <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'home' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'home' %}">Home</a>
-            <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'about' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'about' %}">About</a>
+            <!-- <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'about' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'about' %}">About</a> -->
             <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'how_it_works' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'how_it_works' %}">How It Works</a>
             <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if 'service' in request.resolver_match.namespace %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'service:service_list' %}">Services</a>
             <a class="rounded-xl px-3 py-2 text-sm font-semibold {% if request.resolver_match.url_name == 'contact_page' %}bg-[var(--color-primary)]/10 text-[var(--color-primary)]{% else %}text-slate-600 hover:bg-slate-100{% endif %}" href="{% url 'contact_page' %}">Contact</a>

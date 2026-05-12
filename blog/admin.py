@@ -23,22 +23,22 @@ class BlogPostAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
     actions = ['approve_posts', 'unapprove_posts']
     
-    fieldsets = (
-        ('Post Information', {
-            'fields': ('title', 'author', 'category')
-        }),
-        ('Content', {
-            'fields': ('excerpt', 'content', 'featured_image')
-        }),
-        ('Publishing', {
-            'fields': ('status', 'is_approved', 'approved_at', 'approved_by', 'is_featured', 'published_at'),
-            'classes': ['collapse']
-        }),
-        ('Statistics', {
-            'fields': ('views_count', 'likes_count'),
-            'classes': ['collapse'],
-        }),
-    )
+    # fieldsets = (
+    #     ('Post Information', {
+    #         'fields': ('title', 'author', 'category')
+    #     }),
+    #     ('Content', {
+    #         'fields': ('excerpt', 'content', 'featured_image')
+    #     }),
+    #     ('Publishing', {
+    #         'fields': ('status', 'is_approved', 'approved_at', 'approved_by', 'is_featured', 'published_at'),
+    #         'classes': ['collapse']
+    #     }),
+    #     ('Statistics', {
+    #         'fields': ('views_count', 'likes_count'),
+    #         'classes': ['collapse'],
+    #     }),
+    # )
     
     readonly_fields = ['views_count', 'likes_count', 'approved_at', 'approved_by']
     
